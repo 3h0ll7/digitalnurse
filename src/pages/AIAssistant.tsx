@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Send, Bot, AlertCircle } from "lucide-react";
@@ -21,6 +21,15 @@ const AIAssistant = () => {
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
 
   const handleSend = async () => {
     if (!input.trim()) return;
@@ -30,15 +39,82 @@ const AIAssistant = () => {
     setInput("");
     setIsLoading(true);
 
-    // Simulate AI response (in real app, this would call your AI backend)
-    setTimeout(() => {
-      const aiMessage: Message = {
-        role: "assistant",
-        content: "This is a simulated AI response. In a full implementation, this would connect to an AI backend service to provide evidence-based nursing guidance. Remember to always verify information with qualified healthcare professionals.",
-      };
-      setMessages((prev) => [...prev, aiMessage]);
+    try {
+      const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-chat`;
+      
+      const response = await fetch(CHAT_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 
+          messages: [...messages, userMessage].map(m => ({
+            role: m.role,
+            content: m.content
+          }))
+        }),
+      });
+
+      if (!response.ok || !response.body) {
+        throw new Error('Failed to get response from AI');
+      }
+
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let assistantMessage = "";
+      let textBuffer = "";
+
+      // Add empty assistant message that we'll update
+      setMessages((prev) => [...prev, { role: "assistant", content: "" }]);
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        
+        textBuffer += decoder.decode(value, { stream: true });
+        
+        let newlineIndex: number;
+        while ((newlineIndex = textBuffer.indexOf("\n")) !== -1) {
+          let line = textBuffer.slice(0, newlineIndex);
+          textBuffer = textBuffer.slice(newlineIndex + 1);
+
+          if (line.endsWith("\r")) line = line.slice(0, -1);
+          if (line.startsWith(":") || line.trim() === "") continue;
+          if (!line.startsWith("data: ")) continue;
+
+          const jsonStr = line.slice(6).trim();
+          if (jsonStr === "[DONE]") break;
+
+          try {
+            const parsed = JSON.parse(jsonStr);
+            const content = parsed.choices?.[0]?.delta?.content;
+            if (content) {
+              assistantMessage += content;
+              setMessages((prev) => {
+                const newMessages = [...prev];
+                newMessages[newMessages.length - 1] = {
+                  role: "assistant",
+                  content: assistantMessage
+                };
+                return newMessages;
+              });
+            }
+          } catch (e) {
+            console.error('Error parsing JSON:', e);
+          }
+        }
+      }
+
       setIsLoading(false);
-    }, 1500);
+    } catch (error) {
+      console.error('Error calling AI:', error);
+      toast({
+        title: "خطأ",
+        description: "فشل الاتصال بمساعد الذكاء الاصطناعي. الرجاء المحاولة مرة أخرى.",
+        variant: "destructive",
+      });
+      setIsLoading(false);
+    }
   };
 
   const handleExampleClick = (question: string) => {
@@ -113,6 +189,7 @@ const AIAssistant = () => {
             </div>
           ))
         )}
+        <div ref={messagesEndRef} />
         {isLoading && (
           <div className="flex gap-3">
             <div className="bg-primary p-2 rounded-full h-8 w-8 flex items-center justify-center">

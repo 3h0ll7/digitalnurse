@@ -8,6 +8,7 @@ import {
   Bot,
   Sparkles,
   GitBranch,
+  Cpu,
 } from "lucide-react";
 import { usePreferences } from "@/contexts/PreferencesContext";
 
@@ -24,6 +25,7 @@ const PrimaryNav = () => {
     { path: "/calculators", icon: Calculator, label: t.navCalculators },
     { path: "/flashcards", icon: Sparkles, label: t.navFlashcards },
     { path: "/mind-maps", icon: GitBranch, label: t.navMindMaps },
+    { path: "/ai-tools", icon: Cpu, label: "AI Tools" },
     { path: "/ai-assistant", icon: Bot, label: t.navAssistant },
   ];
 

@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import AppLayout from "@/components/layout/AppLayout";
-import { Activity, Bot, Brain, HeartPulse, Microscope, Sparkles, TestTube2 } from "lucide-react";
+import { Activity, Bot, Brain, HeartPulse, Microscope, Sparkles, TestTube2, Cpu } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const quickActions = [
@@ -70,6 +70,12 @@ const insights = [
     description: "Micro-learning decks tuned for evidence refreshers.",
     icon: Sparkles,
     to: "/flashcards",
+  },
+  {
+    title: "AI Tools",
+    description: "Medical-tech AI arsenal curated for bedside practice.",
+    icon: Cpu,
+    to: "/ai-tools",
   },
 ];
 

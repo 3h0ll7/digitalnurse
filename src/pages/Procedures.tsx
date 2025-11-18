@@ -142,8 +142,11 @@ const Procedures = () => {
           <div className="px-4 space-y-4">
             <p className="text-sm text-muted-foreground">{t.quickViewDescription}</p>
             <div className="rounded-xl border p-4 bg-card">
-              <p className="text-card-foreground whitespace-pre-line">
+              <p className="text-xs uppercase tracking-wide text-muted-foreground">
                 {activeProcedure?.description}
+              </p>
+              <p className="mt-2 text-card-foreground whitespace-pre-line">
+                {activeProcedure?.definition}
               </p>
             </div>
           </div>

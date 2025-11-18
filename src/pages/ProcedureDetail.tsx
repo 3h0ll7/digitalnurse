@@ -1,6 +1,6 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { procedures, additionalProcedures } from "@/data/procedures";
-import { AlertCircle, CheckCircle2, Package, Stethoscope, FileText } from "lucide-react";
+import { AlertCircle, CheckCircle2, GraduationCap, Info, Package, ShieldAlert, Stethoscope, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { usePreferences } from "@/contexts/PreferencesContext";
 import AppLayout from "@/components/layout/AppLayout";
@@ -33,9 +33,15 @@ const ProcedureDetail = () => {
       onBack={() => navigate("/procedures")}
       className="space-y-4"
     >
-        <div className="bg-card p-4 rounded-xl shadow-card">
-          <p className="text-card-foreground">{procedure.description}</p>
-        </div>
+        {procedure.definition && (
+          <div className="bg-card p-4 rounded-xl shadow-card">
+            <div className="flex items-center gap-2 mb-3">
+              <Info className="text-primary" size={20} />
+              <h2 className="font-bold text-card-foreground">{t.definition}</h2>
+            </div>
+            <p className="text-sm text-muted-foreground whitespace-pre-line">{procedure.definition}</p>
+          </div>
+        )}
 
         {procedure.indications && procedure.indications.length > 0 && (
           <div className="bg-card p-4 rounded-xl shadow-card">
@@ -107,6 +113,23 @@ const ProcedureDetail = () => {
           </div>
         )}
 
+        {procedure.safetyAlerts && procedure.safetyAlerts.length > 0 && (
+          <div className="bg-card p-4 rounded-xl shadow-card">
+            <div className="flex items-center gap-2 mb-3">
+              <ShieldAlert className="text-medical-red" size={20} />
+              <h2 className="font-bold text-card-foreground">{t.safetyAlerts}</h2>
+            </div>
+            <ul className="space-y-2">
+              {procedure.safetyAlerts.map((item, index) => (
+                <li key={index} className="text-sm text-muted-foreground flex items-start gap-2">
+                  <span className="text-medical-red mt-0.5">•</span>
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
         {procedure.complications && procedure.complications.length > 0 && (
           <div className="bg-card p-4 rounded-xl shadow-card">
             <div className="flex items-center gap-2 mb-3">
@@ -132,6 +155,23 @@ const ProcedureDetail = () => {
             </div>
             <ul className="space-y-2">
               {procedure.documentation.map((item, index) => (
+                <li key={index} className="text-sm text-muted-foreground flex items-start gap-2">
+                  <span className="text-primary mt-0.5">•</span>
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {procedure.patientTeaching && procedure.patientTeaching.length > 0 && (
+          <div className="bg-card p-4 rounded-xl shadow-card">
+            <div className="flex items-center gap-2 mb-3">
+              <GraduationCap className="text-primary" size={20} />
+              <h2 className="font-bold text-card-foreground">{t.patientTeaching}</h2>
+            </div>
+            <ul className="space-y-2">
+              {procedure.patientTeaching.map((item, index) => (
                 <li key={index} className="text-sm text-muted-foreground flex items-start gap-2">
                   <span className="text-primary mt-0.5">•</span>
                   <span>{item}</span>

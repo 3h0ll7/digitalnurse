@@ -18,6 +18,7 @@ import PrimaryNav from "./components/navigation/PrimaryNav";
 import Labs from "./pages/Labs";
 import Assessments from "./pages/Assessments";
 import MindMaps from "./pages/MindMaps";
+import AITools from "./pages/AITools";
 
 const AppShell = () => (
   <>
@@ -48,6 +49,7 @@ const App = () => (
               <Route path="/ai-assistant" element={<AIAssistant />} />
               <Route path="/flashcards" element={<Flashcards />} />
               <Route path="/mind-maps" element={<MindMaps />} />
+              <Route path="/ai-tools" element={<AITools />} />
               <Route path="/scale/:id" element={<ScaleDetail />} />
             </Route>
             <Route path="*" element={<NotFound />} />

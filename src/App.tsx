@@ -14,7 +14,6 @@ import NotFound from "./pages/NotFound";
 import PreferencesDrawer from "./components/PreferencesDrawer";
 import { PreferencesProvider } from "./contexts/PreferencesContext";
 import PrimaryNav from "./components/navigation/PrimaryNav";
-import Dashboard from "./pages/Dashboard";
 import Labs from "./pages/Labs";
 import Assessments from "./pages/Assessments";
 import MindMaps from "./pages/MindMaps";
@@ -37,8 +36,7 @@ const App = () => (
         <BrowserRouter>
           <Routes>
             <Route element={<AppShell />}>
-              <Route path="/" element={<Navigate to="/dashboard" replace />} />
-              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/" element={<Navigate to="/procedures" replace />} />
               <Route path="/procedures" element={<Procedures />} />
               <Route path="/procedure/:id" element={<ProcedureDetail />} />
               <Route path="/labs" element={<Labs />} />

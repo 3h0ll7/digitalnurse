@@ -1,14 +1,5 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import {
-  LayoutDashboard,
-  BookOpenCheck,
-  TestTube2,
-  ClipboardList,
-  Calculator,
-  Bot,
-  Sparkles,
-  GitBranch,
-} from "lucide-react";
+import { BookOpenCheck, TestTube2, ClipboardList, Calculator, Bot, Sparkles, GitBranch } from "lucide-react";
 import { usePreferences } from "@/contexts/PreferencesContext";
 
 const PrimaryNav = () => {
@@ -17,7 +8,6 @@ const PrimaryNav = () => {
   const { t } = usePreferences();
 
   const navItems = [
-    { path: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
     { path: "/procedures", icon: BookOpenCheck, label: t.navProcedures },
     { path: "/labs", icon: TestTube2, label: "Labs" },
     { path: "/assessments", icon: ClipboardList, label: "Assess" },

@@ -19,10 +19,10 @@ const AppLayout = ({
   onBack,
   className,
 }: AppLayoutProps) => (
-  <div className="relative min-h-screen overflow-hidden bg-[radial-gradient(circle_at_top,_rgba(21,154,255,0.35),_transparent_60%),linear-gradient(180deg,_#030711_0%,_#03060f_100%)] pb-32 text-foreground">
+  <div className="relative min-h-screen overflow-x-hidden bg-[radial-gradient(circle_at_top,_rgba(21,154,255,0.35),_transparent_60%),linear-gradient(180deg,_#030711_0%,_#03060f_100%)] pb-[calc(10rem+env(safe-area-inset-bottom))] text-foreground">
     <div className="pointer-events-none absolute inset-0 opacity-40 [background-image:linear-gradient(90deg,rgba(255,255,255,0.04)_1px,transparent_1px),linear-gradient(rgba(255,255,255,0.04)_1px,transparent_1px)] bg-[length:120px_120px]" />
     <div className="absolute inset-x-10 top-[-120px] h-64 rounded-[50%] bg-[radial-gradient(circle,_rgba(80,255,235,0.18),transparent_70%)] blur-3xl" />
-    <div className="relative z-10 mx-auto w-full max-w-6xl px-4 pt-8 sm:px-6">
+    <div className="relative z-10 mx-auto w-full max-w-6xl px-4 pt-[calc(2rem+env(safe-area-inset-top))] sm:px-6">
       <header className="mb-8 rounded-3xl border border-white/10 bg-card/80 p-5 shadow-[0_25px_120px_rgba(0,168,255,0.18)] backdrop-blur-2xl">
         <div className="flex flex-wrap items-center gap-4">
           <div className="flex items-center gap-3">

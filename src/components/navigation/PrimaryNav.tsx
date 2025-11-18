@@ -31,7 +31,7 @@ const PrimaryNav = () => {
 
   return (
     <nav className="fixed bottom-5 left-1/2 z-50 w-full max-w-3xl -translate-x-1/2 px-4">
-      <div className="flex items-center gap-1 rounded-[26px] border border-white/10 bg-card/70 px-2 py-3 shadow-[0_25px_70px_rgba(0,0,0,0.45)] backdrop-blur-2xl">
+      <div className="flex flex-nowrap items-center gap-1 overflow-x-auto rounded-[26px] border border-white/10 bg-card/70 px-2 py-3 shadow-[0_25px_70px_rgba(0,0,0,0.45)] backdrop-blur-2xl touch-pan-x">
         {navItems.map((item) => {
           const Icon = item.icon;
           const isActive =
@@ -41,7 +41,7 @@ const PrimaryNav = () => {
             <button
               key={item.path}
               onClick={() => navigate(item.path)}
-              className={`group flex flex-1 flex-col items-center justify-center gap-1 rounded-2xl px-2 py-1.5 text-[11px] font-semibold uppercase tracking-widest transition-all duration-300 ${
+              className={`group flex flex-none flex-col items-center justify-center gap-1 rounded-2xl px-2 py-1.5 text-[11px] font-semibold uppercase tracking-widest transition-all duration-300 min-w-[72px] sm:flex-1 sm:min-w-0 ${
                 isActive
                   ? "bg-primary/20 text-white shadow-[0_8px_30px_rgba(21,154,255,0.35)]"
                   : "text-muted-foreground hover:text-white"

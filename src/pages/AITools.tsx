@@ -50,7 +50,7 @@ const AITools = () => {
         </div>
       }
     >
-      <section className="grid gap-4 rounded-3xl border border-white/10 bg-white/5 p-6 text-white shadow-[0_25px_80px_rgba(0,0,0,0.45)] md:grid-cols-[1.2fr,0.8fr]">
+      <section className="grid grid-cols-1 gap-4 rounded-3xl border border-white/10 bg-white/5 p-6 text-white shadow-[0_25px_80px_rgba(0,0,0,0.45)] md:grid-cols-[1.2fr,0.8fr]">
         <div className="space-y-4">
           <p className="text-xs uppercase tracking-[0.4em] text-white/70">Neo-brutalist launchpad</p>
           <h2 className="text-3xl font-semibold sm:text-4xl">
@@ -117,11 +117,11 @@ const AITools = () => {
           </div>
           {aiToolCategories.map((category) => (
             <TabsContent key={category.name} value={category.name} className="px-6 pb-6">
-              <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+              <div className="flex flex-col gap-4 md:grid md:grid-cols-2 xl:grid-cols-3">
                 {category.tools.map((tool) => (
                   <Card
                     key={tool.name}
-                    className="group flex flex-col gap-4 rounded-3xl border-white/10 bg-gradient-to-b from-white/10 to-transparent p-5 text-white transition-all duration-300 hover:-translate-y-1 hover:border-white/40 hover:shadow-[0_30px_80px_rgba(0,0,0,0.45)]"
+                    className="group flex w-full flex-col gap-4 rounded-3xl border-white/10 bg-gradient-to-b from-white/10 to-transparent p-5 text-white transition-all duration-300 hover:-translate-y-1 hover:border-white/40 hover:shadow-[0_30px_80px_rgba(0,0,0,0.45)]"
                   >
                     <div className="flex items-center justify-between">
                       <div>

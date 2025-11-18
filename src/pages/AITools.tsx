@@ -49,6 +49,7 @@ const AITools = () => {
           </Button>
         </div>
       }
+      className="pt-4 pb-8 sm:pt-6"
     >
       <section className="grid grid-cols-1 gap-4 rounded-3xl border border-white/10 bg-white/5 p-4 text-white shadow-[0_25px_80px_rgba(0,0,0,0.45)] sm:p-6 md:grid-cols-[1.2fr,0.8fr]">
         <div className="space-y-4">
@@ -117,7 +118,7 @@ const AITools = () => {
           </div>
           {aiToolCategories.map((category) => (
             <TabsContent key={category.name} value={category.name} className="px-4 pb-6 sm:px-6">
-              <div className="flex flex-col gap-4 lg:grid lg:grid-cols-2 xl:grid-cols-3">
+              <div className="flex flex-col gap-4">
                 {category.tools.map((tool) => (
                   <Card
                     key={tool.name}

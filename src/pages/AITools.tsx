@@ -117,7 +117,7 @@ const AITools = () => {
           </div>
           {aiToolCategories.map((category) => (
             <TabsContent key={category.name} value={category.name} className="px-6 pb-6">
-              <div className="flex flex-col gap-4 md:grid md:grid-cols-2 xl:grid-cols-3">
+              <div className="flex flex-col gap-4 lg:grid lg:grid-cols-2 xl:grid-cols-3">
                 {category.tools.map((tool) => (
                   <Card
                     key={tool.name}

@@ -20,13 +20,13 @@ const PrimaryNav = () => {
   const navItems = [
     { path: "/home", icon: ActivitySquare, label: "Home" },
     { path: "/procedures", icon: BookOpenCheck, label: t.navProcedures },
-    { path: "/labs", icon: TestTube2, label: "Labs" },
-    { path: "/assessments", icon: ClipboardList, label: "Assess" },
+    { path: "/ai-assistant", icon: Bot, label: t.navAssistant },
     { path: "/calculators", icon: Calculator, label: t.navCalculators },
+    { path: "/labs", icon: TestTube2, label: "Labs" },
     { path: "/flashcards", icon: Sparkles, label: t.navFlashcards },
     { path: "/mind-maps", icon: GitBranch, label: t.navMindMaps },
     { path: "/ai-tools", icon: Cpu, label: "AI Tools" },
-    { path: "/ai-assistant", icon: Bot, label: t.navAssistant },
+    { path: "/assessments", icon: ClipboardList, label: "Assess" },
   ];
 
   return (

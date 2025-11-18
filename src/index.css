@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -8,90 +10,83 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 0 0% 98%;
-    --foreground: 210 20% 15%;
+    --background: 218 42% 6%;
+    --foreground: 210 40% 96%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 210 20% 15%;
+    --card: 216 36% 12%;
+    --card-foreground: 210 40% 96%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 210 20% 15%;
+    --popover: 215 36% 14%;
+    --popover-foreground: 210 40% 96%;
 
-    --primary: 199 89% 48%;
-    --primary-foreground: 0 0% 100%;
+    --primary: 195 94% 56%;
+    --primary-foreground: 213 32% 10%;
 
-    --secondary: 199 15% 95%;
-    --secondary-foreground: 199 89% 35%;
+    --secondary: 225 25% 20%;
+    --secondary-foreground: 210 40% 96%;
 
-    --muted: 210 20% 96%;
-    --muted-foreground: 210 15% 50%;
+    --muted: 220 20% 30%;
+    --muted-foreground: 215 17% 72%;
 
-    --accent: 199 80% 92%;
-    --accent-foreground: 199 89% 35%;
+    --accent: 192 100% 47%;
+    --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 84% 60%;
+    --destructive: 0 70% 52%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 210 20% 90%;
-    --input: 210 20% 90%;
-    --ring: 199 89% 48%;
+    --border: 215 30% 22%;
+    --input: 215 30% 22%;
+    --ring: 195 94% 56%;
 
-    --radius: 0.75rem;
-    
-    --medical-blue: 199 89% 48%;
-    --medical-blue-light: 199 80% 92%;
-    --medical-green: 142 71% 45%;
-    --medical-yellow: 38 92% 50%;
-    --medical-red: 0 84% 60%;
-    
-    --shadow-card: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
-    --shadow-card-hover: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --radius: 1.2rem;
 
-    --sidebar-background: 0 0% 98%;
+    --medical-blue: 195 94% 56%;
+    --medical-blue-light: 195 80% 88%;
+    --medical-green: 160 84% 45%;
+    --medical-yellow: 42 94% 54%;
+    --medical-red: 350 82% 56%;
 
-    --sidebar-foreground: 240 5.3% 26.1%;
+    --shadow-card: 0 25px 60px rgba(2, 6, 15, 0.65);
+    --shadow-card-hover: 0 30px 80px rgba(6, 16, 35, 0.7);
 
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-background: 218 42% 6%;
+    --sidebar-foreground: 210 40% 96%;
+    --sidebar-primary: 195 94% 56%;
+    --sidebar-primary-foreground: 213 32% 10%;
+    --sidebar-accent: 215 35% 18%;
+    --sidebar-accent-foreground: 210 40% 96%;
+    --sidebar-border: 215 30% 25%;
+    --sidebar-ring: 195 94% 56%;
   }
 
   .dark {
-    --background: 210 30% 8%;
-    --foreground: 210 20% 98%;
+    --background: 218 42% 6%;
+    --foreground: 210 40% 96%;
 
-    --card: 210 25% 12%;
-    --card-foreground: 210 20% 98%;
+    --card: 217 35% 12%;
+    --card-foreground: 210 40% 96%;
 
-    --popover: 210 25% 12%;
-    --popover-foreground: 210 20% 98%;
+    --popover: 217 35% 12%;
+    --popover-foreground: 210 40% 96%;
 
-    --primary: 199 89% 48%;
-    --primary-foreground: 0 0% 100%;
+    --primary: 195 94% 56%;
+    --primary-foreground: 213 32% 10%;
 
-    --secondary: 210 25% 18%;
-    --secondary-foreground: 210 20% 98%;
+    --secondary: 225 25% 20%;
+    --secondary-foreground: 210 40% 96%;
 
-    --muted: 210 25% 18%;
-    --muted-foreground: 210 15% 65%;
+    --muted: 220 20% 30%;
+    --muted-foreground: 215 17% 72%;
 
-    --accent: 210 25% 18%;
-    --accent-foreground: 210 20% 98%;
+    --accent: 192 100% 47%;
+    --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 84% 60%;
+    --destructive: 0 70% 52%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 210 25% 20%;
-    --input: 210 25% 20%;
-    --ring: 199 89% 48%;
+    --border: 215 30% 22%;
+    --input: 215 30% 22%;
+    --ring: 195 94% 56%;
   }
 }
 
@@ -101,6 +96,28 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    font-family: "IBM Plex Sans", "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+    background-color: hsl(var(--background));
+    background-image: radial-gradient(circle at 20% 20%, rgba(47, 134, 255, 0.25), transparent 55%),
+      radial-gradient(circle at 80% 0%, rgba(35, 210, 255, 0.15), transparent 45%),
+      linear-gradient(180deg, #030711 0%, #010409 100%);
+    color: hsl(var(--foreground));
+    min-height: 100vh;
+    letter-spacing: 0.01em;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: "Space Grotesk", "IBM Plex Sans", sans-serif;
+    letter-spacing: -0.01em;
+  }
+
+  ::selection {
+    background: rgba(35, 210, 255, 0.35);
+    color: #f8fbff;
   }
 }

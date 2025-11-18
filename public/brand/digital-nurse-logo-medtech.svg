@@ -1,0 +1,26 @@
+<svg width="380" height="160" viewBox="0 0 380 160" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Digital Nurse medical tech logo">
+  <defs>
+    <linearGradient id="medTechBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#051226" />
+      <stop offset="100%" stop-color="#02070F" />
+    </linearGradient>
+    <linearGradient id="medTechStroke" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#4ED0FF" />
+      <stop offset="50%" stop-color="#79FFE1" />
+      <stop offset="100%" stop-color="#4E8BFF" />
+    </linearGradient>
+  </defs>
+  <rect width="380" height="160" rx="32" fill="url(#medTechBg)" stroke="#0D213D" stroke-width="3" />
+  <g transform="translate(32,32)">
+    <rect width="96" height="96" rx="30" fill="#030A16" stroke="url(#medTechStroke)" stroke-width="2" />
+    <path d="M18 48h16l10-26l14 60l8-34h12" fill="none" stroke="url(#medTechStroke)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+    <circle cx="82" cy="48" r="6" fill="#79FFE1" />
+    <circle cx="18" cy="48" r="6" fill="#4ED0FF" />
+  </g>
+  <text x="150" y="74" font-family="'Space Grotesk', 'Segoe UI', sans-serif" font-size="38" font-weight="600" fill="#E9F5FF">
+    Digital Nurse
+  </text>
+  <text x="150" y="110" font-family="'IBM Plex Sans', 'Segoe UI', sans-serif" font-size="16" fill="#7AE8FF" letter-spacing="0.3em">
+    MEDICAL TECH COLLECTIVE
+  </text>
+</svg>

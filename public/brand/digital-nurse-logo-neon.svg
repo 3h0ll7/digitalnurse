@@ -1,0 +1,26 @@
+<svg width="360" height="160" viewBox="0 0 360 160" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Digital Nurse neon logo">
+  <defs>
+    <radialGradient id="neonGlow" cx="50%" cy="50%" r="70%">
+      <stop offset="0%" stop-color="#14F1FF" stop-opacity="0.9" />
+      <stop offset="100%" stop-color="#050B16" stop-opacity="0" />
+    </radialGradient>
+    <linearGradient id="neonStroke" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00F0FF" />
+      <stop offset="50%" stop-color="#5B9DFF" />
+      <stop offset="100%" stop-color="#00FFB2" />
+    </linearGradient>
+  </defs>
+  <rect width="360" height="160" rx="32" fill="#050B16" stroke="#12233F" stroke-width="2" />
+  <circle cx="80" cy="80" r="72" fill="url(#neonGlow)" />
+  <g transform="translate(46,46)">
+    <rect x="0" y="0" width="68" height="68" rx="22" fill="none" stroke="url(#neonStroke)" stroke-width="4" />
+    <path d="M34 12v44M12 34h44" stroke="url(#neonStroke)" stroke-width="8" stroke-linecap="round" />
+    <path d="M18 56c12-10 20-10 32 0" stroke="#00FFCE" stroke-width="3" stroke-linecap="round" opacity="0.9" />
+  </g>
+  <text x="140" y="84" font-family="'Space Grotesk', 'Segoe UI', sans-serif" font-size="40" font-weight="600" fill="#E9F8FF">
+    Digital Nurse
+  </text>
+  <text x="140" y="116" font-family="'IBM Plex Sans', 'Segoe UI', sans-serif" font-size="16" fill="#54F2FF" letter-spacing="0.4em">
+    FUTURE CARE
+  </text>
+</svg>

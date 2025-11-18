@@ -4,6 +4,7 @@ import AppLayout from "@/components/layout/AppLayout";
 import { labValues } from "@/data/labValues";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Activity } from "lucide-react";
 
 const Labs = () => {
   const [search, setSearch] = useState("");
@@ -20,22 +21,32 @@ const Labs = () => {
   });
 
   return (
-    <AppLayout title="Lab Panels" subtitle="Critical values & ranges">
-      <section className="space-y-3">
-        <Input
-          value={search}
-          onChange={(event) => setSearch(event.target.value)}
-          placeholder="Search tests or categories"
-          className="bg-card"
-        />
-        <div className="flex flex-wrap gap-2">
+    <AppLayout title="Lab Intelligence" subtitle="Critical ranges & trending deltas">
+      <section className="rounded-3xl border border-white/10 bg-card/80 p-5 shadow-[0_20px_60px_rgba(0,0,0,0.45)]">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
+          <div className="relative flex-1">
+            <Activity size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-primary" />
+            <Input
+              value={search}
+              onChange={(event) => setSearch(event.target.value)}
+              placeholder="Search tests or categories"
+              className="h-12 rounded-2xl border-white/10 bg-white/5 pl-12 text-white placeholder:text-muted-foreground"
+            />
+          </div>
+          <p className="text-xs uppercase tracking-[0.4em] text-muted-foreground">{filteredLabs.length} results</p>
+        </div>
+        <div className="mt-4 flex flex-wrap gap-2">
           {categories.map((cat) => (
             <Button
               key={cat}
               size="sm"
-              variant={cat === category ? "default" : "outline"}
+              variant="outline"
               onClick={() => setCategory(cat)}
-              className="rounded-full"
+              className={`rounded-full border px-4 py-2 text-xs uppercase tracking-widest transition-all ${
+                cat === category
+                  ? "border-primary/50 bg-primary/30 text-white shadow-[0_15px_30px_rgba(21,154,255,0.35)]"
+                  : "border-white/20 text-muted-foreground hover:border-white/40"
+              }`}
             >
               {cat}
             </Button>
@@ -43,18 +54,21 @@ const Labs = () => {
         </div>
       </section>
 
-      <section className="space-y-3">
+      <section className="grid gap-3">
         {filteredLabs.map((lab) => (
-          <div key={lab.test} className="rounded-2xl border bg-card p-4 shadow-sm">
-            <div className="flex items-start justify-between gap-2">
+          <div
+            key={lab.test}
+            className="rounded-3xl border border-white/10 bg-card/70 p-5 text-white transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/40"
+          >
+            <div className="flex flex-wrap items-start justify-between gap-3">
               <div>
-                <p className="text-xs uppercase tracking-wide text-muted-foreground">{lab.category}</p>
-                <p className="text-lg font-semibold text-card-foreground">{lab.test}</p>
+                <p className="text-xs uppercase tracking-[0.4em] text-primary">{lab.category}</p>
+                <p className="text-2xl font-semibold">{lab.test}</p>
               </div>
-              <Badge variant="secondary">{lab.unit}</Badge>
+              <Badge className="rounded-full border border-white/10 bg-white/10 text-white">{lab.unit}</Badge>
             </div>
-            <div className="mt-2 text-sm text-muted-foreground">
-              <p>Normal: {lab.normalRange}</p>
+            <div className="mt-3 text-sm text-muted-foreground">
+              <p className="text-white/80">Normal: {lab.normalRange}</p>
               {(lab.criticalLow || lab.criticalHigh) && (
                 <p className="text-medical-red">
                   Critical: {lab.criticalLow && `≤${lab.criticalLow}`} {lab.criticalHigh && ` / ≥${lab.criticalHigh}`}
@@ -64,7 +78,7 @@ const Labs = () => {
           </div>
         ))}
         {filteredLabs.length === 0 && (
-          <div className="rounded-xl border border-dashed p-6 text-center text-muted-foreground">
+          <div className="rounded-3xl border border-dashed border-white/30 p-10 text-center text-muted-foreground">
             No lab tests found.
           </div>
         )}

@@ -1,0 +1,17 @@
+<svg width="360" height="140" viewBox="0 0 360 140" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Digital Nurse flat logo">
+  <rect width="360" height="140" rx="28" fill="#F5FBFF" />
+  <g transform="translate(24,20)">
+    <rect x="0" y="0" width="100" height="100" rx="28" fill="#E2F1FF" />
+    <path d="M50 18l22 12v40l-22 12-22-12V30z" fill="#0063FF" opacity="0.2" />
+    <path d="M29 45h42" stroke="#0063FF" stroke-width="8" stroke-linecap="round" />
+    <path d="M50 24v60" stroke="#00A8E8" stroke-width="8" stroke-linecap="round" />
+    <circle cx="50" cy="54" r="14" fill="#F5FBFF" stroke="#00A8E8" stroke-width="4" />
+    <circle cx="50" cy="54" r="4" fill="#00A8E8" />
+  </g>
+  <text x="150" y="68" font-family="'Space Grotesk', 'Segoe UI', sans-serif" font-size="36" font-weight="600" fill="#002855">
+    Digital Nurse
+  </text>
+  <text x="150" y="100" font-family="'IBM Plex Sans', 'Segoe UI', sans-serif" font-size="16" fill="#007EA7" letter-spacing="0.2em">
+    CLINICAL NAVIGATION
+  </text>
+</svg>

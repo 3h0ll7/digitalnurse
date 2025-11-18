@@ -6,7 +6,7 @@ import {
   ClipboardList,
   Calculator,
   Bot,
-  Library,
+  Sparkles,
 } from "lucide-react";
 import { usePreferences } from "@/contexts/PreferencesContext";
 
@@ -21,8 +21,8 @@ const PrimaryNav = () => {
     { path: "/labs", icon: TestTube2, label: "Labs" },
     { path: "/assessments", icon: ClipboardList, label: "Assess" },
     { path: "/calculators", icon: Calculator, label: t.navCalculators },
+    { path: "/flashcards", icon: Sparkles, label: t.navFlashcards },
     { path: "/ai-assistant", icon: Bot, label: t.navAssistant },
-    { path: "/reference", icon: Library, label: t.navReference },
   ];
 
   return (

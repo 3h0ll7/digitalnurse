@@ -11,7 +11,7 @@ interface Translation {
   navProcedures: string;
   navCalculators: string;
   navAssistant: string;
-  navReference: string;
+  navFlashcards: string;
   indications: string;
   contraindications: string;
   equipment: string;
@@ -19,12 +19,11 @@ interface Translation {
   complications: string;
   documentation: string;
   backToProcedures: string;
-  referenceTitle: string;
-  labValuesTab: string;
-  scalesTab: string;
-  labSearchPlaceholder: string;
-  normalLabValues: string;
-  assessmentScales: string;
+  flashcardsTitle: string;
+  flashcardsSubtitle: string;
+  searchFlashcards: string;
+  allTopics: string;
+  tapToReveal: string;
   settingsTitle: string;
   settingsDescription: string;
   languageLabel: string;
@@ -46,7 +45,7 @@ export const translations: Record<SupportedLanguage, Translation> = {
     navProcedures: "Procedures",
     navCalculators: "Calculators",
     navAssistant: "AI Assistant",
-    navReference: "Reference",
+    navFlashcards: "Flashcards",
     indications: "Indications",
     contraindications: "Contraindications",
     equipment: "Equipment Needed",
@@ -54,12 +53,11 @@ export const translations: Record<SupportedLanguage, Translation> = {
     complications: "Potential Complications",
     documentation: "Documentation",
     backToProcedures: "Back to Procedures",
-    referenceTitle: "Quick Reference",
-    labValuesTab: "Lab Values",
-    scalesTab: "Assessment Scales",
-    labSearchPlaceholder: "Search lab values...",
-    normalLabValues: "Normal Lab Values",
-    assessmentScales: "Assessment Scales",
+    flashcardsTitle: "Nursing Flashcards",
+    flashcardsSubtitle: "Rapid clinical refreshers",
+    searchFlashcards: "Search questions, answers, or tags",
+    allTopics: "All",
+    tapToReveal: "Tap to reveal the answer",
     settingsTitle: "Preferences",
     settingsDescription: "Choose a language and color theme that matches your environment.",
     languageLabel: "Language",
@@ -79,7 +77,7 @@ export const translations: Record<SupportedLanguage, Translation> = {
     navProcedures: "الإجراءات",
     navCalculators: "الحاسبات",
     navAssistant: "المساعد الذكي",
-    navReference: "المرجع",
+    navFlashcards: "البطاقات التعليمية",
     indications: "الدواعي",
     contraindications: "موانع الاستخدام",
     equipment: "الأدوات اللازمة",
@@ -87,12 +85,11 @@ export const translations: Record<SupportedLanguage, Translation> = {
     complications: "المضاعفات المحتملة",
     documentation: "التوثيق",
     backToProcedures: "العودة للإجراءات",
-    referenceTitle: "المرجع السريع",
-    labValuesTab: "تحاليل المختبر",
-    scalesTab: "المقاييس",
-    labSearchPlaceholder: "ابحث في التحاليل...",
-    normalLabValues: "القيم الطبيعية",
-    assessmentScales: "مقاييس التقييم",
+    flashcardsTitle: "بطاقات تمريضية",
+    flashcardsSubtitle: "مراجعات سريرية سريعة",
+    searchFlashcards: "ابحث في الأسئلة أو الإجابات",
+    allTopics: "الكل",
+    tapToReveal: "اضغط لإظهار الإجابة",
     settingsTitle: "التفضيلات",
     settingsDescription: "اختر اللغة والوضع اللوني المناسب لبيئة عملك.",
     languageLabel: "اللغة",

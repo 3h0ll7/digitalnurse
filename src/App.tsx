@@ -8,7 +8,7 @@ import ProcedureDetail from "./pages/ProcedureDetail";
 import Calculators from "./pages/Calculators";
 import CalculatorDetail from "./pages/CalculatorDetail";
 import AIAssistant from "./pages/AIAssistant";
-import Reference from "./pages/Reference";
+import Flashcards from "./pages/Flashcards";
 import ScaleDetail from "./pages/ScaleDetail";
 import NotFound from "./pages/NotFound";
 import PreferencesDrawer from "./components/PreferencesDrawer";
@@ -45,7 +45,7 @@ const App = () => (
               <Route path="/calculators" element={<Calculators />} />
               <Route path="/calculator/:id" element={<CalculatorDetail />} />
               <Route path="/ai-assistant" element={<AIAssistant />} />
-              <Route path="/reference" element={<Reference />} />
+              <Route path="/flashcards" element={<Flashcards />} />
               <Route path="/scale/:id" element={<ScaleDetail />} />
             </Route>
             <Route path="*" element={<NotFound />} />

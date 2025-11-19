@@ -2,6 +2,7 @@
 
 ## 1. Current state
 - The entire experience now runs as a **public, credential-free web app**. No JWTs, auth guards, or backend APIs are required.
+- The legacy access screen has been removed so sessions open directly in the main workspace.
 - All reference data (procedures, labs, assessments, flashcards, mind maps) ships with the repository, keeping demos deterministic and offline-friendly.
 - Navigation drops users straight into the main dashboard and every route is immediately available.
 
@@ -9,7 +10,7 @@
 ```
 React (Vite + TypeScript)
 ├─ Contexts: Preferences, UI drawers, toasts
-├─ Layout: SecureShell + SystemStatusBar + PrimaryNav
+├─ Layout: SecureShell + PrimaryNav (app loads directly into the workspace)
 ├─ Pages: Home, Procedures, Labs, Calculators, AI Assistant, Flashcards, Mind Maps, Assessments
 └─ Data: Local JSON/TS modules inside src/data
 ```

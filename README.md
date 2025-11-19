@@ -6,6 +6,8 @@
 
 > **App is now fully public-access with no login required.** Every screen, workflow, and calculator loads instantly without credentials or backend dependencies.
 
+> **Update:** The access screen has been removed. The app now loads directly into the main workspace.
+
 ## Overview
 
 - **Clinical cockpit** – evidence-informed dashboards for procedures, labs, calculators, flashcards, and more.

@@ -22,7 +22,7 @@ const PreferencesDrawer = () => {
         </button>
       </DrawerTrigger>
       <DrawerContent className="p-0">
-        <DrawerHeader className="text-left">
+        <DrawerHeader className="text-start">
           <DrawerTitle>{t.settingsTitle}</DrawerTitle>
           <DrawerDescription>{t.settingsDescription}</DrawerDescription>
         </DrawerHeader>

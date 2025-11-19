@@ -13,6 +13,9 @@ interface Translation {
   navAssistant: string;
   navFlashcards: string;
   navMindMaps: string;
+  navHome: string;
+  navLabs: string;
+  navAssessments: string;
   indications: string;
   contraindications: string;
   definition: string;
@@ -51,6 +54,9 @@ export const translations: Record<SupportedLanguage, Translation> = {
     navAssistant: "AI Assistant",
     navFlashcards: "Flashcards",
     navMindMaps: "Mind Maps",
+    navHome: "Home",
+    navLabs: "Labs",
+    navAssessments: "Assess",
     indications: "Indications",
     contraindications: "Contraindications",
     definition: "Definition",
@@ -87,6 +93,9 @@ export const translations: Record<SupportedLanguage, Translation> = {
     navAssistant: "المساعد الذكي",
     navFlashcards: "البطاقات التعليمية",
     navMindMaps: "الخرائط الذهنية",
+    navHome: "الرئيسية",
+    navLabs: "المختبرات",
+    navAssessments: "التقييمات",
     indications: "الدواعي",
     contraindications: "موانع الاستخدام",
     definition: "التعريف",

@@ -157,7 +157,7 @@ const AIAssistant = () => {
                 <button
                   key={index}
                   onClick={() => handleExampleClick(question)}
-                  className="block w-full text-left bg-card p-3 rounded-lg text-sm text-primary hover:bg-accent transition-colors"
+                  className="block w-full text-start bg-card p-3 rounded-lg text-sm text-primary hover:bg-accent transition-colors"
                 >
                   {question}
                 </button>

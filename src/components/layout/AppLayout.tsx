@@ -1,6 +1,7 @@
 import { ReactNode } from "react";
 import { ChevronLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { usePreferences } from "@/contexts/PreferencesContext";
 
 interface AppLayoutProps {
   title: string;
@@ -18,8 +19,14 @@ const AppLayout = ({
   children,
   onBack,
   className,
-}: AppLayoutProps) => (
-  <div className="relative min-h-screen overflow-x-hidden bg-[radial-gradient(circle_at_top,_rgba(21,154,255,0.35),_transparent_60%),linear-gradient(180deg,_#030711_0%,_#03060f_100%)] pb-[calc(10rem+env(safe-area-inset-bottom))] text-foreground">
+}: AppLayoutProps) => {
+  const { direction } = usePreferences();
+
+  return (
+    <div
+      dir={direction}
+      className="app-shell relative min-h-screen overflow-x-hidden pb-[calc(10rem+env(safe-area-inset-bottom))] text-foreground"
+    >
     <div className="pointer-events-none absolute inset-0 opacity-40 [background-image:linear-gradient(90deg,rgba(255,255,255,0.04)_1px,transparent_1px),linear-gradient(rgba(255,255,255,0.04)_1px,transparent_1px)] bg-[length:120px_120px]" />
     <div className="absolute inset-x-10 top-[-120px] h-64 rounded-[50%] bg-[radial-gradient(circle,_rgba(80,255,235,0.18),transparent_70%)] blur-3xl" />
     <div className="relative z-10 mx-auto w-full max-w-6xl px-4 pt-[calc(2rem+env(safe-area-inset-top))] sm:px-6">
@@ -63,7 +70,8 @@ const AppLayout = ({
 
       <main className={cn("space-y-6", className)}>{children}</main>
     </div>
-  </div>
-);
+    </div>
+  );
+};
 
 export default AppLayout;

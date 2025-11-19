@@ -17,14 +17,14 @@ const PrimaryNav = () => {
   const { t } = usePreferences();
 
   const navItems = [
-    { path: "/home", icon: ActivitySquare, label: "Home" },
+    { path: "/home", icon: ActivitySquare, label: t.navHome },
     { path: "/procedures", icon: BookOpenCheck, label: t.navProcedures },
     { path: "/ai-assistant", icon: Bot, label: t.navAssistant },
     { path: "/calculators", icon: Calculator, label: t.navCalculators },
-    { path: "/labs", icon: TestTube2, label: "Labs" },
+    { path: "/labs", icon: TestTube2, label: t.navLabs },
     { path: "/flashcards", icon: Sparkles, label: t.navFlashcards },
     { path: "/mind-maps", icon: GitBranch, label: t.navMindMaps },
-    { path: "/assessments", icon: ClipboardList, label: "Assess" },
+    { path: "/assessments", icon: ClipboardList, label: t.navAssessments },
   ];
 
   return (

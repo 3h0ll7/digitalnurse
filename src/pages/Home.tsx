@@ -141,7 +141,7 @@ const Home = () => {
             <button
               key={tile.title}
               onClick={() => navigate(tile.to)}
-              className={`group flex flex-col rounded-2xl border border-white/10 bg-gradient-to-br ${tile.accent} p-4 text-left text-white transition-transform duration-300 hover:-translate-y-1 hover:shadow-[0_20px_45px_rgba(0,0,0,0.35)]`}
+              className={`group flex flex-col rounded-2xl border border-white/10 bg-gradient-to-br ${tile.accent} p-4 text-start text-white transition-transform duration-300 hover:-translate-y-1 hover:shadow-[0_20px_45px_rgba(0,0,0,0.35)]`}
             >
               <div className="flex items-center justify-between text-xs uppercase tracking-[0.3em]">
                 <span>{tile.tag}</span>

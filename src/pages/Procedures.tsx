@@ -149,7 +149,7 @@ const Procedures = () => {
 
       <Drawer open={Boolean(activeProcedure)} onOpenChange={(open) => !open && setActiveProcedure(null)}>
         <DrawerContent className="border-white/10 bg-[#050912]/95 pb-8 text-white">
-          <DrawerHeader className="text-left">
+          <DrawerHeader className="text-start">
             <p className="text-xs uppercase tracking-[0.4em] text-muted-foreground">{t.quickViewTitle}</p>
             <DrawerTitle className="text-2xl text-white">{activeProcedure?.title}</DrawerTitle>
             <DrawerDescription className="text-primary">

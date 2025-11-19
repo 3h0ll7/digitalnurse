@@ -4,6 +4,7 @@ import { translations, type SupportedLanguage } from "@/lib/i18n";
 type Translation = (typeof translations)[SupportedLanguage];
 
 type Theme = "light" | "dark";
+type Direction = "ltr" | "rtl";
 
 interface PreferencesContextValue {
   theme: Theme;
@@ -11,6 +12,8 @@ interface PreferencesContextValue {
   toggleTheme: () => void;
   language: SupportedLanguage;
   setLanguage: (language: SupportedLanguage) => void;
+  direction: Direction;
+  isRTL: boolean;
   t: Translation;
 }
 
@@ -41,11 +44,19 @@ const getInitialLanguage = (): SupportedLanguage => {
 export const PreferencesProvider = ({ children }: { children: React.ReactNode }) => {
   const [theme, setTheme] = useState<Theme>(getInitialTheme);
   const [language, setLanguage] = useState<SupportedLanguage>(getInitialLanguage);
+  const direction: Direction = language === "ar" ? "rtl" : "ltr";
+  const isRTL = direction === "rtl";
 
   useEffect(() => {
     if (typeof document === "undefined") return;
     const root = document.documentElement;
+    const body = document.body;
     root.classList.toggle("dark", theme === "dark");
+    body.classList.toggle("dark", theme === "dark");
+    root.classList.toggle("light", theme === "light");
+    body.classList.toggle("light", theme === "light");
+    root.dataset.theme = theme;
+    body.dataset.theme = theme;
     root.style.colorScheme = theme;
     window.localStorage.setItem("theme", theme);
   }, [theme]);
@@ -53,10 +64,15 @@ export const PreferencesProvider = ({ children }: { children: React.ReactNode })
   useEffect(() => {
     if (typeof document === "undefined") return;
     const root = document.documentElement;
+    const body = document.body;
     root.lang = language;
-    root.dir = language === "ar" ? "rtl" : "ltr";
+    root.dir = direction;
+    body.lang = language;
+    body.dir = direction;
+    root.classList.toggle("rtl", isRTL);
+    body.classList.toggle("rtl", isRTL);
     window.localStorage.setItem("language", language);
-  }, [language]);
+  }, [language, direction, isRTL]);
 
   const value = useMemo(
     () => ({
@@ -65,9 +81,11 @@ export const PreferencesProvider = ({ children }: { children: React.ReactNode })
       toggleTheme: () => setTheme((prev) => (prev === "light" ? "dark" : "light")),
       language,
       setLanguage,
+      direction,
+      isRTL,
       t: translations[language],
     }),
-    [theme, language],
+    [theme, language, direction, isRTL],
   );
 
   return <PreferencesContext.Provider value={value}>{children}</PreferencesContext.Provider>;

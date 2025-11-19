@@ -57,6 +57,9 @@ All colors MUST be HSL.
     --sidebar-accent-foreground: 210 40% 96%;
     --sidebar-border: 215 30% 25%;
     --sidebar-ring: 195 94% 56%;
+    --app-shell-gradient: radial-gradient(circle at 20% 20%, rgba(47, 134, 255, 0.25), transparent 55%),
+      radial-gradient(circle at 80% 0%, rgba(35, 210, 255, 0.15), transparent 45%),
+      linear-gradient(180deg, #030711 0%, #010409 100%);
   }
 
   .dark {
@@ -87,6 +90,60 @@ All colors MUST be HSL.
     --border: 215 30% 22%;
     --input: 215 30% 22%;
     --ring: 195 94% 56%;
+    --app-shell-gradient: radial-gradient(circle at 20% 20%, rgba(47, 134, 255, 0.25), transparent 55%),
+      radial-gradient(circle at 80% 0%, rgba(35, 210, 255, 0.15), transparent 45%),
+      linear-gradient(180deg, #030711 0%, #010409 100%);
+  }
+
+  .light {
+    --background: 220 32% 18%;
+    --foreground: 210 40% 96%;
+
+    --card: 220 28% 24%;
+    --card-foreground: 210 40% 96%;
+
+    --popover: 219 30% 28%;
+    --popover-foreground: 210 40% 96%;
+
+    --primary: 200 90% 60%;
+    --primary-foreground: 213 32% 12%;
+
+    --secondary: 218 25% 32%;
+    --secondary-foreground: 210 40% 96%;
+
+    --muted: 210 20% 46%;
+    --muted-foreground: 210 18% 88%;
+
+    --accent: 192 100% 47%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 70% 52%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 215 20% 40%;
+    --input: 215 20% 40%;
+    --ring: 200 90% 60%;
+
+    --medical-blue: 199 89% 65%;
+    --medical-blue-light: 196 80% 88%;
+    --medical-green: 158 75% 52%;
+    --medical-yellow: 40 100% 60%;
+    --medical-red: 350 82% 56%;
+
+    --shadow-card: 0 25px 60px rgba(11, 25, 55, 0.35);
+    --shadow-card-hover: 0 30px 80px rgba(10, 20, 40, 0.4);
+
+    --sidebar-background: 218 32% 18%;
+    --sidebar-foreground: 210 40% 96%;
+    --sidebar-primary: 200 90% 60%;
+    --sidebar-primary-foreground: 213 32% 12%;
+    --sidebar-accent: 215 32% 24%;
+    --sidebar-accent-foreground: 210 40% 96%;
+    --sidebar-border: 215 20% 36%;
+    --sidebar-ring: 200 90% 60%;
+    --app-shell-gradient: radial-gradient(circle at 10% 5%, rgba(99, 179, 237, 0.35), transparent 60%),
+      radial-gradient(circle at 90% 0%, rgba(134, 239, 172, 0.2), transparent 45%),
+      linear-gradient(180deg, #0d1833 0%, #060e1e 65%, #030711 100%);
   }
 }
 
@@ -98,12 +155,20 @@ All colors MUST be HSL.
   body {
     font-family: "IBM Plex Sans", "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
     background-color: hsl(var(--background));
-    background-image: radial-gradient(circle at 20% 20%, rgba(47, 134, 255, 0.25), transparent 55%),
-      radial-gradient(circle at 80% 0%, rgba(35, 210, 255, 0.15), transparent 45%),
-      linear-gradient(180deg, #030711 0%, #010409 100%);
+    background-image: var(--app-shell-gradient);
     color: hsl(var(--foreground));
     min-height: 100vh;
     letter-spacing: 0.01em;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  body[dir="rtl"] {
+    font-family: "IBM Plex Sans", "Cairo", "Inter", system-ui, -apple-system, sans-serif;
+  }
+
+  .app-shell {
+    background-image: var(--app-shell-gradient);
+    background-color: hsl(var(--background));
   }
 
   h1,

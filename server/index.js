@@ -28,6 +28,12 @@ router.register("GET", "/api/auth/me", currentUser, { requireAuth: true });
 router.register("GET", "/api/master-data/:type", getMasterData, { requireAuth: true });
 router.register("POST", "/api/ai/triage", triageAssistant, { requireAuth: true });
 
+router.register("POST", "/signup", signup);
+router.register("POST", "/login", login);
+router.register("GET", "/me", currentUser, { requireAuth: true });
+router.register("GET", "/master-data/:type", getMasterData, { requireAuth: true });
+router.register("POST", "/ai/triage", triageAssistant, { requireAuth: true });
+
 const server = http.createServer((req, res) => router.handle(req, res));
 
 const start = async () => {

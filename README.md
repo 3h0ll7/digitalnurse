@@ -46,13 +46,15 @@ All routes are served from the Node.js API (`npm run server`). `Authorization: B
 | Method | Path | Description |
 | --- | --- | --- |
 | `GET` | `/health` | Lightweight probe for uptime checks. |
-| `POST` | `/api/auth/signup` | Creates a clinician account, hashes the password with `scrypt`, seeds the default units, and returns a JWT + profile. |
-| `POST` | `/api/auth/login` | Validates credentials, issues a JWT, and returns the sanitized user profile. |
-| `GET` | `/api/auth/me` *(secure)* | Returns the authenticated user that matches the presented JWT. |
-| `GET` | `/api/master-data/:type` *(secure)* | Fetches master data (labs, drugs, assessments, procedures). |
-| `POST` | `/api/ai/triage` *(secure)* | Sends contextual prompts to the triage assistant (uses a deterministic safe-mode reply when no AI gateway is configured). |
+| `POST` | `/signup` *(alias: `/api/auth/signup`)* | Creates a clinician account, provisions identity via Supabase Auth (bcrypt) when configured or the local store otherwise, seeds the default units, and returns a JWT + profile. |
+| `POST` | `/login` *(alias: `/api/auth/login`)* | Validates credentials, issues a JWT, and returns the sanitized user profile. |
+| `GET` | `/me` *(alias: `/api/auth/me`, secure)* | Returns the authenticated user that matches the presented JWT. |
+| `GET` | `/master-data/:type` *(alias: `/api/master-data/:type`, secure)* | Fetches master data (labs, drugs, assessments, procedures). |
+| `POST` | `/ai/triage` *(alias: `/api/ai/triage`, secure)* | Sends contextual prompts to the triage assistant (uses a deterministic safe-mode reply when no AI gateway is configured). |
 
 Errors are always JSON with `{ error: string | { fieldErrors: ... } }` so the frontend can display meaningful validation feedback.
+
+Additional troubleshooting tips, deployment guidance, and testing steps live in [`docs/AUTH_BACKEND.md`](docs/AUTH_BACKEND.md).
 
 ## Deployment checklist
 

@@ -42,7 +42,7 @@ const AIAssistant = () => {
     setIsLoading(true);
 
     try {
-      const response = await secureRequest<{ answer: string; rationale?: string }>("/api/ai/triage", {
+      const response = await secureRequest<{ answer: string; rationale?: string }>("/ai/triage", {
         method: "POST",
         body: JSON.stringify({
           prompt: input,

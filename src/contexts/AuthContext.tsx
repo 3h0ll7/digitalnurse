@@ -57,7 +57,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         return;
       }
       try {
-        const { user: profile } = await apiFetch<{ user: AuthUser }>("/api/auth/me", { token });
+        const { user: profile } = await apiFetch<{ user: AuthUser }>("/me", { token });
         setUser(profile);
         setActiveUnitId(profile.units?.[0]?.id ?? null);
       } catch (error) {
@@ -98,7 +98,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const login = useCallback(
     async (payload: { email: string; password: string }) => {
       const response = await runAuthRequest(() =>
-        apiFetch<{ token: string; user: AuthUser }>("/api/auth/login", {
+        apiFetch<{ token: string; user: AuthUser }>("/login", {
           method: "POST",
           body: JSON.stringify(payload),
           auth: false,
@@ -114,7 +114,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const register = useCallback(
     async (payload: { fullName: string; email: string; password: string; organization?: string }) => {
       const response = await runAuthRequest(() =>
-        apiFetch<{ token: string; user: AuthUser }>("/api/auth/signup", {
+        apiFetch<{ token: string; user: AuthUser }>("/signup", {
           method: "POST",
           body: JSON.stringify(payload),
           auth: false,

@@ -35,9 +35,26 @@ export const apiFetch = async <T>(path: string, options: ApiOptions = {}): Promi
     } catch (error) {
       // ignore parsing failure
     }
-    const message =
-      (errorBody as { error?: string })?.error || response.statusText || "Request failed";
-    throw new Error(message);
+
+    const parseErrorMessage = () => {
+      const payload = (errorBody as { error?: unknown })?.error;
+      if (!payload) return response.statusText || "Request failed";
+      if (typeof payload === "string") return payload;
+      if (typeof payload === "object") {
+        const fieldErrors = payload as { fieldErrors?: Record<string, string[]>; formErrors?: { formErrors: string[] } };
+        if (fieldErrors?.formErrors?.formErrors?.length) {
+          return fieldErrors.formErrors.formErrors.join(" ");
+        }
+        if (fieldErrors?.fieldErrors) {
+          const firstError = Object.values(fieldErrors.fieldErrors).flat()[0];
+          if (firstError) return firstError;
+        }
+        return JSON.stringify(payload);
+      }
+      return response.statusText || "Request failed";
+    };
+
+    throw new Error(parseErrorMessage());
   }
 
   return response.json() as Promise<T>;

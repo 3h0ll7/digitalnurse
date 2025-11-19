@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { useAuth } from "@/hooks/useAuth";
 import { Loader2, ShieldCheck } from "lucide-react";
+import { API_URL } from "@/lib/api-client";
 
 const loginSchema = z.object({
   fullName: z.string().optional(),
@@ -60,8 +61,9 @@ const Login = () => {
   const onSubmit = async (values: LoginForm) => {
     try {
       setError(null);
+      const normalizedEmail = values.email.trim().toLowerCase();
       if (mode === "login") {
-        await login({ email: values.email, password: values.password });
+        await login({ email: normalizedEmail, password: values.password });
       } else {
         if (!values.fullName) {
           setError("Full name is required for registration");
@@ -69,7 +71,7 @@ const Login = () => {
         }
         await registerUser({
           fullName: values.fullName,
-          email: values.email,
+          email: normalizedEmail,
           password: values.password,
           organization: values.organization,
         });
@@ -82,6 +84,7 @@ const Login = () => {
   };
 
   const isBusy = isSubmitting || isAuthLoading;
+  const isConnectionIssue = Boolean(error && error.toLowerCase().includes("unable to reach"));
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-[#04070f] px-4 py-10 text-white">
@@ -124,7 +127,11 @@ const Login = () => {
               <p className="mt-1 text-xs text-medical-red">{errors.password.message}</p>
             )}
           </div>
-          {error && <p className="text-xs text-medical-red">{error}</p>}
+          {error && (
+            <p className="text-xs text-medical-red" role="alert" aria-live="assertive">
+              {error}
+            </p>
+          )}
           <Button
             type="submit"
             disabled={isBusy}
@@ -143,6 +150,15 @@ const Login = () => {
             )}
           </Button>
         </form>
+        <div className="mt-4 rounded-2xl border border-white/5 bg-white/5 p-3 text-xs text-muted-foreground">
+          <p className="font-semibold text-white">API endpoint</p>
+          <p className="break-all" data-testid="api-url">
+            {API_URL}
+          </p>
+          {isConnectionIssue && (
+            <p className="mt-2 text-medical-red">Digital Nurse API is unreachable. Verify VITE_API_URL and backend deployment.</p>
+          )}
+        </div>
         <div className="mt-6 text-center text-sm text-muted-foreground">
           {mode === "login" ? (
             <button onClick={() => setMode("register")} className="text-primary underline">

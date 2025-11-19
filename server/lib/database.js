@@ -19,8 +19,9 @@ class InMemoryDatabase {
   }
 
   async findUserByEmail(email) {
+    const normalized = email.toLowerCase();
     for (const user of this.users.values()) {
-      if (user.email === email) return user;
+      if (user.email === normalized) return user;
     }
     return null;
   }
@@ -57,7 +58,7 @@ class SupabaseDatabase {
     const payload = {
       id: user.id,
       email: user.email,
-      password_hash: user.passwordHash,
+      password_hash: user.passwordHash || null,
       full_name: user.fullName,
       role: user.role,
       organization: user.organization,
@@ -70,7 +71,11 @@ class SupabaseDatabase {
   }
 
   async findUserByEmail(email) {
-    const { data, error } = await this.client.from("users").select("*").eq("email", email).maybeSingle();
+    const { data, error } = await this.client
+      .from("users")
+      .select("*")
+      .eq("email", email.toLowerCase())
+      .maybeSingle();
     if (error) throw new Error(error.message);
     return data ? this.deserializeUser(data) : null;
   }

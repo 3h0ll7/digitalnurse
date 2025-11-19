@@ -21,7 +21,7 @@ export const useMasterData = <TContent = Record<string, unknown>>(type: MasterDa
   const { secureRequest, user } = useAuth();
   return useQuery<MasterDataResponse<TContent>>({
     queryKey: ["master-data", type, user?.id],
-    queryFn: () => secureRequest<MasterDataResponse<TContent>>(`/api/master-data/${type}`),
+    queryFn: () => secureRequest<MasterDataResponse<TContent>>(`/master-data/${type}`),
     enabled: Boolean(user),
     staleTime: 5 * 60 * 1000,
   });

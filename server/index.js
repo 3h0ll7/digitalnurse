@@ -2,7 +2,7 @@ import "./lib/env.js";
 import http from "node:http";
 import { Router } from "./router.js";
 import { db } from "./lib/database.js";
-import { register, login, currentUser } from "./controllers/authController.js";
+import { signup, login, currentUser } from "./controllers/authController.js";
 import { getMasterData } from "./controllers/masterDataController.js";
 import { triageAssistant } from "./controllers/aiController.js";
 import { sendJson } from "./utils/http.js";
@@ -21,7 +21,8 @@ router.register("GET", "/api/status", async (req, res) => {
   });
 });
 
-router.register("POST", "/api/auth/register", register);
+router.register("POST", "/api/auth/register", signup);
+router.register("POST", "/api/auth/signup", signup);
 router.register("POST", "/api/auth/login", login);
 router.register("GET", "/api/auth/me", currentUser, { requireAuth: true });
 router.register("GET", "/api/master-data/:type", getMasterData, { requireAuth: true });

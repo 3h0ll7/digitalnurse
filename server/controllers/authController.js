@@ -5,7 +5,7 @@ import { hashPassword, verifyPassword } from "../utils/password.js";
 import { issueTokenForUser, sanitizeUser } from "../middleware/auth.js";
 import { sendJson } from "../utils/http.js";
 
-const registerSchema = z.object({
+const signupSchema = z.object({
   fullName: z.string().min(2),
   email: z.string().email(),
   password: z.string().min(8),
@@ -20,9 +20,9 @@ const loginSchema = z.object({
   password: z.string().min(8),
 });
 
-export const register = async (req, res) => {
+export const signup = async (req, res) => {
   try {
-    const data = registerSchema.parse(req.body);
+    const data = signupSchema.parse(req.body);
     const existing = await db.findUserByEmail(data.email);
     if (existing) {
       return sendJson(res, 409, { error: "User already exists" });

@@ -17,10 +17,16 @@ const buildHeaders = (options: ApiOptions) => {
 };
 
 export const apiFetch = async <T>(path: string, options: ApiOptions = {}): Promise<T> => {
-  const response = await fetch(`${API_URL}${path}`, {
-    ...options,
-    headers: buildHeaders(options),
-  });
+  let response: Response;
+  try {
+    response = await fetch(`${API_URL}${path}`, {
+      ...options,
+      headers: buildHeaders(options),
+    });
+  } catch (networkError) {
+    console.error("API request failed", networkError);
+    throw new Error("Unable to reach the Digital Nurse API. Check your connection or VITE_API_URL setting.");
+  }
 
   if (!response.ok) {
     let errorBody: unknown;

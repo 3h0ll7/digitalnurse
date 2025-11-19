@@ -21,6 +21,7 @@ interface AuthContextValue {
   token: string | null;
   activeUnit: CareUnit | null;
   isSessionLoading: boolean;
+  isAuthLoading: boolean;
   login: (payload: { email: string; password: string }) => Promise<void>;
   register: (payload: {
     fullName: string;
@@ -47,6 +48,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<AuthUser | null>(null);
   const [activeUnitId, setActiveUnitId] = useState<string | null>(null);
   const [isSessionLoading, setIsSessionLoading] = useState(true);
+  const [isAuthLoading, setIsAuthLoading] = useState(false);
 
   useEffect(() => {
     const loadUser = async () => {
@@ -81,29 +83,48 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }, []);
 
-  const login = useCallback(async (payload: { email: string; password: string }) => {
-    const response = await apiFetch<{ token: string; user: AuthUser }>("/api/auth/login", {
-      method: "POST",
-      body: JSON.stringify(payload),
-      auth: false,
-    });
-    persistToken(response.token);
-    setUser(response.user);
-    setActiveUnitId(response.user.units?.[0]?.id ?? null);
-  }, [persistToken]);
+  const runAuthRequest = useCallback(
+    async <T,>(factory: () => Promise<T>): Promise<T> => {
+      setIsAuthLoading(true);
+      try {
+        return await factory();
+      } finally {
+        setIsAuthLoading(false);
+      }
+    },
+    []
+  );
 
-  const register = useCallback(
-    async (payload: { fullName: string; email: string; password: string; organization?: string }) => {
-      const response = await apiFetch<{ token: string; user: AuthUser }>("/api/auth/register", {
-        method: "POST",
-        body: JSON.stringify(payload),
-        auth: false,
-      });
+  const login = useCallback(
+    async (payload: { email: string; password: string }) => {
+      const response = await runAuthRequest(() =>
+        apiFetch<{ token: string; user: AuthUser }>("/api/auth/login", {
+          method: "POST",
+          body: JSON.stringify(payload),
+          auth: false,
+        })
+      );
       persistToken(response.token);
       setUser(response.user);
       setActiveUnitId(response.user.units?.[0]?.id ?? null);
     },
-    [persistToken]
+    [persistToken, runAuthRequest]
+  );
+
+  const register = useCallback(
+    async (payload: { fullName: string; email: string; password: string; organization?: string }) => {
+      const response = await runAuthRequest(() =>
+        apiFetch<{ token: string; user: AuthUser }>("/api/auth/signup", {
+          method: "POST",
+          body: JSON.stringify(payload),
+          auth: false,
+        })
+      );
+      persistToken(response.token);
+      setUser(response.user);
+      setActiveUnitId(response.user.units?.[0]?.id ?? null);
+    },
+    [persistToken, runAuthRequest]
   );
 
   const logout = useCallback(() => {
@@ -137,13 +158,25 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       token,
       activeUnit,
       isSessionLoading,
+      isAuthLoading,
       login,
       register,
       logout,
       setActiveUnit,
       secureRequest,
     }),
-    [user, token, activeUnit, isSessionLoading, login, register, logout, setActiveUnit, secureRequest]
+    [
+      user,
+      token,
+      activeUnit,
+      isSessionLoading,
+      isAuthLoading,
+      login,
+      register,
+      logout,
+      setActiveUnit,
+      secureRequest,
+    ]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

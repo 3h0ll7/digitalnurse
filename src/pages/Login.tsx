@@ -19,7 +19,7 @@ const loginSchema = z.object({
 type LoginForm = z.infer<typeof loginSchema>;
 
 const Login = () => {
-  const { login, register: registerUser, user, isSessionLoading } = useAuth();
+  const { login, register: registerUser, user, isSessionLoading, isAuthLoading } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const [mode, setMode] = useState<"login" | "register">("login");
@@ -39,6 +39,13 @@ const Login = () => {
     },
   });
 
+  useEffect(() => {
+    if (!isSessionLoading && user) {
+      const redirectTo = (location.state as { from?: { pathname?: string } })?.from?.pathname || "/home";
+      navigate(redirectTo, { replace: true });
+    }
+  }, [isSessionLoading, user, location, navigate]);
+
   if (isSessionLoading) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-[#04070f] text-white">
@@ -49,13 +56,6 @@ const Login = () => {
       </div>
     );
   }
-
-  useEffect(() => {
-    if (!isSessionLoading && user) {
-      const redirectTo = (location.state as { from?: { pathname?: string } })?.from?.pathname || "/home";
-      navigate(redirectTo, { replace: true });
-    }
-  }, [isSessionLoading, user, location, navigate]);
 
   const onSubmit = async (values: LoginForm) => {
     try {
@@ -80,6 +80,8 @@ const Login = () => {
       setError(err instanceof Error ? err.message : "Unable to authenticate");
     }
   };
+
+  const isBusy = isSubmitting || isAuthLoading;
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-[#04070f] px-4 py-10 text-white">
@@ -123,8 +125,22 @@ const Login = () => {
             )}
           </div>
           {error && <p className="text-xs text-medical-red">{error}</p>}
-          <Button type="submit" className="w-full rounded-2xl bg-gradient-to-r from-primary via-[#5F5CFF] to-[#8C79FF]">
-            {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : mode === "login" ? "Login" : "Create account"}
+          <Button
+            type="submit"
+            disabled={isBusy}
+            aria-busy={isBusy}
+            className="w-full rounded-2xl bg-gradient-to-r from-primary via-[#5F5CFF] to-[#8C79FF]"
+          >
+            {isBusy ? (
+              <span className="flex items-center justify-center gap-2">
+                <Loader2 className="h-4 w-4 animate-spin" />
+                <span>{mode === "login" ? "Authenticating" : "Creating account"}…</span>
+              </span>
+            ) : mode === "login" ? (
+              "Login"
+            ) : (
+              "Create account"
+            )}
           </Button>
         </form>
         <div className="mt-6 text-center text-sm text-muted-foreground">

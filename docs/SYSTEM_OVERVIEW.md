@@ -28,7 +28,7 @@
 |--------|----------|---------|
 | GET | `/health` | Lightweight uptime probe for load balancers. |
 | GET | `/api/status` | Returns build metadata and uptime (used in monitoring dashboards). |
-| POST | `/api/auth/register` | Creates a clinician account, hashing credentials with scrypt. |
+| POST | `/api/auth/signup` | Creates a clinician account, hashing credentials with scrypt. |
 | POST | `/api/auth/login` | Issues JWT for existing accounts. |
 | GET | `/api/auth/me` | Returns sanitized clinician profile + assigned units. |
 | GET | `/api/master-data/:type` | Fetches master datasets (`procedures`, `labs`, `drugs`, `assessments`). |

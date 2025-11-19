@@ -10,13 +10,11 @@ import {
   GitBranch,
 } from "lucide-react";
 import { usePreferences } from "@/contexts/PreferencesContext";
-import { useAuth } from "@/hooks/useAuth";
 
 const PrimaryNav = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { t } = usePreferences();
-  const { activeUnit } = useAuth();
 
   const navItems = [
     { path: "/home", icon: ActivitySquare, label: t.navHome },
@@ -46,7 +44,7 @@ const PrimaryNav = () => {
                   ? "bg-primary/20 text-white shadow-[0_8px_30px_rgba(21,154,255,0.35)]"
                   : "text-muted-foreground hover:text-white"
               }`}
-              aria-label={`${item.label} • ${activeUnit?.name ?? "No unit"}`}
+              aria-label={item.label}
             >
               <span
                 className={`flex h-9 w-9 items-center justify-center rounded-2xl border text-xs transition-all duration-300 ${

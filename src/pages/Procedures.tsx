@@ -8,43 +8,19 @@ import { Drawer, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, D
 import { Button } from "@/components/ui/button";
 import AppLayout from "@/components/layout/AppLayout";
 import { Card } from "@/components/ui/card";
-import { useMasterData, type MasterDataRecord } from "@/hooks/useMasterData";
-import { Skeleton } from "@/components/ui/skeleton";
 
 const Procedures = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
   const { t } = usePreferences();
   const [activeProcedure, setActiveProcedure] = useState<Procedure | null>(null);
+  const allProcedures = [...procedures, ...additionalProcedures];
 
-  const { data, isFetching } = useMasterData<Record<string, unknown>>("procedures");
-  const remoteRecords = data?.records ?? [];
-
-  const normalizedRemote: Procedure[] = remoteRecords.map((record: MasterDataRecord<Record<string, unknown>>) => ({
-    id: record.id,
-    category: record.category || (record.content?.category as string) || "CLINICAL",
-    title: record.name,
-    description: record.summary || (record.content?.description as string) || "",
-    definition: (record.content?.definition as string) || record.summary || "",
-    indications: (record.content?.indications as string[]) || [],
-    contraindications: (record.content?.contraindications as string[]) || [],
-    equipment: (record.content?.equipment as string[]) || [],
-    steps: (record.content?.steps as string[]) || [],
-    safetyAlerts: (record.content?.safetyAlerts as string[]) || [],
-    complications: (record.content?.complications as string[]) || [],
-    documentation: (record.content?.documentation as string[]) || [],
-    patientTeaching: (record.content?.patientTeaching as string[]) || [],
-  }));
-
-  const allProcedures = normalizedRemote.length
-    ? normalizedRemote
-    : [...procedures, ...additionalProcedures];
-  
   const filteredProcedures = allProcedures.filter(proc =>
     proc.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
     proc.category.toLowerCase().includes(searchQuery.toLowerCase())
   );
-  
+
   const categories = Array.from(new Set(allProcedures.map(p => p.category)));
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
 
@@ -94,9 +70,7 @@ const Procedures = () => {
           </div>
           <div className="flex flex-col text-xs uppercase tracking-[0.3em] text-muted-foreground">
             <span>{displayProcedures.length} workflows</span>
-            <span className="text-[10px] text-primary">
-              Source: {normalizedRemote.length ? "Hospital master data" : "Local clinical sample"}
-            </span>
+            <span className="text-[10px] text-primary">Source: On-device clinical reference</span>
           </div>
         </div>
         <div className="mt-4 flex gap-2 overflow-x-auto pb-2">
@@ -138,13 +112,6 @@ const Procedures = () => {
         })}
       </section>
 
-      {isFetching && (
-        <div className="space-y-2">
-          {[...Array(3)].map((_, index) => (
-            <Skeleton key={index} className="h-24 w-full rounded-3xl bg-white/5" />
-          ))}
-        </div>
-      )}
       <section className="space-y-3">
         {displayProcedures.map((procedure) => {
           const snippet = procedure.definition

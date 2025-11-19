@@ -1,134 +1,62 @@
-# Welcome to your Lovable project
+# Digital Nurse Buddy
 
 ## Project info
 
 **URL**: https://lovable.dev/projects/46c3b1f7-4484-40fa-a402-f43a941a4f32
 
-## Phase 1 Modernization Snapshot
+> **App is now fully public-access with no login required.** Every screen, workflow, and calculator loads instantly without credentials or backend dependencies.
 
-- **Backend**: Custom Node.js API (`npm run server`) with JWT auth, AI gateway isolation, and Postgres (Supabase) adapter. See [`docs/SYSTEM_OVERVIEW.md`](docs/SYSTEM_OVERVIEW.md) for architecture and deployment guidance.
-- **Frontend**: Vite + React + shadcn/ui with protected routes, organization-aware shell, and API-aware data hooks.
-- **Roadmap**: Future security, clinical, and scalability milestones are tracked in [`TODO_ROADMAP.md`](TODO_ROADMAP.md).
+## Overview
 
-## Local Development
+- **Clinical cockpit** – evidence-informed dashboards for procedures, labs, calculators, flashcards, and more.
+- **Offline-friendly data** – all master data lives in `src/data/*`, so demos run without APIs or environment variables.
+- **Responsive shell** – shadcn/ui components, Lucide icons, and Tailwind CSS create a polished experience across mobile and desktop.
+- **AI helper** – the assistant now responds locally with curated guidance, keeping the UI helpful even without a model backend.
+
+## Local development
 
 ```bash
 # Install dependencies
 npm install
 
-# Start the backend API on http://localhost:4000
-npm run server
-
-# In a second terminal, run the React client
+# Start the Vite dev server
 npm run dev
 ```
 
-> Set environment variables using `.env` (see `.env.example`). `VITE_API_URL` must point to the running API for login and data retrieval to succeed.
+No additional services or environment variables are required.
 
-## Environment variables
+## Production build & preview
 
-| Variable | Scope | Purpose |
-| --- | --- | --- |
-| `VITE_API_URL` | Frontend | Base URL for every call that leaves the browser. Point it at the deployed API host (defaults to `http://localhost:4000`). |
-| `PORT` | Backend | Port that the Node API listens on. |
-| `CLIENT_ORIGIN` | Backend | Comma-separated list of origins that are allowed to hit the API (drives the CORS headers). |
-| `JWT_SECRET` | Backend | Secret used to sign/verify the JWT tokens that are returned on `/api/auth/login` and `/api/auth/signup`. |
-| `SUPABASE_URL` / `SUPABASE_SERVICE_ROLE_KEY` | Backend | Optional Postgres (Supabase) connection. When present, users + master data are persisted to Supabase; otherwise an in-memory store is used for local prototyping. |
-| `SKIP_REMOTE_SEED` | Backend | Set to `true` to prevent the API from re-seeding reference data on every boot. |
-| `AI_GATEWAY_URL` / `AI_GATEWAY_KEY` | Backend | Optional upstream AI integration. |
+```bash
+npm run build
+npm run preview
+```
 
-Copy `.env.example` into `.env` (frontend) and `.env.server` (backend) or feed these values via your secrets manager in production.
+Deploy the contents of `dist/` to any static host (Vercel, Netlify, S3, etc.). There are no server-side requirements.
 
-## API endpoints
+## Feature highlights
 
-All routes are served from the Node.js API (`npm run server`). `Authorization: Bearer <token>` is required for any path flagged below as “secure”.
+- Secure-shell inspired layout that keeps navigation, system status, and preferences always within reach.
+- Procedures, labs, and assessments all reference the curated data bundled with the repo—perfect for offline demos.
+- Calculators, flashcards, and mind maps showcase specialty tooling for bedside teams.
+- AI Nursing Assistant supplies templated coaching without network calls, so staging builds never block on credentials.
 
-| Method | Path | Description |
-| --- | --- | --- |
-| `GET` | `/health` | Lightweight probe for uptime checks. |
-| `POST` | `/signup` *(alias: `/api/auth/signup`)* | Creates a clinician account, provisions identity via Supabase Auth (bcrypt) when configured or the local store otherwise, seeds the default units, and returns a JWT + profile. |
-| `POST` | `/login` *(alias: `/api/auth/login`)* | Validates credentials, issues a JWT, and returns the sanitized user profile. |
-| `GET` | `/me` *(alias: `/api/auth/me`, secure)* | Returns the authenticated user that matches the presented JWT. |
-| `GET` | `/master-data/:type` *(alias: `/api/master-data/:type`, secure)* | Fetches master data (labs, drugs, assessments, procedures). |
-| `POST` | `/ai/triage` *(alias: `/api/ai/triage`, secure)* | Sends contextual prompts to the triage assistant (uses a deterministic safe-mode reply when no AI gateway is configured). |
+## Contributing / editing
 
-Errors are always JSON with `{ error: string | { fieldErrors: ... } }` so the frontend can display meaningful validation feedback.
+You can keep building via [Lovable](https://lovable.dev/projects/46c3b1f7-4484-40fa-a402-f43a941a4f32) or your preferred IDE:
 
-Additional troubleshooting tips, deployment guidance, and testing steps live in [`docs/AUTH_BACKEND.md`](docs/AUTH_BACKEND.md).
-
-## Deployment checklist
-
-1. **Provision Postgres** – either via Supabase or another managed Postgres that exposes the same schema as `server/seed/masterData.js`.
-2. **Configure secrets** – set `JWT_SECRET`, `SUPABASE_URL`, and `SUPABASE_SERVICE_ROLE_KEY` (or wire up your own Postgres adapter) plus your allowed client origins.
-3. **Build the UI** – `npm install && npm run build` generates the production-ready assets in `dist/`.
-4. **Run the API** – `npm install && npm run server` on the server host (Node 18+). Use a process manager (PM2/Systemd) and expose `/health` for your load balancer checks.
-5. **Set the frontend origin** – configure `VITE_API_URL` (at build time) or `PUBLIC_URL` in your hosting provider so the browser knows where to call the API.
-6. **Smoke test** – hit `/api/auth/signup` and `/api/auth/login` manually (or via the React form) to confirm the JWT + localStorage flow works before cutting traffic over.
-
-## How can I edit this code?
-
-There are several ways of editing your application.
-
-**Use Lovable**
-
-Simply visit the [Lovable Project](https://lovable.dev/projects/46c3b1f7-4484-40fa-a402-f43a941a4f32) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
+```bash
 git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
 cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+npm install
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+Any changes committed here are immediately available to Lovable and downstream deployments.
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## Tech stack
 
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
+- Vite + React 18 + TypeScript
+- shadcn/ui
 - Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/46c3b1f7-4484-40fa-a402-f43a941a4f32) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+- Lucide icons

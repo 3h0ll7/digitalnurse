@@ -2,6 +2,7 @@ import { ReactNode } from "react";
 import { ChevronLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { usePreferences } from "@/contexts/PreferencesContext";
+import { useAuth } from "@/hooks/useAuth";
 
 interface AppLayoutProps {
   title: string;
@@ -21,6 +22,7 @@ const AppLayout = ({
   className,
 }: AppLayoutProps) => {
   const { direction } = usePreferences();
+  const { user, activeUnit, setActiveUnit } = useAuth();
 
   return (
     <div
@@ -66,6 +68,29 @@ const AppLayout = ({
             </div>
           )}
         </div>
+        {user && (
+          <div className="mt-4 flex flex-wrap items-center gap-2 text-[11px] uppercase tracking-[0.3em] text-muted-foreground">
+            <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1">
+              {user.organization || "Unassigned facility"}
+            </span>
+            {user.units?.length > 0 && (
+              <select
+                value={activeUnit?.id || user.units[0].id}
+                onChange={(event) => setActiveUnit(event.target.value)}
+                className="rounded-full border border-white/10 bg-transparent px-3 py-1 text-[11px] uppercase tracking-[0.3em]"
+              >
+                {user.units.map((unit) => (
+                  <option key={unit.id} value={unit.id}>
+                    {unit.name}
+                  </option>
+                ))}
+              </select>
+            )}
+            <span className="rounded-full border border-white/10 px-3 py-1 text-[11px] uppercase tracking-[0.3em] text-white/70">
+              {user.role}
+            </span>
+          </div>
+        )}
       </header>
 
       <main className={cn("space-y-6", className)}>{children}</main>

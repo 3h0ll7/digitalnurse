@@ -6,18 +6,32 @@ import { useNavigate } from "react-router-dom";
 import { useMemo, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Sparkles } from "lucide-react";
+import { useMasterData, type MasterDataRecord } from "@/hooks/useMasterData";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const Assessments = () => {
   const navigate = useNavigate();
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("All");
 
+  const { data, isFetching } = useMasterData<Record<string, unknown>>("assessments");
+  const remoteScales = data?.records ?? [];
+
+  const normalizedScales = remoteScales.map((record: MasterDataRecord<Record<string, unknown>>) => ({
+    id: record.id,
+    category: record.category || "Clinical",
+    name: record.name,
+    description: record.summary || (record.content?.description as string) || "",
+  }));
+
+  const dataset = normalizedScales.length ? normalizedScales : assessmentScales;
+
   const categories = useMemo(
-    () => ["All", ...Array.from(new Set(assessmentScales.map((scale) => scale.category)))],
-    []
+    () => ["All", ...Array.from(new Set(dataset.map((scale) => scale.category)))],
+    [dataset]
   );
 
-  const filteredScales = assessmentScales.filter((scale) => {
+  const filteredScales = dataset.filter((scale) => {
     const matchesQuery =
       scale.name.toLowerCase().includes(query.toLowerCase()) ||
       scale.description.toLowerCase().includes(query.toLowerCase());
@@ -38,7 +52,12 @@ const Assessments = () => {
               className="h-12 rounded-2xl border-white/10 bg-white/5 pl-12 text-white placeholder:text-muted-foreground"
             />
           </div>
-          <p className="text-xs uppercase tracking-[0.4em] text-muted-foreground">{filteredScales.length} modules</p>
+          <div className="text-xs uppercase tracking-[0.4em] text-muted-foreground">
+            {filteredScales.length} modules
+            <p className="text-[10px] text-primary">
+              Source: {normalizedScales.length ? "Hospital master data" : "Local catalog"}
+            </p>
+          </div>
         </div>
         <div className="mt-4 flex flex-wrap gap-2">
           {categories.map((cat) => (
@@ -59,6 +78,13 @@ const Assessments = () => {
         </div>
       </section>
 
+      {isFetching && (
+        <div className="space-y-2">
+          {[...Array(2)].map((_, index) => (
+            <Skeleton key={index} className="h-24 w-full rounded-3xl bg-white/5" />
+          ))}
+        </div>
+      )}
       <section className="grid gap-4">
         {filteredScales.map((scale) => (
           <Card

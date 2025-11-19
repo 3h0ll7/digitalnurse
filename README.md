@@ -4,6 +4,27 @@
 
 **URL**: https://lovable.dev/projects/46c3b1f7-4484-40fa-a402-f43a941a4f32
 
+## Phase 1 Modernization Snapshot
+
+- **Backend**: Custom Node.js API (`npm run server`) with JWT auth, AI gateway isolation, and Postgres (Supabase) adapter. See [`docs/SYSTEM_OVERVIEW.md`](docs/SYSTEM_OVERVIEW.md) for architecture and deployment guidance.
+- **Frontend**: Vite + React + shadcn/ui with protected routes, organization-aware shell, and API-aware data hooks.
+- **Roadmap**: Future security, clinical, and scalability milestones are tracked in [`TODO_ROADMAP.md`](TODO_ROADMAP.md).
+
+## Local Development
+
+```bash
+# Install dependencies
+npm install
+
+# Start the backend API on http://localhost:4000
+npm run server
+
+# In a second terminal, run the React client
+npm run dev
+```
+
+> Set environment variables using `.env` (see `.env.example`). `VITE_API_URL` must point to the running API for login and data retrieval to succeed.
+
 ## How can I edit this code?
 
 There are several ways of editing your application.

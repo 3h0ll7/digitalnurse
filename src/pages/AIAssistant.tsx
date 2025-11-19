@@ -2,8 +2,6 @@ import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Send, Bot, AlertCircle } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
-import { useAuth } from "@/hooks/useAuth";
 
 interface Message {
   role: "user" | "assistant";
@@ -21,9 +19,24 @@ const AIAssistant = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const { toast } = useToast();
-  const { secureRequest } = useAuth();
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const generateLocalAnswer = (question: string) => {
+    const normalized = question.toLowerCase();
+    if (normalized.includes("iv") && normalized.includes("infiltration")) {
+      return "Assess for swelling, blanching, pain, and slowed infusion. Stop the IV, elevate the limb, apply a warm or cool compress per protocol, and restart the line proximal to the site. Document assessments and notify the provider if vesicants were involved.";
+    }
+    if (normalized.includes("metformin")) {
+      return "Metformin decreases hepatic glucose production, increases peripheral uptake, and improves insulin sensitivity. Remind patients to take it with meals, hold the dose around IV contrast, and monitor renal function and lactic acidosis symptoms.";
+    }
+    if (normalized.includes("progress note")) {
+      return "Use a SOAP format: document subjective status, objective vitals/labs, your assessment of trends, and an actionable plan (consults, education, safety checks). Keep the tone concise and clinically focused.";
+    }
+    if (normalized.includes("vital")) {
+      return "Adult vital sign targets: Temp 36.4–37.6°C, HR 60–100 bpm, RR 12–20/min, BP roughly 100–120/60–80 mmHg, SpO2 ≥94% unless otherwise ordered. Trend changes, not just absolutes.";
+    }
+    return `Here is a rapid bedside approach: clarify the indication, capture baseline vitals, outline first-line interventions, and highlight red flags for escalation related to "${question}". Pair the response with education, documentation, and follow-up reminders.`;
+  };
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -33,7 +46,7 @@ const AIAssistant = () => {
     scrollToBottom();
   }, [messages]);
 
-  const handleSend = async () => {
+  const handleSend = () => {
     if (!input.trim()) return;
 
     const userMessage: Message = { role: "user", content: input };
@@ -41,32 +54,11 @@ const AIAssistant = () => {
     setInput("");
     setIsLoading(true);
 
-    try {
-      const response = await secureRequest<{ answer: string; rationale?: string }>("/ai/triage", {
-        method: "POST",
-        body: JSON.stringify({
-          prompt: input,
-          transcript: [...messages, userMessage],
-        }),
-      });
-
-      setMessages((prev) => [
-        ...prev,
-        { role: "assistant", content: response.answer },
-        response.rationale
-          ? { role: "assistant", content: `Rationale: ${response.rationale}` }
-          : null,
-      ].filter(Boolean) as Message[]);
+    setTimeout(() => {
+      const answer = generateLocalAnswer(userMessage.content);
+      setMessages((prev) => [...prev, { role: "assistant", content: answer }]);
       setIsLoading(false);
-    } catch (error) {
-      console.error("Error calling AI:", error);
-      toast({
-        title: "خطأ",
-        description: "فشل الاتصال بمساعد الذكاء الاصطناعي. الرجاء المحاولة مرة أخرى.",
-        variant: "destructive",
-      });
-      setIsLoading(false);
-    }
+    }, 600);
   };
 
   const handleExampleClick = (question: string) => {

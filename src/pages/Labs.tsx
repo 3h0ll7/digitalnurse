@@ -5,26 +5,12 @@ import { labValues } from "@/data/labValues";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Activity } from "lucide-react";
-import { useMasterData, type MasterDataRecord } from "@/hooks/useMasterData";
-import { Skeleton } from "@/components/ui/skeleton";
 
 const Labs = () => {
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("All");
 
-  const { data, isFetching } = useMasterData<Record<string, unknown>>("labs");
-  const remoteLabs = data?.records ?? [];
-
-  const normalizedLabs = remoteLabs.map((record: MasterDataRecord<Record<string, unknown>>) => ({
-    test: record.name,
-    normalRange: (record.content?.normalRange as string) || record.summary || "",
-    unit: (record.content?.unit as string) || "",
-    criticalLow: record.content?.criticalLow as string | undefined,
-    criticalHigh: record.content?.criticalHigh as string | undefined,
-    category: record.category || "Lab",
-  }));
-
-  const dataset = normalizedLabs.length ? normalizedLabs : labValues;
+  const dataset = labValues;
 
   const categories = useMemo(
     () => ["All", ...Array.from(new Set(dataset.map((lab) => lab.category)))],
@@ -54,9 +40,7 @@ const Labs = () => {
           </div>
           <div className="text-xs uppercase tracking-[0.4em] text-muted-foreground">
             {filteredLabs.length} results
-            <p className="text-[10px] text-primary">
-              Source: {normalizedLabs.length ? "Hospital master data" : "Local reference"}
-            </p>
+            <p className="text-[10px] text-primary">Source: On-device lab reference</p>
           </div>
         </div>
         <div className="mt-4 flex flex-wrap gap-2">
@@ -78,13 +62,6 @@ const Labs = () => {
         </div>
       </section>
 
-      {isFetching && (
-        <div className="space-y-2">
-          {[...Array(3)].map((_, index) => (
-            <Skeleton key={index} className="h-24 w-full rounded-3xl bg-white/5" />
-          ))}
-        </div>
-      )}
       <section className="grid gap-3">
         {filteredLabs.map((lab) => (
           <div

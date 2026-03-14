@@ -17,6 +17,7 @@ import { PreferencesProvider } from "./contexts/PreferencesContext";
 import Labs from "./pages/Labs";
 import Assessments from "./pages/Assessments";
 import MindMaps from "./pages/MindMaps";
+import ECG from "./pages/ECG";
 import SecureShell from "./components/layout/SecureShell";
 
 const queryClient = new QueryClient();
@@ -35,6 +36,7 @@ const App = () => (
               <Route path="/procedures" element={<Procedures />} />
               <Route path="/procedure/:id" element={<ProcedureDetail />} />
               <Route path="/labs" element={<Labs />} />
+              <Route path="/ecg" element={<ECG />} />
               <Route path="/assessments" element={<Assessments />} />
               <Route path="/calculators" element={<Calculators />} />
               <Route path="/calculator/:id" element={<CalculatorDetail />} />

@@ -2,45 +2,25 @@ import { Droplet, Activity, Scale, Calculator as CalcIcon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import AppLayout from "@/components/layout/AppLayout";
 import { Card } from "@/components/ui/card";
-
-const calculators = [
-  {
-    id: "dosage",
-    name: "Dosage Calculation",
-    description: "Calculate medication dosage based on weight",
-    icon: Droplet,
-  },
-  {
-    id: "iv-drip",
-    name: "IV Drip Rate",
-    description: "Calculate mL/hour and drops/min",
-    icon: Activity,
-  },
-  {
-    id: "bmi",
-    name: "BMI Calculator",
-    description: "Calculate Body Mass Index",
-    icon: Scale,
-  },
-  {
-    id: "creatinine",
-    name: "Creatinine Clearance",
-    description: "Calculate renal function",
-    icon: CalcIcon,
-  },
-];
+import { usePreferences } from "@/contexts/PreferencesContext";
 
 const Calculators = () => {
   const navigate = useNavigate();
+  const { t } = usePreferences();
+
+  const calculators = [
+    { id: "dosage", name: t.dosageCalculation, description: t.dosageCalculationDesc, icon: Droplet },
+    { id: "iv-drip", name: t.ivDripRate, description: t.ivDripRateDesc, icon: Activity },
+    { id: "bmi", name: t.bmiCalculator, description: t.bmiCalculatorDesc, icon: Scale },
+    { id: "creatinine", name: t.creatinineClearance, description: t.creatinineClearanceDesc, icon: CalcIcon },
+  ];
 
   return (
-    <AppLayout title="Clinical Calculators" subtitle="Smart dosing & drip tools">
+    <AppLayout title={t.calculatorsTitle} subtitle={t.calculatorsSubtitle}>
       <section className="rounded-3xl border border-white/10 bg-card/80 p-5 text-white shadow-[0_20px_60px_rgba(0,0,0,0.45)]">
-        <p className="text-xs uppercase tracking-[0.4em] text-muted-foreground">Precision dosing</p>
-        <h2 className="mt-3 text-3xl font-semibold">Frictionless tools engineered for bedside titrations.</h2>
-        <p className="mt-2 text-sm text-muted-foreground">
-          Every calculator mirrors the Digital Nurse identity with clean inputs, contrast, and escalation prompts.
-        </p>
+        <p className="text-xs uppercase tracking-[0.4em] text-muted-foreground">{t.precisionDosing}</p>
+        <h2 className="mt-3 text-3xl font-semibold">{t.calculatorsHeroHeading}</h2>
+        <p className="mt-2 text-sm text-muted-foreground">{t.calculatorsHeroDesc}</p>
       </section>
 
       <div className="grid gap-4">
@@ -60,7 +40,7 @@ const Calculators = () => {
                   <h3 className="text-2xl font-semibold">{calc.name}</h3>
                   <p className="text-sm text-muted-foreground">{calc.description}</p>
                 </div>
-                <span className="text-xs uppercase tracking-[0.4em] text-muted-foreground">Open →</span>
+                <span className="text-xs uppercase tracking-[0.4em] text-muted-foreground">{t.open}</span>
               </div>
             </Card>
           );

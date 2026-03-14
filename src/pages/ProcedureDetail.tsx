@@ -17,7 +17,7 @@ const ProcedureDetail = () => {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
-          <p className="text-muted-foreground">Procedure not found</p>
+          <p className="text-muted-foreground">{t.procedureNotFound}</p>
           <Button onClick={() => navigate("/procedures")} className="mt-4">
             {t.backToProcedures}
           </Button>

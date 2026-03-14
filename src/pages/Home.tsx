@@ -3,95 +3,97 @@ import { Card } from "@/components/ui/card";
 import AppLayout from "@/components/layout/AppLayout";
 import { Activity, Bot, Brain, HeartPulse, Microscope, Sparkles, TestTube2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-
-const quickActions = [
-  {
-    title: "Procedural Playbooks",
-    description: "Neo-brutalist checklists with escalation cues",
-    icon: Activity,
-    action: "Browse",
-    to: "/procedures",
-  },
-  {
-    title: "Assessment Co-pilot",
-    description: "Risk scoring + validated bedside scales",
-    icon: HeartPulse,
-    action: "Launch",
-    to: "/assessments",
-  },
-  {
-    title: "Lab Intelligence",
-    description: "Critical deltas & trending ranges",
-    icon: TestTube2,
-    action: "Review",
-    to: "/labs",
-  },
-];
-
-const workflowTiles = [
-  {
-    title: "Vascular access",
-    tag: "Priority",
-    signal: "Sterile kit", 
-    accent: "from-[#64FFE0] to-[#209EFF]",
-    to: "/procedures",
-  },
-  {
-    title: "Neuro checks",
-    tag: "Protocol",
-    signal: "GCS+NIHSS",
-    accent: "from-[#94B9FF] to-[#4D4DFF]",
-    to: "/assessments",
-  },
-  {
-    title: "Medication math",
-    tag: "Tools",
-    signal: "Titrate & drip",
-    accent: "from-[#FFB7C5] to-[#FF5F8F]",
-    to: "/calculators",
-  },
-];
-
-const insights = [
-  {
-    title: "AI bedside brief",
-    description: "Summaries & escalation language auto-generated for complex patients.",
-    icon: Bot,
-    to: "/ai-assistant",
-  },
-  {
-    title: "Mind maps",
-    description: "Pathways that translate chaos into visual order for rapid huddles.",
-    icon: Brain,
-    to: "/mind-maps",
-  },
-  {
-    title: "Flashcards",
-    description: "Micro-learning decks tuned for evidence refreshers.",
-    icon: Sparkles,
-    to: "/flashcards",
-  },
-];
-
-const vitals = [
-  { label: "Neuro", status: "Stable", progress: 84 },
-  { label: "Hemodynamics", status: "Responsive", progress: 72 },
-  { label: "Respiratory", status: "Escalate", progress: 63 },
-];
+import { usePreferences } from "@/contexts/PreferencesContext";
 
 const Home = () => {
   const navigate = useNavigate();
+  const { t } = usePreferences();
+
+  const quickActions = [
+    {
+      title: t.proceduralPlaybooks,
+      description: t.proceduralPlaybooksDesc,
+      icon: Activity,
+      action: t.browse,
+      to: "/procedures",
+    },
+    {
+      title: t.assessmentCoPilot,
+      description: t.assessmentCoPilotDesc,
+      icon: HeartPulse,
+      action: t.launch,
+      to: "/assessments",
+    },
+    {
+      title: t.labIntelligence,
+      description: t.labIntelligenceDesc,
+      icon: TestTube2,
+      action: t.review,
+      to: "/labs",
+    },
+  ];
+
+  const workflowTiles = [
+    {
+      title: t.vascularAccess,
+      tag: t.priority,
+      signal: t.sterileKit,
+      accent: "from-[#64FFE0] to-[#209EFF]",
+      to: "/procedures",
+    },
+    {
+      title: t.neuroChecks,
+      tag: t.protocol,
+      signal: t.gcsNihss,
+      accent: "from-[#94B9FF] to-[#4D4DFF]",
+      to: "/assessments",
+    },
+    {
+      title: t.medicationMath,
+      tag: t.tools,
+      signal: t.titrateDrip,
+      accent: "from-[#FFB7C5] to-[#FF5F8F]",
+      to: "/calculators",
+    },
+  ];
+
+  const insights = [
+    {
+      title: t.aiBedBrief,
+      description: t.aiBedBriefDesc,
+      icon: Bot,
+      to: "/ai-assistant",
+    },
+    {
+      title: t.mindMapsInsight,
+      description: t.mindMapsInsightDesc,
+      icon: Brain,
+      to: "/mind-maps",
+    },
+    {
+      title: t.flashcardsInsight,
+      description: t.flashcardsInsightDesc,
+      icon: Sparkles,
+      to: "/flashcards",
+    },
+  ];
+
+  const vitals = [
+    { label: t.neuro, status: t.stable, progress: 84 },
+    { label: t.hemodynamics, status: t.responsive, progress: 72 },
+    { label: t.respiratory, status: t.escalate, progress: 63 },
+  ];
 
   return (
     <AppLayout
-      title="Digital Nurse Command"
-      subtitle="Neo-brutalist clinical cockpit"
+      title={t.homeTitle}
+      subtitle={t.homeSubtitle}
       actions={
         <Button
           onClick={() => navigate("/ai-assistant")}
           className="bg-gradient-to-r from-[#23D2FF] via-[#5F5CFF] to-[#8C79FF] text-white shadow-[0_20px_45px_rgba(44,178,255,0.35)]"
         >
-          <Bot size={16} /> Engage AI nurse
+          <Bot size={16} /> {t.engageAI}
         </Button>
       }
     >
@@ -100,12 +102,12 @@ const Home = () => {
           <div className="flex flex-wrap gap-6">
             <div className="flex-1 min-w-[220px] space-y-6">
               <div className="space-y-3">
-                <p className="text-xs uppercase tracking-[0.3em] text-muted-foreground">Futuristic care OS</p>
+                <p className="text-xs uppercase tracking-[0.3em] text-muted-foreground">{t.futuristicCareOS}</p>
                 <h2 className="text-3xl font-semibold text-white sm:text-4xl">
-                  Premium workflows engineered for the modern bedside.
+                  {t.homeHeroHeading}
                 </h2>
                 <p className="text-sm text-muted-foreground">
-                  Glide through assessments, procedures, and decision support with a cohesive medical-tech identity.
+                  {t.homeHeroDescription}
                 </p>
               </div>
               <div className="flex flex-wrap gap-3">
@@ -113,14 +115,14 @@ const Home = () => {
                   onClick={() => navigate("/procedures")}
                   className="bg-white/90 text-background hover:bg-white"
                 >
-                  Explore procedures
+                  {t.exploreProcedures}
                 </Button>
                 <Button
                   variant="outline"
                   onClick={() => navigate("/labs")}
                   className="border-white/30 bg-transparent text-white hover:bg-white/10"
                 >
-                  View lab intelligence
+                  {t.viewLabIntelligence}
                 </Button>
               </div>
             </div>
@@ -148,7 +150,7 @@ const Home = () => {
                 <span className="text-white/70">{tile.signal}</span>
               </div>
               <p className="mt-3 text-2xl font-semibold">{tile.title}</p>
-              <span className="mt-4 text-sm text-white/80">Enter →</span>
+              <span className="mt-4 text-sm text-white/80">{t.enter}</span>
             </button>
           ))}
         </div>
@@ -177,7 +179,7 @@ const Home = () => {
                 onClick={() => navigate(action.to)}
                 className="justify-start px-0 text-primary hover:text-white"
               >
-                Enter workspace →
+                {t.enterWorkspace}
               </Button>
             </Card>
           );
@@ -188,10 +190,10 @@ const Home = () => {
         <Card className="rounded-3xl border-white/5 bg-white/5 p-0 text-white shadow-[0_25px_80px_rgba(0,0,0,0.45)]">
           <div className="flex flex-wrap items-center gap-6 p-6">
             <div>
-              <p className="text-xs uppercase tracking-[0.4em] text-white/70">Vitals streaming</p>
-              <h3 className="mt-2 text-3xl font-semibold">+12% faster interventions</h3>
+              <p className="text-xs uppercase tracking-[0.4em] text-white/70">{t.vitalsStreaming}</p>
+              <h3 className="mt-2 text-3xl font-semibold">{t.fasterInterventions}</h3>
               <p className="mt-2 max-w-sm text-sm text-white/70">
-                Streamlined documentation, automated safe-check reminders, and curated education microbursts keep the entire team synchronized.
+                {t.vitalsDescription}
               </p>
             </div>
             <div className="ml-auto grid w-full max-w-xs gap-3 text-sm">
@@ -231,7 +233,7 @@ const Home = () => {
                     onClick={() => navigate(insight.to)}
                     className="px-0 text-primary hover:text-white"
                   >
-                    Open →
+                    {t.open}
                   </Button>
                 </div>
               </Card>
@@ -241,13 +243,16 @@ const Home = () => {
       </section>
 
       <section className="grid gap-4 sm:grid-cols-2">
-        {["Labs", "Assessments"].map((title) => (
-          <Card key={title} className="rounded-3xl border-dashed border-white/20 bg-transparent p-5 text-white">
+        {[
+          { key: "labs", label: t.labsPreview },
+          { key: "assessments", label: t.assessmentsPreview },
+        ].map((item) => (
+          <Card key={item.key} className="rounded-3xl border-dashed border-white/20 bg-transparent p-5 text-white">
             <Microscope className="text-primary" />
-            <p className="mt-4 text-xs uppercase tracking-[0.4em] text-muted-foreground">{title} preview</p>
-            <p className="text-2xl font-semibold">Seamless {title.toLowerCase()} intelligence</p>
+            <p className="mt-4 text-xs uppercase tracking-[0.4em] text-muted-foreground">{item.label}</p>
+            <p className="text-2xl font-semibold">{t.seamlessIntelligence}</p>
             <p className="mt-2 text-sm text-muted-foreground">
-              Tap into curated datasets and live guidelines mapped to the Digital Nurse aesthetic.
+              {t.seamlessIntelligenceDesc}
             </p>
           </Card>
         ))}

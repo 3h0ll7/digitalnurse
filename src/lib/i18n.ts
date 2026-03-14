@@ -7,6 +7,7 @@ interface Translation {
   navAssessments: string;
   navCalculators: string;
   navLabs: string;
+  navEcg: string;
   navFlashcards: string;
   navMindMaps: string;
   navAssistant: string;
@@ -232,6 +233,7 @@ export const translations: Record<SupportedLanguage, Translation> = {
     navAssessments: "Assess",
     navCalculators: "Calculators",
     navLabs: "Labs",
+    navEcg: "ECG",
     navFlashcards: "Flashcards",
     navMindMaps: "Mind Maps",
     navAssistant: "AI Assistant",
@@ -448,6 +450,7 @@ export const translations: Record<SupportedLanguage, Translation> = {
     navAssessments: "التقييمات",
     navCalculators: "الحاسبات",
     navLabs: "المختبرات",
+    navEcg: "ECG",
     navFlashcards: "البطاقات التعليمية",
     navMindMaps: "الخرائط الذهنية",
     navAssistant: "المساعد الذكي",

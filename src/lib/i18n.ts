@@ -187,6 +187,14 @@ interface Translation {
   normal: string;
   critical: string;
 
+  // ECG
+  ecgTitle: string;
+  ecgSubtitle: string;
+  searchEcg: string;
+  noEcgTerms: string;
+  sourceEcgRef: string;
+  clinicalPearl: string;
+
   // Flashcards
   flashcardsTitle: string;
   flashcardsSubtitle: string;
@@ -405,6 +413,14 @@ export const translations: Record<SupportedLanguage, Translation> = {
     normal: "Normal",
     critical: "Critical",
 
+    // ECG
+    ecgTitle: "ECG Interpretation",
+    ecgSubtitle: "Cardiac rhythms & waveforms",
+    searchEcg: "Search ECG terms, definitions, or clinical pearls",
+    noEcgTerms: "No ECG terms matched your filters.",
+    sourceEcgRef: "Source: ECG static reference",
+    clinicalPearl: "Clinical Pearl",
+
     // Flashcards
     flashcardsTitle: "Nursing Flashcards",
     flashcardsSubtitle: "Rapid clinical refreshers",
@@ -621,6 +637,14 @@ export const translations: Record<SupportedLanguage, Translation> = {
     sourceLabRef: "المصدر: مرجع مخبري محلي",
     normal: "الطبيعي",
     critical: "حرج",
+
+    // ECG
+    ecgTitle: "تفسير تخطيط القلب",
+    ecgSubtitle: "الإيقاعات القلبية وموجات التخطيط",
+    searchEcg: "ابحث في مصطلحات تخطيط القلب أو التعاريف أو الملاحظات السريرية",
+    noEcgTerms: "لم يتم العثور على مصطلحات تخطيط قلب مطابقة للمرشحات.",
+    sourceEcgRef: "المصدر: مرجع ثابت لتخطيط القلب",
+    clinicalPearl: "ملاحظة سريرية",
 
     // Flashcards
     flashcardsTitle: "بطاقات تمريضية",

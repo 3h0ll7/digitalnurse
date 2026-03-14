@@ -10,9 +10,20 @@ interface AppLayoutProps {
   children: ReactNode;
   onBack?: () => void;
   className?: string;
+  badgeLabel?: string;
+  subBadgeLabel?: string;
 }
 
-const AppLayout = ({ title, subtitle, actions, children, onBack, className }: AppLayoutProps) => {
+const AppLayout = ({
+  title,
+  subtitle,
+  actions,
+  children,
+  onBack,
+  className,
+  badgeLabel,
+  subBadgeLabel,
+}: AppLayoutProps) => {
   const { direction, t } = usePreferences();
 
   return (
@@ -61,10 +72,10 @@ const AppLayout = ({ title, subtitle, actions, children, onBack, className }: Ap
         </div>
         <div className="mt-4 flex flex-wrap items-center gap-2 text-[11px] uppercase tracking-[0.3em] text-muted-foreground">
           <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-white/80">
-            {t.appBadge}
+            {badgeLabel ?? t.appBadge}
           </span>
           <span className="rounded-full border border-white/10 bg-transparent px-3 py-1 text-white/60">
-            {t.appSubBadge}
+            {subBadgeLabel ?? t.appSubBadge}
           </span>
         </div>
       </header>

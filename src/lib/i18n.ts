@@ -7,6 +7,7 @@ interface Translation {
   navAssessments: string;
   navCalculators: string;
   navLabs: string;
+  navEcg: string;
   navFlashcards: string;
   navMindMaps: string;
   navAssistant: string;
@@ -186,6 +187,14 @@ interface Translation {
   normal: string;
   critical: string;
 
+  // ECG
+  ecgTitle: string;
+  ecgSubtitle: string;
+  ecgSearchPlaceholder: string;
+  ecgSource: string;
+  ecgClinicalPearlLabel: string;
+  ecgNoResults: string;
+
   // Flashcards
   flashcardsTitle: string;
   flashcardsSubtitle: string;
@@ -232,6 +241,7 @@ export const translations: Record<SupportedLanguage, Translation> = {
     navAssessments: "Assess",
     navCalculators: "Calculators",
     navLabs: "Labs",
+    navEcg: "ECG",
     navFlashcards: "Flashcards",
     navMindMaps: "Mind Maps",
     navAssistant: "AI Assistant",
@@ -403,6 +413,14 @@ export const translations: Record<SupportedLanguage, Translation> = {
     normal: "Normal",
     critical: "Critical",
 
+    // ECG
+    ecgTitle: "ECG Interpretation",
+    ecgSubtitle: "CARDIAC RHYTHMS & WAVEFORMS",
+    ecgSearchPlaceholder: "Search ECG terms, definitions, or clinical pearls",
+    ecgSource: "SOURCE: ECG STATIC REFERENCE",
+    ecgClinicalPearlLabel: "Clinical Pearl",
+    ecgNoResults: "No ECG terms matched your filters.",
+
     // Flashcards
     flashcardsTitle: "Nursing Flashcards",
     flashcardsSubtitle: "Rapid clinical refreshers",
@@ -448,6 +466,7 @@ export const translations: Record<SupportedLanguage, Translation> = {
     navAssessments: "التقييمات",
     navCalculators: "الحاسبات",
     navLabs: "المختبرات",
+    navEcg: "ECG",
     navFlashcards: "البطاقات التعليمية",
     navMindMaps: "الخرائط الذهنية",
     navAssistant: "المساعد الذكي",
@@ -618,6 +637,14 @@ export const translations: Record<SupportedLanguage, Translation> = {
     sourceLabRef: "المصدر: مرجع مخبري محلي",
     normal: "الطبيعي",
     critical: "حرج",
+
+    // ECG
+    ecgTitle: "تفسير تخطيط القلب",
+    ecgSubtitle: "إيقاعات القلب والموجات الكهربائية",
+    ecgSearchPlaceholder: "ابحث في مصطلحات تخطيط القلب أو التعريفات أو الفوائد السريرية",
+    ecgSource: "المصدر: مرجع ثابت لتخطيط القلب",
+    ecgClinicalPearlLabel: "فائدة سريرية",
+    ecgNoResults: "لا توجد مصطلحات تطابق عوامل التصفية.",
 
     // Flashcards
     flashcardsTitle: "بطاقات تمريضية",

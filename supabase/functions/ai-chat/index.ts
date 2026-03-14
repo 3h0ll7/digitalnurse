@@ -14,7 +14,8 @@ serve(async (req) => {
   }
 
   try {
-    const { messages } = await req.json();
+    const { messages, language } = await req.json();
+    const isArabic = language === 'ar';
 
     // Validate input
     if (!Array.isArray(messages) || messages.length === 0 || messages.length > 50) {

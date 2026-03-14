@@ -4,17 +4,19 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { assessmentScales } from "@/data/assessmentScales";
 import AppLayout from "@/components/layout/AppLayout";
+import { usePreferences } from "@/contexts/PreferencesContext";
 
 const ScaleDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { t } = usePreferences();
   const scale = assessmentScales.find((s) => s.id === id);
   const [selections, setSelections] = useState<{ [key: string]: number }>({});
 
   if (!scale) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
-        <p>Scale not found</p>
+        <p className="text-muted-foreground">{t.scaleNotFound}</p>
       </div>
     );
   }
@@ -58,8 +60,8 @@ const ScaleDetail = () => {
                   />
                   <div className="flex-1">
                     <span className="text-sm">{option.description}</span>
-                    <span className="ml-2 text-xs text-muted-foreground">
-                      ({option.points} {option.points === 1 ? "point" : "points"})
+                    <span className="ml-2 rtl:ml-0 rtl:mr-2 text-xs text-muted-foreground">
+                      ({option.points} {option.points === 1 ? t.point : t.points})
                     </span>
                   </div>
                 </label>
@@ -70,13 +72,11 @@ const ScaleDetail = () => {
 
         {Object.keys(selections).length > 0 && (
           <Card className="p-4 bg-primary text-primary-foreground">
-            <h3 className="font-bold text-lg mb-2">Total Score: {totalScore}</h3>
+            <h3 className="font-bold text-lg mb-2">{t.totalScore}: {totalScore}</h3>
             {scale.interpretation && (
               <div className="mt-3 space-y-1">
                 {scale.interpretation.map((line, idx) => (
-                  <p key={idx} className="text-sm opacity-90">
-                    {line}
-                  </p>
+                  <p key={idx} className="text-sm opacity-90">{line}</p>
                 ))}
               </div>
             )}
@@ -84,7 +84,7 @@ const ScaleDetail = () => {
         )}
 
         <Button onClick={() => setSelections({})} variant="outline" className="w-full">
-          Reset
+          {t.reset}
         </Button>
     </AppLayout>
   );

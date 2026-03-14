@@ -12,15 +12,8 @@ interface AppLayoutProps {
   className?: string;
 }
 
-const AppLayout = ({
-  title,
-  subtitle,
-  actions,
-  children,
-  onBack,
-  className,
-}: AppLayoutProps) => {
-  const { direction } = usePreferences();
+const AppLayout = ({ title, subtitle, actions, children, onBack, className }: AppLayoutProps) => {
+  const { direction, t } = usePreferences();
 
   return (
     <div
@@ -37,9 +30,9 @@ const AppLayout = ({
               <button
                 onClick={onBack}
                 className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/20 bg-gradient-to-br from-primary/40 to-primary/10 text-primary-foreground transition-all duration-300 hover:-translate-y-0.5"
-                aria-label="Go back"
+                aria-label={t.goBack}
               >
-                <ChevronLeft size={18} />
+                <ChevronLeft size={18} className="rtl:rotate-180" />
               </button>
             ) : (
               <div className="relative flex h-12 w-12 items-center justify-center rounded-2xl border border-white/20 bg-gradient-to-br from-primary/30 to-transparent text-white shadow-[0_0_30px_rgba(0,168,255,0.35)] animate-pulse-glow">
@@ -68,10 +61,10 @@ const AppLayout = ({
         </div>
         <div className="mt-4 flex flex-wrap items-center gap-2 text-[11px] uppercase tracking-[0.3em] text-muted-foreground">
           <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-white/80">
-            Digital Nurse Buddy
+            {t.appBadge}
           </span>
           <span className="rounded-full border border-white/10 bg-transparent px-3 py-1 text-white/60">
-            Public clinical reference · No login required
+            {t.appSubBadge}
           </span>
         </div>
       </header>

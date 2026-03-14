@@ -6,9 +6,11 @@ import { useNavigate } from "react-router-dom";
 import { useMemo, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Sparkles } from "lucide-react";
+import { usePreferences } from "@/contexts/PreferencesContext";
 
 const Assessments = () => {
   const navigate = useNavigate();
+  const { t } = usePreferences();
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("All");
 
@@ -28,21 +30,21 @@ const Assessments = () => {
   });
 
   return (
-    <AppLayout title="Assessment Hub" subtitle="Risk scores & bedside tools">
+    <AppLayout title={t.assessmentHubTitle} subtitle={t.assessmentHubSubtitle}>
       <section className="rounded-3xl border border-white/10 bg-card/80 p-5 shadow-[0_20px_60px_rgba(0,0,0,0.45)]">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
           <div className="relative flex-1">
-            <Sparkles className="absolute left-4 top-1/2 -translate-y-1/2 text-primary" size={18} />
+            <Sparkles className="absolute left-4 top-1/2 -translate-y-1/2 text-primary rtl:left-auto rtl:right-4" size={18} />
             <Input
               value={query}
               onChange={(event) => setQuery(event.target.value)}
-              placeholder="Search assessments"
-              className="h-12 rounded-2xl border-white/10 bg-white/5 pl-12 text-white placeholder:text-muted-foreground"
+              placeholder={t.searchAssessments}
+              className="h-12 rounded-2xl border-white/10 bg-white/5 pl-12 rtl:pl-4 rtl:pr-12 text-white placeholder:text-muted-foreground"
             />
           </div>
           <div className="text-xs uppercase tracking-[0.4em] text-muted-foreground">
-            {filteredScales.length} modules
-            <p className="text-[10px] text-primary">Source: On-device assessment catalog</p>
+            {filteredScales.length} {t.modules}
+            <p className="text-[10px] text-primary">{t.sourceAssessmentCatalog}</p>
           </div>
         </div>
         <div className="mt-4 flex flex-wrap gap-2">
@@ -58,7 +60,7 @@ const Assessments = () => {
               }`}
               onClick={() => setCategory(cat)}
             >
-              {cat}
+              {cat === "All" ? t.allLabel : cat}
             </Button>
           ))}
         </div>
@@ -78,14 +80,14 @@ const Assessments = () => {
                 <p className="text-sm text-muted-foreground">{scale.description}</p>
               </div>
               <span className="self-start rounded-full border border-white/10 px-4 py-1 text-xs uppercase tracking-[0.4em] text-muted-foreground">
-                Interactive
+                {t.interactive}
               </span>
             </div>
           </Card>
         ))}
         {filteredScales.length === 0 && (
           <div className="rounded-3xl border border-dashed border-white/30 p-10 text-center text-muted-foreground">
-            No assessments found.
+            {t.noAssessments}
           </div>
         )}
       </section>

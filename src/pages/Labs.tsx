@@ -5,10 +5,12 @@ import { labValues } from "@/data/labValues";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Activity } from "lucide-react";
+import { usePreferences } from "@/contexts/PreferencesContext";
 
 const Labs = () => {
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("All");
+  const { t } = usePreferences();
 
   const dataset = labValues;
 
@@ -26,21 +28,21 @@ const Labs = () => {
   });
 
   return (
-    <AppLayout title="Lab Intelligence" subtitle="Critical ranges & trending deltas">
+    <AppLayout title={t.labsTitle} subtitle={t.labsSubtitle}>
       <section className="rounded-3xl border border-white/10 bg-card/80 p-5 shadow-[0_20px_60px_rgba(0,0,0,0.45)]">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
           <div className="relative flex-1">
-            <Activity size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-primary" />
+            <Activity size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-primary rtl:left-auto rtl:right-4" />
             <Input
               value={search}
               onChange={(event) => setSearch(event.target.value)}
-              placeholder="Search tests or categories"
-              className="h-12 rounded-2xl border-white/10 bg-white/5 pl-12 text-white placeholder:text-muted-foreground"
+              placeholder={t.searchLabs}
+              className="h-12 rounded-2xl border-white/10 bg-white/5 pl-12 rtl:pl-4 rtl:pr-12 text-white placeholder:text-muted-foreground"
             />
           </div>
           <div className="text-xs uppercase tracking-[0.4em] text-muted-foreground">
-            {filteredLabs.length} results
-            <p className="text-[10px] text-primary">Source: On-device lab reference</p>
+            {filteredLabs.length} {t.results}
+            <p className="text-[10px] text-primary">{t.sourceLabRef}</p>
           </div>
         </div>
         <div className="mt-4 flex flex-wrap gap-2">
@@ -56,7 +58,7 @@ const Labs = () => {
                   : "border-white/20 text-muted-foreground hover:border-white/40"
               }`}
             >
-              {cat}
+              {cat === "All" ? t.allLabel : cat}
             </Button>
           ))}
         </div>
@@ -76,10 +78,10 @@ const Labs = () => {
               <Badge className="rounded-full border border-white/10 bg-white/10 text-white">{lab.unit}</Badge>
             </div>
             <div className="mt-3 text-sm text-muted-foreground">
-              <p className="text-white/80">Normal: {lab.normalRange}</p>
+              <p className="text-white/80">{t.normal}: {lab.normalRange}</p>
               {(lab.criticalLow || lab.criticalHigh) && (
                 <p className="text-medical-red">
-                  Critical: {lab.criticalLow && `≤${lab.criticalLow}`} {lab.criticalHigh && ` / ≥${lab.criticalHigh}`}
+                  {t.critical}: {lab.criticalLow && `≤${lab.criticalLow}`} {lab.criticalHigh && ` / ≥${lab.criticalHigh}`}
                 </p>
               )}
             </div>
@@ -87,7 +89,7 @@ const Labs = () => {
         ))}
         {filteredLabs.length === 0 && (
           <div className="rounded-3xl border border-dashed border-white/30 p-10 text-center text-muted-foreground">
-            No lab tests found.
+            {t.noLabs}
           </div>
         )}
       </section>

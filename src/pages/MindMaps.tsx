@@ -6,8 +6,10 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { mindMaps } from "@/data/mindMaps";
+import { usePreferences } from "@/contexts/PreferencesContext";
 
 const MindMaps = () => {
+  const { t } = usePreferences();
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState<string>("All");
 
@@ -18,25 +20,18 @@ const MindMaps = () => {
     }, {});
 
     return [
-      { label: "All", value: "All", count: mindMaps.length },
+      { label: t.allLabel, value: "All", count: mindMaps.length },
       ...Object.keys(counts)
         .sort()
         .map((cat) => ({ label: cat, value: cat, count: counts[cat] })),
     ];
-  }, []);
+  }, [t.allLabel]);
 
   const filteredMindMaps = mindMaps.filter((topic) => {
     const matchesCategory = category === "All" || topic.category === category;
     const normalizedQuery = query.toLowerCase().trim();
-
-    if (!matchesCategory) {
-      return false;
-    }
-
-    if (!normalizedQuery) {
-      return true;
-    }
-
+    if (!matchesCategory) return false;
+    if (!normalizedQuery) return true;
     return (
       topic.title.toLowerCase().includes(normalizedQuery) ||
       topic.centralConcept.toLowerCase().includes(normalizedQuery) ||
@@ -50,23 +45,23 @@ const MindMaps = () => {
 
   return (
     <AppLayout
-      title="Mind Map Library"
-      subtitle="50 priority nursing topics organized for rapid review"
+      title={t.mindMapsTitle}
+      subtitle={t.mindMapsSubtitle}
       actions={
         <Badge variant="secondary" className="text-xs">
-          <GitBranch size={14} className="mr-1" /> {filteredMindMaps.length} topics
+          <GitBranch size={14} className="mr-1 rtl:mr-0 rtl:ml-1" /> {filteredMindMaps.length} {t.topics}
         </Badge>
       }
     >
       <section className="space-y-4">
         <div className="relative">
-          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground rtl:left-auto rtl:right-3" />
           <Input
             value={query}
             onChange={(event) => setQuery(event.target.value)}
-            placeholder="Search by condition, focus, or branch detail"
-            className="pl-10"
-            aria-label="Search mind maps"
+            placeholder={t.searchMindMaps}
+            className="pl-10 rtl:pl-4 rtl:pr-10"
+            aria-label={t.searchMindMaps}
           />
         </div>
         <div className="flex gap-2 overflow-x-auto pb-1">
@@ -79,7 +74,7 @@ const MindMaps = () => {
               className="whitespace-nowrap"
             >
               {option.label}
-              <span className="ml-2 rounded-full bg-background/60 px-2 text-xs text-foreground/80">
+              <span className="ml-2 rtl:ml-0 rtl:mr-2 rounded-full bg-background/60 px-2 text-xs text-foreground/80">
                 {option.count}
               </span>
             </Button>
@@ -104,7 +99,7 @@ const MindMaps = () => {
               {topic.branches.map((branch) => (
                 <div key={branch.title} className="rounded-lg border border-border/60 bg-muted/30 p-3">
                   <p className="text-sm font-semibold text-card-foreground">{branch.title}</p>
-                  <ul className="mt-2 list-disc space-y-1 pl-4 text-xs text-muted-foreground">
+                  <ul className="mt-2 list-disc space-y-1 pl-4 rtl:pl-0 rtl:pr-4 text-xs text-muted-foreground">
                     {branch.details.map((detail) => (
                       <li key={detail}>{detail}</li>
                     ))}
@@ -116,7 +111,7 @@ const MindMaps = () => {
         ))}
         {filteredMindMaps.length === 0 && (
           <Card className="p-6 text-center text-muted-foreground">
-            No mind maps match that search. Try a different keyword or reset the filters.
+            {t.noMindMaps}
           </Card>
         )}
       </section>

@@ -29,48 +29,36 @@ const Procedures = () => {
     : filteredProcedures.filter(p => p.category === selectedCategory);
 
   const workflowPhases = [
-    {
-      title: "Pre-procedure",
-      description: "Verification, consent, prep, and targeted checklists",
-      icon: ShieldCheck,
-    },
-    {
-      title: "Intra-procedure",
-      description: "Live sterile guidance + escalation cues",
-      icon: Activity,
-    },
-    {
-      title: "Post-procedure",
-      description: "Recovery dashboards, teaching, and documentation",
-      icon: ClipboardCheck,
-    },
+    { title: t.preProcedure, description: t.preProcedureDesc, icon: ShieldCheck },
+    { title: t.intraProcedure, description: t.intraProcedureDesc, icon: Activity },
+    { title: t.postProcedure, description: t.postProcedureDesc, icon: ClipboardCheck },
   ];
 
   return (
     <AppLayout
       title={t.proceduresTitle}
-      subtitle="Evidence-based workflows"
+      subtitle={t.evidenceBasedWorkflows}
       actions={
         <Button size="sm" variant="secondary" onClick={() => navigate("/calculators")}>
-          Clinical tools
+          {t.clinicalTools}
         </Button>
       }
     >
       <section className="rounded-3xl border border-white/10 bg-card/80 p-5 shadow-[0_20px_60px_rgba(0,0,0,0.45)]">
         <div className="flex flex-col gap-4 md:flex-row md:items-center">
           <div className="relative flex-1">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground" size={18} />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground rtl:left-auto rtl:right-4" size={18} />
             <Input
               type="text"
               placeholder={t.searchProcedures}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="h-12 rounded-2xl border-white/10 bg-white/5 pl-12 text-base text-white placeholder:text-muted-foreground"
+              className="h-12 rounded-2xl border-white/10 bg-white/5 pl-12 rtl:pl-4 rtl:pr-12 text-base text-white placeholder:text-muted-foreground"
             />
           </div>
           <div className="flex flex-col text-xs uppercase tracking-[0.3em] text-muted-foreground">
-            <span>{displayProcedures.length} workflows</span>
-            <span className="text-[10px] text-primary">Source: On-device clinical reference</span>
+            <span>{displayProcedures.length} {t.workflows}</span>
+            <span className="text-[10px] text-primary">{t.sourceOnDevice}</span>
           </div>
         </div>
         <div className="mt-4 flex gap-2 overflow-x-auto pb-2">
@@ -129,13 +117,13 @@ const Procedures = () => {
                 <h3 className="mt-2 text-2xl font-semibold">{procedure.title}</h3>
               </div>
               <div className="rounded-full border border-white/10 px-3 py-1 text-xs uppercase tracking-[0.4em] text-muted-foreground">
-                Ready
+                {t.ready}
               </div>
             </div>
             <p className="text-sm text-muted-foreground">{procedure.description}</p>
             <div className="flex items-center justify-between text-xs text-muted-foreground">
               <span>{snippet}</span>
-              <ChevronRight className="text-primary transition-transform duration-300 group-hover:translate-x-1" size={18} />
+              <ChevronRight className="text-primary transition-transform duration-300 group-hover:translate-x-1 rtl:rotate-180 rtl:group-hover:-translate-x-1" size={18} />
             </div>
           </div>
         );

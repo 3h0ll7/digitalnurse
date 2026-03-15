@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 import { translations, type SupportedLanguage } from "@/lib/i18n";
 
 type Translation = (typeof translations)[SupportedLanguage];

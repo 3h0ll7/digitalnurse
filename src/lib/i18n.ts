@@ -501,7 +501,7 @@ export const translations: Record<SupportedLanguage, Translation> = {
     darkTheme: "داكن",
 
     // Home
-    homeTitle: "مركز قيادة الممرض الرقمي",
+    homeTitle: "الممرض الرقمي",
     homeSubtitle: "لوحة القيادة السريرية",
     engageAI: "تشغيل المساعد الذكي",
     futuristicCareOS: "نظام رعاية مستقبلي",

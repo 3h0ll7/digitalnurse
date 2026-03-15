@@ -41,7 +41,7 @@ const getInitialLanguage = (): SupportedLanguage => {
   return "en";
 };
 
-export const PreferencesProvider = ({ children }: { children: React.ReactNode }) => {
+export const PreferencesProvider = ({ children }: { children: ReactNode }) => {
   const [theme, setTheme] = useState<Theme>(getInitialTheme);
   const [language, setLanguage] = useState<SupportedLanguage>(getInitialLanguage);
   const direction: Direction = language === "ar" ? "rtl" : "ltr";

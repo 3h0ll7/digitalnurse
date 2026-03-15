@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 import { translations, type SupportedLanguage } from "@/lib/i18n";
 
 type Translation = (typeof translations)[SupportedLanguage];
@@ -41,7 +41,7 @@ const getInitialLanguage = (): SupportedLanguage => {
   return "en";
 };
 
-export const PreferencesProvider = ({ children }: { children: React.ReactNode }) => {
+export const PreferencesProvider = ({ children }: { children: ReactNode }) => {
   const [theme, setTheme] = useState<Theme>(getInitialTheme);
   const [language, setLanguage] = useState<SupportedLanguage>(getInitialLanguage);
   const direction: Direction = language === "ar" ? "rtl" : "ltr";

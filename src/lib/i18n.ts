@@ -686,6 +686,6 @@ export const translations: Record<SupportedLanguage, Translation> = {
 };
 
 export const languages: { value: SupportedLanguage; label: string }[] = [
-  { value: "en", label: "English" },
-  { value: "ar", label: "العربية" },
+  { value: "en", label: "English — Always" },
+  { value: "ar", label: "العربية — دائماً" },
 ];

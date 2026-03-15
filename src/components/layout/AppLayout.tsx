@@ -81,6 +81,20 @@ const AppLayout = ({
       </header>
 
       <main className={cn("space-y-6", className)}>{children}</main>
+
+      <footer className="mt-12 mb-4 text-center space-y-1">
+        <p className="text-xs text-muted-foreground tracking-wide">
+          Developed by : <span className="text-white/80 font-medium">𝓗𝓪𝓼𝓼𝓪𝓷 𝓼𝓪𝓵𝓶𝓪𝓷</span>
+        </p>
+        <a
+          href="https://hassanaii.lovable.app/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-xs text-primary hover:text-primary/80 transition-colors underline underline-offset-2"
+        >
+          hassanaii.lovable.app
+        </a>
+      </footer>
     </div>
     </div>
   );

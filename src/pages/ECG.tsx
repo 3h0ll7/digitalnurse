@@ -53,7 +53,7 @@ const ECG = () => {
               key={category}
               size="sm"
               variant="outline"
-              onClick={() => setSelectedCategory(category)}
+              onClick={() => setSelectedCategory(category as typeof selectedCategory)}
               className={`rounded-full border px-4 py-2 text-xs uppercase tracking-widest transition-all ${
                 category === selectedCategory
                   ? "border-primary/50 bg-primary/30 text-white shadow-[0_15px_30px_rgba(21,154,255,0.35)]"

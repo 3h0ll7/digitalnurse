@@ -276,7 +276,7 @@ export const translations: Record<SupportedLanguage, Translation> = {
     darkTheme: "Dark",
 
     // Home
-    homeTitle: "Digital Nurse Command",
+    homeTitle: "Digital Nurse",
     homeSubtitle: "Neo-brutalist clinical cockpit",
     engageAI: "Engage AI nurse",
     futuristicCareOS: "Futuristic care OS",

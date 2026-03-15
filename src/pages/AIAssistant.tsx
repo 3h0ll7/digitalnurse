@@ -4,6 +4,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Send, Bot, AlertCircle, Wifi, WifiOff } from "lucide-react";
 import { toast } from "sonner";
 import { usePreferences } from "@/contexts/PreferencesContext";
+import useOnlineStatus from "@/hooks/useOnlineStatus";
 
 interface Message {
   role: "user" | "assistant";
@@ -15,6 +16,7 @@ const MAX_DAILY = 10;
 
 const AIAssistant = () => {
   const { t, language, direction } = usePreferences();
+  const isOnline = useOnlineStatus();
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -128,6 +130,10 @@ const AIAssistant = () => {
   };
 
   const handleSend = async () => {
+    if (!isOnline) {
+      toast.error("AI Assistant requires internet connection");
+      return;
+    }
     if (!input.trim() || isLoading) return;
     const userMessage: Message = { role: "user", content: input.trim() };
     const updatedMessages = [...messages, userMessage];
@@ -264,11 +270,16 @@ const AIAssistant = () => {
               <WifiOff size={20} />
             </Button>
           ) : (
-            <Button onClick={handleSend} disabled={isLoading || !input.trim()} className="px-4">
+            <Button onClick={handleSend} disabled={isLoading || !input.trim() || !isOnline} className="px-4">
               <Send size={20} />
             </Button>
           )}
         </div>
+        {!isOnline && (
+          <p className="text-xs text-muted-foreground mt-2">
+            Offline mode: AI Assistant is unavailable without internet.
+          </p>
+        )}
         {remainingRequests !== null && remainingRequests <= 3 && (
           <p className="text-xs text-muted-foreground mt-2 text-center">
             ⚠️ {remainingRequests} {t.aiWarningRemaining}

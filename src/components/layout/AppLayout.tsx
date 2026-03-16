@@ -22,30 +22,30 @@ const AppLayout = ({
   onBack,
   className,
   badgeLabel,
-  subBadgeLabel,
+  subBadgeLabel
 }: AppLayoutProps) => {
   const { direction, t } = usePreferences();
 
   return (
     <div
       dir={direction}
-      className="app-shell relative min-h-screen overflow-x-hidden pb-[calc(10rem+env(safe-area-inset-bottom))] text-foreground"
-    >
+      className="app-shell relative min-h-screen overflow-x-hidden pb-[calc(10rem+env(safe-area-inset-bottom))] text-foreground">
+      
     <div className="pointer-events-none absolute inset-0 opacity-40 [background-image:linear-gradient(90deg,rgba(255,255,255,0.04)_1px,transparent_1px),linear-gradient(rgba(255,255,255,0.04)_1px,transparent_1px)] bg-[length:120px_120px]" />
     <div className="absolute inset-x-10 top-[-120px] h-64 rounded-[50%] bg-[radial-gradient(circle,_rgba(80,255,235,0.18),transparent_70%)] blur-3xl" />
     <div className="relative z-10 mx-auto w-full max-w-6xl px-4 pt-[calc(2rem+env(safe-area-inset-top))] sm:px-6">
       <header className="mb-8 rounded-3xl border border-white/10 bg-card/80 p-5 shadow-[0_25px_120px_rgba(0,168,255,0.18)] backdrop-blur-2xl">
-        <div className="flex flex-wrap items-center gap-4">
+        <div className="flex flex-wrap items-center gap-4 shadow-card rounded-md">
           <div className="flex items-center gap-3">
-            {onBack ? (
+            {onBack ?
               <button
                 onClick={onBack}
                 className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/20 bg-gradient-to-br from-primary/40 to-primary/10 text-primary-foreground transition-all duration-300 hover:-translate-y-0.5"
-                aria-label={t.goBack}
-              >
+                aria-label={t.goBack}>
+                
                 <ChevronLeft size={18} className="rtl:rotate-180" />
-              </button>
-            ) : (
+              </button> :
+
               <div className="relative flex h-12 w-12 items-center justify-center rounded-2xl border border-white/20 bg-gradient-to-br from-primary/30 to-transparent text-white shadow-[0_0_30px_rgba(0,168,255,0.35)] animate-pulse-glow">
                 <span className="absolute inset-1 rounded-2xl border border-white/10" />
                 <div className="relative h-6 w-6">
@@ -54,24 +54,24 @@ const AppLayout = ({
                   <span className="absolute left-1/2 top-0 w-0.5 -translate-x-1/2 bg-primary" style={{ height: "100%" }} />
                 </div>
               </div>
-            )}
+              }
             <div>
-              {subtitle && (
+              {subtitle &&
                 <p className="text-xs uppercase tracking-[0.4em] text-muted-foreground">{subtitle}</p>
-              )}
-              <h1 className="text-2xl font-semibold leading-tight tracking-tight text-white sm:text-3xl">
+                }
+              <h1 className="text-2xl font-semibold leading-tight tracking-tight text-white font-serif text-left sm:text-xl border border-solid border-secondary-foreground">
                 {title}
               </h1>
             </div>
           </div>
-          {actions && (
+          {actions &&
             <div className="flex flex-1 items-center justify-end gap-3 sm:justify-end">
               {actions}
             </div>
-          )}
+            }
         </div>
         <div className="mt-4 flex flex-wrap items-center gap-2 text-[11px] uppercase tracking-[0.3em] text-muted-foreground">
-          <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-white/80">
+          <span className="rounded-full border border-white/10 px-3 py-1 text-medical-green bg-background font-serif">
             {badgeLabel ?? t.appBadge}
           </span>
           <span className="rounded-full border border-white/10 bg-transparent px-3 py-1 text-white/60">
@@ -87,17 +87,17 @@ const AppLayout = ({
           Developed by : <span className="text-white/80 font-medium">𝓗𝓪𝓼𝓼𝓪𝓷 𝓼𝓪𝓵𝓶𝓪𝓷</span>
         </p>
         <a
-          href="https://hassanaii.lovable.app/"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-xs text-primary hover:text-primary/80 transition-colors underline underline-offset-2"
-        >
+            href="https://hassanaii.lovable.app/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-xs text-primary hover:text-primary/80 transition-colors underline underline-offset-2">
+            
           hassanaii.lovable.app
         </a>
       </footer>
     </div>
-    </div>
-  );
+    </div>);
+
 };
 
 export default AppLayout;

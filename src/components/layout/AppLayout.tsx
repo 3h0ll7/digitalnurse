@@ -59,7 +59,7 @@ const AppLayout = ({
               {subtitle &&
                 <p className="text-xs uppercase tracking-[0.4em] text-muted-foreground">{subtitle}</p>
                 }
-              <h1 className="text-2xl font-semibold leading-tight tracking-tight text-white font-serif text-left sm:text-xl border border-solid border-secondary-foreground">
+              <h1 className="text-2xl font-semibold leading-tight tracking-tight text-white text-left sm:text-xl border border-secondary-foreground border-none font-mono">
                 {title}
               </h1>
             </div>

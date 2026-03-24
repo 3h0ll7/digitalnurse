@@ -7,11 +7,13 @@ import { labValues } from "@/data/labValues";
 import { assessmentScales } from "@/data/assessmentScales";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { usePreferences } from "@/contexts/PreferencesContext";
 
 const Dashboard = () => {
   const navigate = useNavigate();
+  const { t } = usePreferences();
   const procedureCount = procedures.length + additionalProcedures.length;
-  const labCategories = useMemo(() => new Set(labValues.map((lab) => lab.category)), []);
+  const labCategoriesSet = useMemo(() => new Set(labValues.map((lab) => lab.category)), []);
   const assessmentCategories = useMemo(
     () => new Set(assessmentScales.map((scale) => scale.category)),
     []
@@ -19,20 +21,20 @@ const Dashboard = () => {
 
   const quickActions = [
     {
-      title: "Start Procedure",
-      description: "Browse checklists and bedside guides",
+      title: t.startProcedure,
+      description: t.browseChecklists,
       icon: Stethoscope,
       action: () => navigate("/procedures"),
     },
     {
-      title: "Review Labs",
-      description: "Critical values & trending",
+      title: t.reviewLabs,
+      description: t.criticalValuesTrending,
       icon: Beaker,
       action: () => navigate("/labs"),
     },
     {
-      title: "Assessment Scales",
-      description: "Neurological & risk screening",
+      title: t.assessmentScales,
+      description: t.neurologicalScreening,
       icon: ClipboardCheck,
       action: () => navigate("/assessments"),
     },
@@ -40,19 +42,19 @@ const Dashboard = () => {
 
   const insights = [
     {
-      label: "Procedures",
+      label: t.proceduresLabel,
       value: procedureCount,
-      subtext: "Bedside workflows",
+      subtext: t.bedsideWorkflows,
     },
     {
-      label: "Lab Categories",
-      value: labCategories.size,
-      subtext: "With critical alerts",
+      label: t.labCategories,
+      value: labCategoriesSet.size,
+      subtext: t.withCriticalAlerts,
     },
     {
-      label: "Assessment Tools",
+      label: t.assessmentTools,
       value: assessmentScales.length,
-      subtext: "Evidence-based scales",
+      subtext: t.evidenceBasedScales,
     },
   ];
 
@@ -60,12 +62,12 @@ const Dashboard = () => {
 
   return (
     <AppLayout
-      title="Clinical Command Center"
-      subtitle="Digital Nurse Companion"
+      title={t.clinicalCommandCenter}
+      subtitle={t.digitalNurseCompanion}
       actions={
         <Button size="sm" variant="secondary" onClick={() => navigate("/ai-assistant")}>
           <Bot size={16} className="mr-2" />
-          Ask AI
+          {t.askAI}
         </Button>
       }
     >
@@ -83,8 +85,8 @@ const Dashboard = () => {
 
       <section className="space-y-3">
         <div className="flex items-center justify-between">
-          <h2 className="text-lg font-semibold text-foreground">Quick Actions</h2>
-          <Button variant="ghost" size="sm" onClick={() => navigate("/procedures")}>View all workflows</Button>
+          <h2 className="text-lg font-semibold text-foreground">{t.quickActions}</h2>
+          <Button variant="ghost" size="sm" onClick={() => navigate("/procedures")}>{t.viewAllWorkflows}</Button>
         </div>
         <div className="grid gap-3 sm:grid-cols-3">
           {quickActions.map((action) => {
@@ -112,8 +114,8 @@ const Dashboard = () => {
 
       <section className="space-y-3">
         <div className="flex items-center justify-between">
-          <h2 className="text-lg font-semibold text-foreground">Active Procedure List</h2>
-          <Button size="sm" variant="outline" onClick={() => navigate("/procedures")}>Open board</Button>
+          <h2 className="text-lg font-semibold text-foreground">{t.activeProcedureList}</h2>
+          <Button size="sm" variant="outline" onClick={() => navigate("/procedures")}>{t.openBoard}</Button>
         </div>
         <div className="space-y-3">
           {recentProcedures.map((procedure) => (
@@ -139,10 +141,10 @@ const Dashboard = () => {
 
       <section className="space-y-3">
         <div className="flex items-center justify-between">
-          <h2 className="text-lg font-semibold text-foreground">Labs & Assessments</h2>
+          <h2 className="text-lg font-semibold text-foreground">{t.labsAndAssessments}</h2>
           <Button size="sm" onClick={() => navigate("/labs")}>
             <Beaker size={16} className="mr-2" />
-            Labs
+            {t.labs}
           </Button>
         </div>
         <div className="grid gap-3 sm:grid-cols-2">
@@ -150,24 +152,24 @@ const Dashboard = () => {
             <div className="flex items-center gap-3">
               <Beaker className="text-primary" size={20} />
               <div>
-                <p className="text-sm text-muted-foreground">Critical watchlist</p>
-                <p className="text-xl font-semibold text-card-foreground">{labCategories.size} lab domains</p>
+                <p className="text-sm text-muted-foreground">{t.criticalWatchlist}</p>
+                <p className="text-xl font-semibold text-card-foreground">{labCategoriesSet.size} {t.labDomains}</p>
               </div>
             </div>
             <Button className="mt-4 w-full" variant="secondary" onClick={() => navigate("/labs")}>
-              Review panels
+              {t.reviewPanels}
             </Button>
           </Card>
           <Card className="p-4">
             <div className="flex items-center gap-3">
               <ClipboardCheck className="text-primary" size={20} />
               <div>
-                <p className="text-sm text-muted-foreground">Bedside scoring</p>
-                <p className="text-xl font-semibold text-card-foreground">{assessmentCategories.size} domains</p>
+                <p className="text-sm text-muted-foreground">{t.bedsideScoring}</p>
+                <p className="text-xl font-semibold text-card-foreground">{assessmentCategories.size} {t.domains}</p>
               </div>
             </div>
             <Button className="mt-4 w-full" variant="secondary" onClick={() => navigate("/assessments")}>
-              Launch assessments
+              {t.launchAssessments}
             </Button>
           </Card>
         </div>
@@ -177,14 +179,14 @@ const Dashboard = () => {
         <Card className="p-4 border-dashed border-2">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <p className="text-sm text-muted-foreground">Need help documenting?</p>
+              <p className="text-sm text-muted-foreground">{t.needHelpDocumenting}</p>
               <p className="text-lg font-semibold text-card-foreground">
-                Summon the AI assistant for handoff summaries
+                {t.summonAIAssistant}
               </p>
             </div>
             <Button onClick={() => navigate("/ai-assistant")}>
               <PlusCircle size={16} className="mr-2" />
-              Start consult
+              {t.startConsult}
             </Button>
           </div>
         </Card>

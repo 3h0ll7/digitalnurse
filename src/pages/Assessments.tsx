@@ -5,11 +5,13 @@ import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { useMemo, useState } from "react";
 import { Input } from "@/components/ui/input";
+import { usePreferences } from "@/contexts/PreferencesContext";
 
 const Assessments = () => {
   const navigate = useNavigate();
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("All");
+  const { t } = usePreferences();
 
   const categories = useMemo(
     () => ["All", ...Array.from(new Set(assessmentScales.map((scale) => scale.category)))],
@@ -25,12 +27,12 @@ const Assessments = () => {
   });
 
   return (
-    <AppLayout title="Assessment Hub" subtitle="Risk scores & bedside tools">
+    <AppLayout title={t.assessmentHub} subtitle={t.riskScoresBedsideTools}>
       <section className="space-y-3">
         <Input
           value={query}
           onChange={(event) => setQuery(event.target.value)}
-          placeholder="Search assessments"
+          placeholder={t.searchAssessments}
           className="bg-card"
         />
         <div className="flex flex-wrap gap-2">
@@ -42,7 +44,7 @@ const Assessments = () => {
               className="rounded-full"
               onClick={() => setCategory(cat)}
             >
-              {cat}
+              {cat === "All" ? t.allLabel : cat}
             </Button>
           ))}
         </div>
@@ -62,14 +64,14 @@ const Assessments = () => {
                 <p className="text-sm text-muted-foreground line-clamp-2">{scale.description}</p>
               </div>
               <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
-                Interactive
+                {t.interactive}
               </span>
             </div>
           </Card>
         ))}
         {filteredScales.length === 0 && (
           <div className="rounded-xl border border-dashed p-6 text-center text-muted-foreground">
-            No assessments found.
+            {t.noAssessmentsFound}
           </div>
         )}
       </section>

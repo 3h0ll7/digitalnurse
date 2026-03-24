@@ -16,10 +16,10 @@ const PrimaryNav = () => {
   const { t } = usePreferences();
 
   const navItems = [
-    { path: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
+    { path: "/dashboard", icon: LayoutDashboard, label: t.navDashboard },
     { path: "/procedures", icon: BookOpenCheck, label: t.navProcedures },
-    { path: "/labs", icon: TestTube2, label: "Labs" },
-    { path: "/assessments", icon: ClipboardList, label: "Assess" },
+    { path: "/labs", icon: TestTube2, label: t.navLabs },
+    { path: "/assessments", icon: ClipboardList, label: t.navAssess },
     { path: "/calculators", icon: Calculator, label: t.navCalculators },
     { path: "/flashcards", icon: Sparkles, label: t.navFlashcards },
     { path: "/ai-assistant", icon: Bot, label: t.navAssistant },

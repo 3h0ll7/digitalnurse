@@ -1,10 +1,14 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { ChevronLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
+import { usePreferences } from "@/contexts/PreferencesContext";
+import type { translations } from "@/lib/i18n";
+
+type Translation = (typeof translations)["en"];
 
 type CalculatorField = {
   id: string;
@@ -32,98 +36,101 @@ const getNumericValue = (value: number | string | undefined) => {
   return 0;
 };
 
-const calculators: Record<string, CalculatorDefinition> = {
+const getCalculators = (t: Translation): Record<string, CalculatorDefinition> => ({
   dosage: {
-    name: "Dosage Calculation",
+    name: t.dosageCalculation,
     fields: [
-      { id: "ordered", label: "Ordered Dose (mg)", type: "number" },
-      { id: "available", label: "Available Dose (mg)", type: "number" },
-      { id: "volume", label: "Volume Available (mL)", type: "number" },
+      { id: "ordered", label: t.orderedDose, type: "number" },
+      { id: "available", label: t.availableDose, type: "number" },
+      { id: "volume", label: t.volumeAvailable, type: "number" },
     ],
     calculate: (values) => {
       const ordered = getNumericValue(values.ordered);
       const available = getNumericValue(values.available);
       const volume = getNumericValue(values.volume);
       if (available === 0) {
-        return "Available dose must be greater than 0";
+        return t.availableDoseError;
       }
       const dose = (ordered / available) * volume;
-      return `Administer: ${dose.toFixed(2)} mL`;
+      return `${t.administer} ${dose.toFixed(2)} mL`;
     },
   },
   "iv-drip": {
-    name: "IV Drip Rate",
+    name: t.ivDripRate,
     fields: [
-      { id: "volume", label: "Total Volume (mL)", type: "number" },
-      { id: "time", label: "Time (hours)", type: "number" },
-      { id: "dropFactor", label: "Drop Factor (gtts/mL)", type: "number" },
+      { id: "volume", label: t.totalVolume, type: "number" },
+      { id: "time", label: t.timeHours, type: "number" },
+      { id: "dropFactor", label: t.dropFactor, type: "number" },
     ],
     calculate: (values) => {
       const volume = getNumericValue(values.volume);
       const time = getNumericValue(values.time);
       const dropFactor = getNumericValue(values.dropFactor);
       if (time === 0) {
-        return "Time must be greater than 0";
+        return t.timeError;
       }
       const mlPerHour = volume / time;
       const dropsPerMin = (mlPerHour * dropFactor) / 60;
-      return `Rate: ${mlPerHour.toFixed(1)} mL/hr or ${dropsPerMin.toFixed(0)} drops/min`;
+      return `${t.rate} ${mlPerHour.toFixed(1)} ${t.mlHr} / ${dropsPerMin.toFixed(0)} ${t.dropsMin}`;
     },
   },
   bmi: {
-    name: "BMI Calculator",
+    name: t.bmiCalculator,
     fields: [
-      { id: "weight", label: "Weight (kg)", type: "number" },
-      { id: "height", label: "Height (cm)", type: "number" },
+      { id: "weight", label: t.weightKg, type: "number" },
+      { id: "height", label: t.heightCm, type: "number" },
     ],
     calculate: (values) => {
       const heightM = getNumericValue(values.height) / 100;
       const weight = getNumericValue(values.weight);
       if (heightM === 0) {
-        return "Height must be greater than 0";
+        return t.heightError;
       }
       const bmi = weight / (heightM * heightM);
       let category = "";
-      if (bmi < 18.5) category = "Underweight";
-      else if (bmi < 25) category = "Normal weight";
-      else if (bmi < 30) category = "Overweight";
-      else category = "Obese";
-      return `BMI: ${bmi.toFixed(1)} - ${category}`;
+      if (bmi < 18.5) category = t.underweight;
+      else if (bmi < 25) category = t.normalWeight;
+      else if (bmi < 30) category = t.overweight;
+      else category = t.obese;
+      return `${t.bmiLabel} ${bmi.toFixed(1)} - ${category}`;
     },
   },
   creatinine: {
-    name: "Creatinine Clearance",
+    name: t.creatinineClearance,
     fields: [
-      { id: "age", label: "Age (years)", type: "number" },
-      { id: "weight", label: "Weight (kg)", type: "number" },
-      { id: "creatinine", label: "Serum Creatinine (mg/dL)", type: "number" },
-      { id: "sex", label: "Sex", type: "select", options: ["Male", "Female"] },
+      { id: "age", label: t.ageYears, type: "number" },
+      { id: "weight", label: t.weightKg, type: "number" },
+      { id: "creatinine", label: t.serumCreatinine, type: "number" },
+      { id: "sex", label: t.sexLabel, type: "select", options: [t.male, t.female] },
     ],
     calculate: (values) => {
       const age = getNumericValue(values.age);
       const weight = getNumericValue(values.weight);
       const creatinine = getNumericValue(values.creatinine);
       if (creatinine === 0) {
-        return "Serum creatinine must be greater than 0";
+        return t.serumCreatinineError;
       }
-      const femaleAdjustment = values.sex === "Female" ? 0.85 : 1;
+      const femaleAdjustment = values.sex === t.female ? 0.85 : 1;
       const ccr = ((140 - age) * weight) / (72 * creatinine) * femaleAdjustment;
-      return `Creatinine Clearance: ${ccr.toFixed(1)} mL/min`;
+      return `${t.creatinineClearanceResult} ${ccr.toFixed(1)} mL/min`;
     },
   },
-};
+});
 
 const CalculatorDetail = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const { t } = usePreferences();
   const [result, setResult] = useState<string>("");
-  const calculator = id ? calculators[id] : undefined;
   const [values, setValues] = useState<CalculatorValues>({});
+
+  const calculators = useMemo(() => getCalculators(t), [t]);
+  const calculator = id ? calculators[id] : undefined;
 
   if (!calculator) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
-        <p>Calculator not found</p>
+        <p>{t.calculatorNotFound}</p>
       </div>
     );
   }
@@ -157,7 +164,7 @@ const CalculatorDetail = () => {
                     setValues((prev) => ({ ...prev, [field.id]: e.target.value }))
                   }
                 >
-                  <option value="">Select...</option>
+                  <option value="">{t.selectOption}</option>
                   {field.options?.map((opt) => (
                     <option key={opt} value={opt}>
                       {opt}
@@ -181,7 +188,7 @@ const CalculatorDetail = () => {
           ))}
 
           <Button onClick={handleCalculate} className="w-full">
-            Calculate
+            {t.calculate}
           </Button>
 
           {result && (

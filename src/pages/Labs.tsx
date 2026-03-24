@@ -4,10 +4,12 @@ import AppLayout from "@/components/layout/AppLayout";
 import { labValues } from "@/data/labValues";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { usePreferences } from "@/contexts/PreferencesContext";
 
 const Labs = () => {
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("All");
+  const { t } = usePreferences();
 
   const categories = useMemo(() => ["All", ...Array.from(new Set(labValues.map((lab) => lab.category)))], []);
 
@@ -20,12 +22,12 @@ const Labs = () => {
   });
 
   return (
-    <AppLayout title="Lab Panels" subtitle="Critical values & ranges">
+    <AppLayout title={t.labPanels} subtitle={t.criticalValuesRanges}>
       <section className="space-y-3">
         <Input
           value={search}
           onChange={(event) => setSearch(event.target.value)}
-          placeholder="Search tests or categories"
+          placeholder={t.searchTestsOrCategories}
           className="bg-card"
         />
         <div className="flex flex-wrap gap-2">
@@ -37,7 +39,7 @@ const Labs = () => {
               onClick={() => setCategory(cat)}
               className="rounded-full"
             >
-              {cat}
+              {cat === "All" ? t.allLabel : cat}
             </Button>
           ))}
         </div>
@@ -54,10 +56,10 @@ const Labs = () => {
               <Badge variant="secondary">{lab.unit}</Badge>
             </div>
             <div className="mt-2 text-sm text-muted-foreground">
-              <p>Normal: {lab.normalRange}</p>
+              <p>{t.normalLabel} {lab.normalRange}</p>
               {(lab.criticalLow || lab.criticalHigh) && (
                 <p className="text-medical-red">
-                  Critical: {lab.criticalLow && `≤${lab.criticalLow}`} {lab.criticalHigh && ` / ≥${lab.criticalHigh}`}
+                  {t.criticalLabel} {lab.criticalLow && `≤${lab.criticalLow}`} {lab.criticalHigh && ` / ≥${lab.criticalHigh}`}
                 </p>
               )}
             </div>
@@ -65,7 +67,7 @@ const Labs = () => {
         ))}
         {filteredLabs.length === 0 && (
           <div className="rounded-xl border border-dashed p-6 text-center text-muted-foreground">
-            No lab tests found.
+            {t.noLabTestsFound}
           </div>
         )}
       </section>

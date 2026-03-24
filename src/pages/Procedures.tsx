@@ -16,41 +16,41 @@ const Procedures = () => {
   const [activeProcedure, setActiveProcedure] = useState<Procedure | null>(null);
 
   const allProcedures = [...procedures, ...additionalProcedures];
-  
+
   const filteredProcedures = allProcedures.filter(proc =>
     proc.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
     proc.category.toLowerCase().includes(searchQuery.toLowerCase())
   );
-  
+
   const categories = Array.from(new Set(allProcedures.map(p => p.category)));
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
 
-  const displayProcedures = selectedCategory === "All" 
-    ? filteredProcedures 
+  const displayProcedures = selectedCategory === "All"
+    ? filteredProcedures
     : filteredProcedures.filter(p => p.category === selectedCategory);
 
   const workflowPhases = [
     {
-      title: "Pre-procedure",
-      description: "Verification, consent, and patient preparation",
+      title: t.preProcedure,
+      description: t.preProcedureDesc,
     },
     {
-      title: "Intra-procedure",
-      description: "Sterile technique, monitoring, escalation cues",
+      title: t.intraProcedure,
+      description: t.intraProcedureDesc,
     },
     {
-      title: "Post-procedure",
-      description: "Recovery, documentation, and patient teaching",
+      title: t.postProcedure,
+      description: t.postProcedureDesc,
     },
   ];
 
   return (
     <AppLayout
       title={t.proceduresTitle}
-      subtitle="Evidence-based workflows"
+      subtitle={t.evidenceBasedWorkflows}
       actions={
         <Button size="sm" variant="secondary" onClick={() => navigate("/calculators")}>
-          Clinical tools
+          {t.clinicalTools}
         </Button>
       }
     >

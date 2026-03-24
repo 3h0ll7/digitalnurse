@@ -57,10 +57,10 @@ const Flashcards = () => {
           />
           <Button variant="outline" onClick={resetFilters} className="md:w-auto">
             <RefreshCcw className="mr-2 h-4 w-4" />
-            Reset
+            {t.resetLabel}
           </Button>
           <div className="hidden md:flex items-center justify-end text-sm text-muted-foreground">
-            {filteredCards.length} / {flashcards.length} cards
+            {filteredCards.length} / {flashcards.length} {t.cards}
           </div>
         </div>
         <div className="flex flex-wrap gap-2">
@@ -114,7 +114,7 @@ const Flashcards = () => {
         })}
         {filteredCards.length === 0 && (
           <div className="rounded-2xl border border-dashed p-8 text-center text-muted-foreground">
-            No cards match the current filters.
+            {t.noCardsMatch}
           </div>
         )}
       </section>

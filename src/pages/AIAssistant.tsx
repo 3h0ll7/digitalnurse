@@ -3,25 +3,22 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Send, Bot, AlertCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { usePreferences } from "@/contexts/PreferencesContext";
 
 interface Message {
   role: "user" | "assistant";
   content: string;
 }
 
-const exampleQuestions = [
-  "What are the signs of IV infiltration?",
-  "Explain the mechanism of action for metformin",
-  "Help me write a progress note for a stable patient",
-  "What are normal vital signs for adults?",
-];
-
 const AIAssistant = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
+  const { t } = usePreferences();
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const exampleQuestions = [t.exampleQ1, t.exampleQ2, t.exampleQ3, t.exampleQ4];
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -41,13 +38,13 @@ const AIAssistant = () => {
 
     try {
       const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-chat`;
-      
+
       const response = await fetch(CHAT_URL, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ 
+        body: JSON.stringify({
           messages: [...messages, userMessage].map(m => ({
             role: m.role,
             content: m.content
@@ -70,9 +67,9 @@ const AIAssistant = () => {
       while (true) {
         const { done, value } = await reader.read();
         if (done) break;
-        
+
         textBuffer += decoder.decode(value, { stream: true });
-        
+
         let newlineIndex: number;
         while ((newlineIndex = textBuffer.indexOf("\n")) !== -1) {
           let line = textBuffer.slice(0, newlineIndex);
@@ -109,8 +106,8 @@ const AIAssistant = () => {
     } catch (error) {
       console.error('Error calling AI:', error);
       toast({
-        title: "خطأ",
-        description: "فشل الاتصال بمساعد الذكاء الاصطناعي. الرجاء المحاولة مرة أخرى.",
+        title: t.aiErrorTitle,
+        description: t.aiErrorDescription,
         variant: "destructive",
       });
       setIsLoading(false);
@@ -124,14 +121,14 @@ const AIAssistant = () => {
   return (
     <div className="min-h-screen bg-background pb-20 flex flex-col">
       <header className="bg-primary text-primary-foreground p-6 shadow-md">
-        <h1 className="text-2xl font-bold">AI Nursing Assistant</h1>
+        <h1 className="text-2xl font-bold">{t.aiNursingAssistant}</h1>
       </header>
 
       <div className="bg-medical-yellow/10 border-l-4 border-medical-yellow p-4 m-4 rounded-r-lg">
         <div className="flex gap-2">
           <AlertCircle className="text-medical-yellow flex-shrink-0 mt-0.5" size={20} />
           <p className="text-sm text-foreground">
-            For educational purposes only. Always verify with qualified healthcare professionals.
+            {t.educationalDisclaimer}
           </p>
         </div>
       </div>
@@ -143,15 +140,15 @@ const AIAssistant = () => {
               <Bot className="text-primary" size={32} />
             </div>
             <h2 className="text-xl font-bold text-foreground mb-2">
-              AI Nursing Assistant
+              {t.aiNursingAssistant}
             </h2>
             <p className="text-muted-foreground mb-6 px-4">
-              Ask me about nursing procedures, medications, clinical scenarios, or help with professional documentation.
+              {t.aiDescription}
             </p>
 
             <div className="space-y-2">
               <p className="text-sm font-semibold text-foreground mb-3">
-                Example questions:
+                {t.exampleQuestionsLabel}
               </p>
               {exampleQuestions.map((question, index) => (
                 <button
@@ -217,7 +214,7 @@ const AIAssistant = () => {
                 handleSend();
               }
             }}
-            placeholder="Ask a nursing question..."
+            placeholder={t.askNursingQuestion}
             className="resize-none bg-card"
             rows={1}
           />

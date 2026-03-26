@@ -440,10 +440,10 @@ export const translations: Record<SupportedLanguage, Translation> = {
 
     // AI Assistant
     aiTitle: "AI Nursing Assistant",
-    aiConnectionStatus: "Gemini AI",
+    aiConnectionStatus: "Open-Source AI",
     aiDisclaimer: "For educational purposes only. Always verify with qualified healthcare professionals.",
     aiWelcomeTitle: "AI Nursing Assistant",
-    aiWelcomeDesc: "Powered by Google Gemini. Ask about procedures, medications, clinical scenarios, or documentation help.",
+    aiWelcomeDesc: "Powered by powerful open-source AI models. Ask about procedures, medications, clinical scenarios, or documentation help.",
     aiExampleQuestionsTitle: "Example questions:",
     aiPlaceholder: "Ask a nursing question... (10 messages/day)",
     aiDailyRemaining: "daily messages remaining",
@@ -665,10 +665,10 @@ export const translations: Record<SupportedLanguage, Translation> = {
 
     // AI Assistant
     aiTitle: "مساعد التمريض الذكي",
-    aiConnectionStatus: "Gemini AI",
+    aiConnectionStatus: "ذكاء اصطناعي مفتوح المصدر",
     aiDisclaimer: "للأغراض التعليمية فقط. يُرجى التحقق دائمًا مع متخصصي الرعاية الصحية المؤهلين.",
     aiWelcomeTitle: "مساعد التمريض الذكي",
-    aiWelcomeDesc: "مدعوم بـ Google Gemini. اسأل عن الإجراءات والأدوية والسيناريوهات السريرية أو المساعدة في التوثيق.",
+    aiWelcomeDesc: "مدعوم بنماذج ذكاء اصطناعي مفتوحة المصدر قوية ومعتمدة. اسأل عن الإجراءات والأدوية والسيناريوهات السريرية أو المساعدة في التوثيق.",
     aiExampleQuestionsTitle: "أسئلة مقترحة:",
     aiPlaceholder: "اطرح سؤالاً تمريضيًا... (10 رسائل/يوم)",
     aiDailyRemaining: "رسالة يومية متبقية",

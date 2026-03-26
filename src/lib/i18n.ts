@@ -440,10 +440,10 @@ export const translations: Record<SupportedLanguage, Translation> = {
 
     // AI Assistant
     aiTitle: "AI Nursing Assistant",
-    aiConnectionStatus: "Gemini AI",
+    aiConnectionStatus: "Open-Source AI",
     aiDisclaimer: "For educational purposes only. Always verify with qualified healthcare professionals.",
     aiWelcomeTitle: "AI Nursing Assistant",
-    aiWelcomeDesc: "Powered by Google Gemini. Ask about procedures, medications, clinical scenarios, or documentation help.",
+    aiWelcomeDesc: "Powered by powerful open-source AI models. Ask about procedures, medications, clinical scenarios, or documentation help.",
     aiExampleQuestionsTitle: "Example questions:",
     aiPlaceholder: "Ask a nursing question... (10 messages/day)",
     aiDailyRemaining: "daily messages remaining",

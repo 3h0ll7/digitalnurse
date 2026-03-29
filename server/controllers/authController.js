@@ -69,7 +69,7 @@ export const login = async (req, res) => {
     try {
       await identityProvider.verify({ user, email, password: data.password });
     } catch (error) {
-      return sendJson(res, 401, { error: error.message || "Invalid email or password" });
+      return sendJson(res, 401, { error: "Invalid email or password" });
     }
     const token = issueTokenForUser(user);
     return sendJson(res, 200, { token, user: sanitizeUser(user) });

@@ -35,26 +35,32 @@ serve(async (req) => {
       }
     }
 
-    // Determine user identifier (use auth token sub if available, fallback to IP)
+    // Require authentication
     const authHeader = req.headers.get('Authorization');
-    let userIdentifier = req.headers.get('x-forwarded-for') || 'anonymous';
+    if (!authHeader?.startsWith('Bearer ')) {
+      return new Response(JSON.stringify({ error: 'Authentication required' }), {
+        status: 401,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
 
-    // Create Supabase service client for rate limiting
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
     const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
     const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey);
 
-    // Try to get authenticated user ID for more accurate rate limiting
-    if (authHeader?.startsWith('Bearer ')) {
-      const anonKey = Deno.env.get('SUPABASE_ANON_KEY')!;
-      const supabaseUser = createClient(supabaseUrl, anonKey, {
-        global: { headers: { Authorization: authHeader } },
+    const anonKey = Deno.env.get('SUPABASE_ANON_KEY')!;
+    const supabaseUser = createClient(supabaseUrl, anonKey, {
+      global: { headers: { Authorization: authHeader } },
+    });
+    const { data: { user }, error: authError } = await supabaseUser.auth.getUser();
+    if (authError || !user) {
+      return new Response(JSON.stringify({ error: 'Invalid or expired token' }), {
+        status: 401,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
-      const { data: { user } } = await supabaseUser.auth.getUser();
-      if (user) {
-        userIdentifier = `user_${user.id}`;
-      }
     }
+
+    const userIdentifier = `user_${user.id}`;
 
     // --- Rate Limiting ---
     const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD

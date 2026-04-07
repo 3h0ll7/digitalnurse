@@ -19,6 +19,8 @@ import Assessments from "./pages/Assessments";
 import MindMaps from "./pages/MindMaps";
 import ECG from "./pages/ECG";
 import SecureShell from "./components/layout/SecureShell";
+import Drugs from "./pages/Drugs";
+import DrugDetail from "./pages/DrugDetail";
 
 const queryClient = new QueryClient();
 
@@ -33,6 +35,8 @@ const App = () => (
             <Route element={<SecureShell />}>
               <Route path="/" element={<Navigate to="/home" replace />} />
               <Route path="/home" element={<Home />} />
+              <Route path="/drugs" element={<Drugs />} />
+              <Route path="/drugs/:id" element={<DrugDetail />} />
               <Route path="/procedures" element={<Procedures />} />
               <Route path="/procedure/:id" element={<ProcedureDetail />} />
               <Route path="/labs" element={<Labs />} />

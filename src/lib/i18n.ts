@@ -7,7 +7,6 @@ interface Translation {
   navAssessments: string;
   navCalculators: string;
   navLabs: string;
-  navEcg: string;
   navFlashcards: string;
   navMindMaps: string;
   navAssistant: string;
@@ -190,12 +189,6 @@ interface Translation {
   normal: string;
   critical: string;
 
-  // ECG
-  ecgTitle: string;
-  ecgSubtitle: string;
-  searchEcg: string;
-  noEcgTerms: string;
-  sourceEcgRef: string;
   clinicalPearl: string;
 
   // Flashcards
@@ -244,7 +237,6 @@ export const translations: Record<SupportedLanguage, Translation> = {
     navAssessments: "Assess",
     navCalculators: "Calculators",
     navLabs: "Labs",
-    navEcg: "ECG",
     navFlashcards: "Flashcards",
     navMindMaps: "Mind Maps",
     navAssistant: "AI Assistant",
@@ -418,13 +410,6 @@ export const translations: Record<SupportedLanguage, Translation> = {
     sourceLabRef: "Source: On-device lab reference",
     normal: "Normal",
     critical: "Critical",
-
-    // ECG
-    ecgTitle: "ECG Interpretation",
-    ecgSubtitle: "Cardiac rhythms & waveforms",
-    searchEcg: "Search ECG terms, definitions, or clinical pearls",
-    noEcgTerms: "No ECG terms matched your filters.",
-    sourceEcgRef: "Source: ECG static reference",
     clinicalPearl: "Clinical Pearl",
 
     // Flashcards
@@ -472,7 +457,6 @@ export const translations: Record<SupportedLanguage, Translation> = {
     navAssessments: "التقييمات",
     navCalculators: "الحاسبات",
     navLabs: "المختبرات",
-    navEcg: "ECG",
     navFlashcards: "البطاقات التعليمية",
     navMindMaps: "الخرائط الذهنية",
     navAssistant: "المساعد الذكي",
@@ -646,13 +630,6 @@ export const translations: Record<SupportedLanguage, Translation> = {
     sourceLabRef: "المصدر: مرجع مخبري محلي",
     normal: "الطبيعي",
     critical: "حرج",
-
-    // ECG
-    ecgTitle: "تفسير تخطيط القلب",
-    ecgSubtitle: "الإيقاعات القلبية وموجات التخطيط",
-    searchEcg: "ابحث في مصطلحات تخطيط القلب أو التعاريف أو الملاحظات السريرية",
-    noEcgTerms: "لم يتم العثور على مصطلحات تخطيط قلب مطابقة للمرشحات.",
-    sourceEcgRef: "المصدر: مرجع ثابت لتخطيط القلب",
     clinicalPearl: "ملاحظة سريرية",
 
     // Flashcards

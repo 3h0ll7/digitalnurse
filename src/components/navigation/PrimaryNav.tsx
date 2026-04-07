@@ -24,7 +24,7 @@ const PrimaryNav = () => {
     { path: "/assessments", icon: ClipboardList, label: t.navAssessments },
     { path: "/calculators", icon: Calculator, label: t.navCalculators },
     { path: "/labs", icon: TestTube2, label: t.navLabs },
-    { path: "/drugs", icon: Pill, label: "DRUGS" },
+    { path: "/drugs", icon: Pill, label: "الأدوية" },
     { path: "/ecg", icon: HeartPulse, label: t.navEcg },
     { path: "/flashcards", icon: Sparkles, label: t.navFlashcards },
     { path: "/mind-maps", icon: GitBranch, label: t.navMindMaps },

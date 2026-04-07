@@ -61,6 +61,9 @@ interface Translation {
   labIntelligence: string;
   labIntelligenceDesc: string;
   review: string;
+  drugReference: string;
+  drugReferenceDesc: string;
+  explore: string;
   // Workflow tiles
   vascularAccess: string;
   priority: string;
@@ -294,6 +297,9 @@ export const translations: Record<SupportedLanguage, Translation> = {
     labIntelligence: "Lab Intelligence",
     labIntelligenceDesc: "Critical deltas & trending ranges",
     review: "Review",
+    drugReference: "Drug Reference",
+    drugReferenceDesc: "Drug classes, dosages & interactions",
+    explore: "Explore",
     vascularAccess: "Vascular access",
     priority: "Priority",
     sterileKit: "Sterile kit",
@@ -519,6 +525,9 @@ export const translations: Record<SupportedLanguage, Translation> = {
     labIntelligence: "تحليلات المختبر",
     labIntelligenceDesc: "الفروقات الحرجة والنطاقات المتغيرة",
     review: "مراجعة",
+    drugReference: "مرجع الأدوية",
+    drugReferenceDesc: "فئات الأدوية والجرعات والتفاعلات",
+    explore: "استكشاف",
     vascularAccess: "الوصول الوعائي",
     priority: "أولوية",
     sterileKit: "أدوات معقمة",

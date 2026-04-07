@@ -10,13 +10,14 @@ import {
   Sparkles,
   GitBranch,
   Pill,
+  Droplets,
 } from "lucide-react";
 import { usePreferences } from "@/contexts/PreferencesContext";
 
 const PrimaryNav = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { t } = usePreferences();
+  const { t, language } = usePreferences();
 
   const navItems = [
     { path: "/home", icon: ActivitySquare, label: t.navHome },
@@ -24,7 +25,8 @@ const PrimaryNav = () => {
     { path: "/assessments", icon: ClipboardList, label: t.navAssessments },
     { path: "/calculators", icon: Calculator, label: t.navCalculators },
     { path: "/labs", icon: TestTube2, label: t.navLabs },
-    { path: "/drugs", icon: Pill, label: "الأدوية" },
+    { path: "/drugs", icon: Pill, label: language === "ar" ? "الأدوية" : "DRUGS" },
+    { path: "/fluids", icon: Droplets, label: language === "ar" ? "السوائل" : "FLUIDS" },
     { path: "/ecg", icon: HeartPulse, label: t.navEcg },
     { path: "/flashcards", icon: Sparkles, label: t.navFlashcards },
     { path: "/mind-maps", icon: GitBranch, label: t.navMindMaps },

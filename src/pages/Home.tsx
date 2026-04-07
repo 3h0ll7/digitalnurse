@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import AppLayout from "@/components/layout/AppLayout";
-import { Activity, Bot, Brain, HeartPulse, Microscope, Sparkles, TestTube2 } from "lucide-react";
+import { Activity, Bot, Brain, HeartPulse, Microscope, Pill, Sparkles, TestTube2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { usePreferences } from "@/contexts/PreferencesContext";
 
@@ -30,6 +30,13 @@ const Home = () => {
       icon: TestTube2,
       action: t.review,
       to: "/labs",
+    },
+    {
+      title: t.drugReference,
+      description: t.drugReferenceDesc,
+      icon: Pill,
+      action: t.explore,
+      to: "/drugs",
     },
   ];
 

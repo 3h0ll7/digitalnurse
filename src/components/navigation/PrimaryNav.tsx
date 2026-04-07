@@ -9,6 +9,7 @@ import {
   Bot,
   Sparkles,
   GitBranch,
+  Pill,
 } from "lucide-react";
 import { usePreferences } from "@/contexts/PreferencesContext";
 
@@ -19,6 +20,7 @@ const PrimaryNav = () => {
 
   const navItems = [
     { path: "/home", icon: ActivitySquare, label: t.navHome },
+    { path: "/drugs", icon: Pill, label: "DRUGS" },
     { path: "/procedures", icon: BookOpenCheck, label: t.navProcedures },
     { path: "/assessments", icon: ClipboardList, label: t.navAssessments },
     { path: "/calculators", icon: Calculator, label: t.navCalculators },

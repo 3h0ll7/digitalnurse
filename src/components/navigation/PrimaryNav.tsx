@@ -27,6 +27,7 @@ const PrimaryNav = () => {
     { path: "/labs", icon: TestTube2, label: t.navLabs },
     { path: "/drugs", icon: Pill, label: language === "ar" ? "الأدوية" : "DRUGS" },
     { path: "/fluids", icon: Droplets, label: language === "ar" ? "السوائل" : "FLUIDS" },
+    { path: "/shift", icon: ClipboardList, label: language === "ar" ? "الشفت" : "SHIFT" },
     { path: "/ecg", icon: HeartPulse, label: t.navEcg },
     { path: "/flashcards", icon: Sparkles, label: t.navFlashcards },
     { path: "/mind-maps", icon: GitBranch, label: t.navMindMaps },

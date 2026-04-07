@@ -22,6 +22,7 @@ import SecureShell from "./components/layout/SecureShell";
 import Drugs from "./pages/Drugs";
 import DrugDetail from "./pages/DrugDetail";
 import Fluids from "./pages/Fluids";
+import ShiftPlanner from "./pages/ShiftPlanner";
 
 const queryClient = new QueryClient();
 
@@ -39,6 +40,7 @@ const App = () => (
               <Route path="/drugs" element={<Drugs />} />
               <Route path="/drugs/:id" element={<DrugDetail />} />
               <Route path="/fluids" element={<Fluids />} />
+              <Route path="/shift" element={<ShiftPlanner />} />
               <Route path="/procedures" element={<Procedures />} />
               <Route path="/procedure/:id" element={<ProcedureDetail />} />
               <Route path="/labs" element={<Labs />} />

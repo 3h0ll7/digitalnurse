@@ -34,6 +34,22 @@ const routeBadgeStyles: Record<string, string> = {
   IO: "border-emerald-300/40 bg-emerald-400/10 text-emerald-100",
 };
 
+const categoryLabels: Record<string, string> = {
+  ALL: "الكل",
+  VASOPRESSORS: "رافعات الضغط",
+  INOTROPES: "مقويات القلب",
+  "SEDATION & ANALGESIA": "التهدئة والتسكين",
+  ANTIARRHYTHMICS: "مضادات اضطراب النظم",
+  ANTICOAGULANTS: "مضادات التخثر",
+  "RSI & AIRWAY": "أدوية التنبيب",
+  "CODE DRUGS": "أدوية الكود",
+  "ELECTROLYTE REPLACEMENT": "تعويض الشوارد",
+  ANTIHYPERTENSIVES: "خافضات الضغط",
+  "ANTIDOTES & REVERSAL AGENTS": "المضادات والترياق",
+  ANTIBIOTICS: "المضادات الحيوية",
+  "OTHER ICU ESSENTIALS": "أساسيات العناية المركزة",
+};
+
 const Drugs = () => {
   const navigate = useNavigate();
   const [query, setQuery] = useState("");
@@ -60,7 +76,7 @@ const Drugs = () => {
 
   const compatibilityResult = useMemo(() => {
     if (!drugA || !drugB) return null;
-    if (drugA === drugB) return { type: "unknown", message: "Select two different medications for Y-site check." };
+    if (drugA === drugB) return { type: "unknown", message: "اختر دواءين مختلفين لفحص التوافق عبر Y-site." };
     const match = drugsCatalog.ivCompatibilityMatrix.find(
       (item) =>
         (item.drugA === drugA && item.drugB === drugB) ||
@@ -68,34 +84,34 @@ const Drugs = () => {
     );
 
     if (!match) {
-      return { type: "unknown", message: "No direct pair found in quick matrix. Verify with pharmacy database." };
+      return { type: "unknown", message: "لا يوجد زوج مباشر في المصفوفة السريعة. يُرجى التحقق عبر قاعدة بيانات الصيدلية." };
     }
 
     return match.compatible
-      ? { type: "compatible", message: "Y-site compatible in quick reference matrix." }
-      : { type: "incompatible", message: "Not Y-site compatible in quick reference matrix." };
+      ? { type: "compatible", message: "متوافق ✅" }
+      : { type: "incompatible", message: "غير متوافق ❌" };
   }, [drugA, drugB]);
 
   return (
-    <AppLayout title="Drug Reference" subtitle="ICU & EMERGENCY MEDICATIONS">
-      <section className="rounded-3xl border border-white/10 bg-card/80 p-5 shadow-[0_20px_60px_rgba(0,0,0,0.45)]">
-        <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+    <AppLayout title="مرجع الأدوية" subtitle="أدوية العناية المركزة والطوارئ">
+      <section dir="rtl" className="rounded-3xl border border-white/10 bg-card/80 p-5 text-right shadow-[0_20px_60px_rgba(0,0,0,0.45)]">
+        <div className="flex flex-col gap-3 md:flex-row-reverse md:items-center md:justify-between">
           <Dialog>
             <DialogTrigger asChild>
               <Button className="rounded-2xl bg-red-500/20 text-red-100 hover:bg-red-500/30 border border-red-400/40">
-                <Siren className="mr-2" size={16} /> Crash Cart Quick Reference
+                <Siren className="ml-2" size={16} /> المرجع السريع لعربة الطوارئ
               </Button>
             </DialogTrigger>
             <DialogContent className="max-w-4xl border-white/10 bg-slate-950 text-white">
               <DialogHeader>
-                <DialogTitle>Crash Cart Quick Reference</DialogTitle>
+                <DialogTitle className="text-right">المرجع السريع لعربة الطوارئ</DialogTitle>
               </DialogHeader>
               <div className="grid grid-cols-2 gap-3 md:grid-cols-3">
                 {emergencyDrugs.map((drug) => (
-                  <Card key={drug.id} className="rounded-2xl border border-red-400/30 bg-red-500/10 p-3">
+                  <Card key={drug.id} className="rounded-2xl border border-red-400/30 bg-red-500/10 p-3 text-right">
                     <p className="font-semibold">{drug.genericName}</p>
-                    <p className="text-xs text-muted-foreground">Route: {drug.routes.join(" / ")}</p>
-                    <p className="text-xs text-red-100">Dose: {drug.emergencyDose ?? "Emergency protocol dosing"}</p>
+                    <p className="text-xs text-muted-foreground">الطريق: {drug.routes.join(" / ")}</p>
+                    <p className="text-xs text-red-100">الجرعة: {drug.emergencyDose ?? "جرعة حسب بروتوكول الطوارئ"}</p>
                   </Card>
                 ))}
               </div>
@@ -103,21 +119,21 @@ const Drugs = () => {
           </Dialog>
 
           <div className="text-xs uppercase tracking-[0.3em] text-muted-foreground">
-            {filteredDrugs.length} drugs
+            دواء {filteredDrugs.length}
           </div>
         </div>
 
         <div className="relative mt-4">
-          <Sparkles className="absolute left-4 top-1/2 -translate-y-1/2 text-primary" size={18} />
+          <Sparkles className="absolute right-4 top-1/2 -translate-y-1/2 text-primary" size={18} />
           <Input
             value={query}
             onChange={(event) => setQuery(event.target.value)}
-            placeholder="Search ICU medications..."
-            className="h-12 rounded-2xl border-white/10 bg-white/5 pl-12 text-white placeholder:text-muted-foreground"
+            placeholder="...ابحث عن أدوية العناية المركزة"
+            className="h-12 rounded-2xl border-white/10 bg-white/5 pr-12 text-right text-white placeholder:text-muted-foreground"
           />
         </div>
 
-        <div className="mt-4 flex flex-wrap gap-2">
+        <div className="mt-4 flex flex-wrap justify-end gap-2">
           {drugsCatalog.categories.map((cat) => (
             <Button
               key={cat.value}
@@ -130,67 +146,67 @@ const Drugs = () => {
               }`}
               onClick={() => setSelectedCategory(cat.value)}
             >
-              {cat.label}
+              {categoryLabels[cat.value] ?? cat.label}
             </Button>
           ))}
         </div>
       </section>
 
-      <section className="rounded-3xl border border-white/10 bg-card/70 p-4 shadow-[0_15px_50px_rgba(0,0,0,0.4)]">
-        <div className="mb-3 flex items-center gap-2 text-sm text-cyan-100">
-          <GitMerge size={16} /> IV Compatibility Quick-Check
+      <section dir="rtl" className="rounded-3xl border border-white/10 bg-card/70 p-4 text-right shadow-[0_15px_50px_rgba(0,0,0,0.4)]">
+        <div className="mb-3 flex items-center justify-end gap-2 text-sm text-cyan-100">
+          <GitMerge size={16} /> فحص توافق الأدوية الوريدية
         </div>
         <div className="grid gap-3 md:grid-cols-3">
           <Select value={drugA} onValueChange={setDrugA}>
-            <SelectTrigger className="border-white/15 bg-white/5"><SelectValue placeholder="Select drug A" /></SelectTrigger>
+            <SelectTrigger className="border-white/15 bg-white/5 text-right"><SelectValue placeholder="اختر الدواء الأول" /></SelectTrigger>
             <SelectContent>{drugsCatalog.drugs.map((d) => <SelectItem key={d.id} value={d.genericName}>{d.genericName}</SelectItem>)}</SelectContent>
           </Select>
           <Select value={drugB} onValueChange={setDrugB}>
-            <SelectTrigger className="border-white/15 bg-white/5"><SelectValue placeholder="Select drug B" /></SelectTrigger>
+            <SelectTrigger className="border-white/15 bg-white/5 text-right"><SelectValue placeholder="اختر الدواء الثاني" /></SelectTrigger>
             <SelectContent>{drugsCatalog.drugs.map((d) => <SelectItem key={`${d.id}-b`} value={d.genericName}>{d.genericName}</SelectItem>)}</SelectContent>
           </Select>
           <div className={`rounded-2xl border p-3 text-sm ${compatibilityResult?.type === "compatible" ? "border-emerald-400/40 bg-emerald-500/10 text-emerald-100" : compatibilityResult?.type === "incompatible" ? "border-red-400/40 bg-red-500/10 text-red-100" : "border-white/10 bg-white/5 text-muted-foreground"}`}>
-            {compatibilityResult?.message ?? "Select two drugs to check Y-site compatibility."}
+            {compatibilityResult?.message ?? "اختر دوائين لفحص التوافق عبر Y-site"}
           </div>
         </div>
       </section>
 
-      <section className="grid gap-4">
+      <section dir="rtl" className="grid gap-4">
         {filteredDrugs.map((drug) => (
           <Card
             key={drug.id}
             className="cursor-pointer rounded-3xl border border-white/10 bg-card/70 p-5 text-white transition-all hover:-translate-y-1 hover:border-primary/40"
             onClick={() => navigate(`/drugs/${drug.id}`)}
           >
-            <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+            <div className="flex flex-col gap-3 md:flex-row-reverse md:items-start md:justify-between">
               <div>
                 <p className="text-xl font-semibold">{drug.genericName} <span className="text-sm font-normal text-muted-foreground">{drug.brandName ? `(${drug.brandName})` : ""}</span></p>
-                <div className="mt-2 flex flex-wrap gap-2">
-                  <Badge className={`border ${categoryStyles[drug.categoryColor]}`}>{drug.category}</Badge>
-                  {drug.highAlert && <Badge className="border-red-400/50 bg-red-500/20 text-red-100">HIGH ALERT</Badge>}
-                  {drug.emergency && <Badge className="border-orange-400/50 bg-orange-500/20 text-orange-100">EMERGENCY</Badge>}
+                <div className="mt-2 flex flex-wrap justify-end gap-2">
+                  <Badge className={`border ${categoryStyles[drug.categoryColor]}`}>{categoryLabels[drug.category] ?? drug.category}</Badge>
+                  {drug.highAlert && <Badge className="border-red-400/50 bg-red-500/20 text-red-100">عالي الخطورة</Badge>}
+                  {drug.emergency && <Badge className="border-orange-400/50 bg-orange-500/20 text-orange-100">طوارئ</Badge>}
                   {drug.hasTitrationGuide && (
                     <Dialog>
                       <DialogTrigger asChild>
-                        <Badge className="border-cyan-400/50 bg-cyan-500/20 text-cyan-100">Titration Guide</Badge>
+                        <Badge className="border-cyan-400/50 bg-cyan-500/20 text-cyan-100">دليل المعايرة</Badge>
                       </DialogTrigger>
                       <DialogContent className="border-white/10 bg-slate-950 text-white">
                         <DialogHeader>
-                          <DialogTitle>{drug.genericName} Titration Protocol</DialogTitle>
+                          <DialogTitle className="text-right">{drug.genericName} دليل المعايرة</DialogTitle>
                         </DialogHeader>
-                        <ol className="list-decimal space-y-2 pl-5 text-sm text-slate-100">
-                          <li>Verify target MAP/HR and baseline perfusion metrics.</li>
-                          <li>Start at protocol initial dose via smart pump.</li>
-                          <li>Titrate q2-3 min based on trend response.</li>
-                          <li>Reassess lactate, urine output, mental status, and ECG.</li>
-                          <li>Document final rate and escalation/backup plan.</li>
+                        <ol className="list-decimal space-y-2 pr-5 text-right text-sm text-slate-100">
+                          <li>تحقق من أهداف MAP/HR وخط الأساس لمؤشرات التروية.</li>
+                          <li>ابدأ بالجرعة الابتدائية حسب البروتوكول عبر المضخة الذكية.</li>
+                          <li>قم بالمعايرة كل 2-3 دقائق وفق الاستجابة.</li>
+                          <li>أعد تقييم اللاكتات وإدرار البول والحالة الذهنية وتخطيط ECG.</li>
+                          <li>وثّق المعدل النهائي وخطة التصعيد أو الخطة الاحتياطية.</li>
                         </ol>
                       </DialogContent>
                     </Dialog>
                   )}
                 </div>
               </div>
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap justify-end gap-2">
                 {drug.routes.map((route) => (
                   <Badge key={route} className={`border ${routeBadgeStyles[route]}`}>{route}</Badge>
                 ))}

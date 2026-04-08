@@ -21,6 +21,7 @@ import SecureShell from "./components/layout/SecureShell";
 import Drugs from "./pages/Drugs";
 import DrugDetail from "./pages/DrugDetail";
 import Fluids from "./pages/Fluids";
+import ECG from "./pages/ECG";
 
 const queryClient = new QueryClient();
 
@@ -47,6 +48,7 @@ const App = () => (
               <Route path="/ai-assistant" element={<AIAssistant />} />
               <Route path="/flashcards" element={<Flashcards />} />
               <Route path="/mind-maps" element={<MindMaps />} />
+              <Route path="/ecg" element={<ECG />} />
               <Route path="/scale/:id" element={<ScaleDetail />} />
             </Route>
             <Route path="*" element={<NotFound />} />

@@ -1,0 +1,179 @@
+{
+  "en": {
+    "title": "ECG Interpretation",
+    "subtitle": "RHYTHM ANALYSIS, INTERVENTIONS & CLINICAL TIPS",
+    "searchPlaceholder": "Search rhythms, conditions...",
+    "tabs": {
+      "rhythms": "Rhythms",
+      "howToRead": "How to Read",
+      "acls": "ACLS",
+      "tips": "Tips"
+    },
+    "categories": {
+      "ALL": "ALL",
+      "NORMAL_BASICS": "NORMAL & BASICS",
+      "ATRIAL": "ATRIAL RHYTHMS",
+      "JUNCTIONAL": "JUNCTIONAL",
+      "VENTRICULAR": "VENTRICULAR",
+      "BLOCKS": "HEART BLOCKS",
+      "ST": "ST CHANGES",
+      "LIFE": "LIFE-THREATENING",
+      "PACEMAKER": "PACEMAKER",
+      "ELECTROLYTE": "ELECTROLYTE EFFECTS",
+      "PEDIATRIC": "PEDIATRIC"
+    },
+    "severity": {
+      "BENIGN": "BENIGN",
+      "MONITOR": "MONITOR",
+      "URGENT": "URGENT",
+      "LIFE_THREATENING": "EMERGENCY"
+    },
+    "labels": {
+      "rate": "Rate",
+      "characteristics": "Characteristics",
+      "interventions": "Interventions",
+      "tips": "Clinical Tip",
+      "category": "Category",
+      "noResults": "No rhythms match your search.",
+      "hAndTs": "H's & T's"
+    },
+    "howToReadSteps": [
+      { "step": "1", "title": "Rate", "check": "Count method: 300/big boxes or 6-sec strip × 10" },
+      { "step": "2", "title": "Rhythm", "check": "Regular or irregular? Use calipers/paper method" },
+      { "step": "3", "title": "P Waves", "check": "Present? Upright in II? One P per QRS? Morphology consistent?" },
+      { "step": "4", "title": "PR Interval", "check": "0.12–0.20 sec? Constant? Progressive?" },
+      { "step": "5", "title": "QRS Complex", "check": "< 0.12 sec? Wide or narrow? Morphology?" },
+      { "step": "6", "title": "ST Segment", "check": "Elevated? Depressed? In which leads?" },
+      { "step": "7", "title": "T Wave", "check": "Upright? Inverted? Peaked? Flat?" },
+      { "step": "8", "title": "QT Interval", "check": "QTc < 0.44 sec (male) / < 0.46 sec (female)?" },
+      { "step": "9", "title": "Overall", "check": "Put it all together — what's the rhythm?" }
+    ],
+    "acls": [
+      { "title": "Shockable Arrest", "subtitle": "Cardiac Arrest (VF/pVT)", "steps": ["CPR + O2 + monitor/defib", "Shock 200J biphasic", "CPR 2 min + IV/IO", "Epinephrine 1mg q3-5min", "Shock + Amiodarone 300mg then 150mg"] },
+      { "title": "Non-Shockable Arrest", "subtitle": "Cardiac Arrest (Asystole/PEA)", "steps": ["CPR + O2 + rhythm check", "No shock advised", "Epinephrine 1mg q3-5min", "Treat reversible causes", "Reassess rhythm every 2 min"] },
+      { "title": "Bradycardia", "subtitle": "Bradycardia with Pulse", "steps": ["Assess unstable signs", "Atropine 0.5mg IV q3-5 min (max 3mg)", "Transcutaneous pacing", "Dopamine infusion 5-20 mcg/kg/min", "Epinephrine infusion 2-10 mcg/min"] },
+      { "title": "Narrow Complex Tachycardia", "subtitle": "Tachycardia with Pulse (Narrow)", "steps": ["Vagal maneuvers", "Adenosine 6mg rapid IV push", "Then 12mg, then 12mg", "Consider beta-blocker/CCB", "Unstable: synchronized cardioversion 50-100J"] },
+      { "title": "Wide Complex Tachycardia", "subtitle": "Tachycardia with Pulse (Wide)", "steps": ["Assume VT if uncertain", "Stable: Amiodarone 150mg over 10 min", "Unstable: synchronized cardioversion 100J", "Pulseless: defibrillate + CPR", "Correct H's and T's"] }
+    ],
+    "hsTs": ["Hypovolemia", "Hypoxia", "Hydrogen ion (acidosis)", "Hypo/Hyperkalemia", "Hypothermia", "Tension pneumothorax", "Tamponade", "Toxins", "Thrombosis (pulmonary)", "Thrombosis (coronary)"],
+    "clinicalTips": [
+      { "title": "Lead Placement", "content": "12-lead placement: ensure V1 at 4th ICS right sternal border and V6 midaxillary at 5th ICS." },
+      { "title": "Is it real?", "content": "Artifact vs arrhythmia: check patient first, verify leads, then confirm repeating pattern." },
+      { "title": "Calculate Rate", "content": "Use 300, 1500, or 6-second methods based on rhythm regularity." },
+      { "title": "Axis", "content": "Quick axis using Lead I and aVF quadrant method." },
+      { "title": "BBB", "content": "RBBB vs LBBB: WiLLiaM MaRRoW mnemonic; RBBB has rsR' in V1, LBBB has broad R in I/V6." },
+      { "title": "QT Drugs", "content": "Common QT-prolonging agents: Amiodarone, Haloperidol, Ondansetron, Fluoroquinolones, Azithromycin, Methadone." },
+      { "title": "Peds Norms", "content": "Pediatric rates vary by age; always compare with age-specific normal HR ranges." },
+      { "title": "ECG Mimics", "content": "Hyperkalemia, hypothermia (Osborn waves), and WPW may mimic VT/STEMI patterns." }
+    ]
+  },
+  "ar": {
+    "title": "تفسير تخطيط القلب",
+    "subtitle": "تحليل النظم، التداخلات والنصائح السريرية",
+    "searchPlaceholder": "...ابحث عن النظم والحالات",
+    "tabs": {
+      "rhythms": "النظم",
+      "howToRead": "كيف تقرأ",
+      "acls": "خوارزميات الإنعاش",
+      "tips": "نصائح"
+    },
+    "categories": {
+      "ALL": "الكل",
+      "NORMAL_BASICS": "الطبيعي والأساسيات",
+      "ATRIAL": "نظم أذينية",
+      "JUNCTIONAL": "نظم وصلية",
+      "VENTRICULAR": "نظم بطينية",
+      "BLOCKS": "إحصارات القلب",
+      "ST": "تغيرات ST",
+      "LIFE": "مهددة للحياة",
+      "PACEMAKER": "منظم القلب",
+      "ELECTROLYTE": "تأثيرات الشوارد",
+      "PEDIATRIC": "أطفال"
+    },
+    "severity": {
+      "BENIGN": "حميد",
+      "MONITOR": "مراقبة",
+      "URGENT": "عاجل",
+      "LIFE_THREATENING": "طوارئ"
+    },
+    "labels": {
+      "rate": "المعدل",
+      "characteristics": "الخصائص",
+      "interventions": "التداخلات",
+      "tips": "نصيحة سريرية",
+      "category": "التصنيف",
+      "noResults": "لا توجد نظم مطابقة للبحث.",
+      "hAndTs": "قائمة H's و T's"
+    },
+    "howToReadSteps": [
+      { "step": "1", "title": "المعدل", "check": "طريقة العد: 300/المربعات الكبيرة أو شريط 6 ثواني × 10" },
+      { "step": "2", "title": "النظم", "check": "منتظم أو غير منتظم؟ استخدم طريقة الورق/الفرجار" },
+      { "step": "3", "title": "موجات P", "check": "موجودة؟ موجبة في II؟ كل P مقابل QRS؟" },
+      { "step": "4", "title": "فترة PR", "check": "بين 0.12–0.20 ثانية؟ ثابتة أم تتدرج؟" },
+      { "step": "5", "title": "مركب QRS", "check": "أقل من 0.12 ثانية؟ ضيق أم واسع؟" },
+      { "step": "6", "title": "مقطع ST", "check": "مرتفع أو منخفض؟ وفي أي اشتقاقات؟" },
+      { "step": "7", "title": "موجة T", "check": "موجبة؟ مقلوبة؟ مدببة؟ مسطحة؟" },
+      { "step": "8", "title": "فترة QT", "check": "QTc أقل من 0.44 للذكور و0.46 للإناث؟" },
+      { "step": "9", "title": "الحكم النهائي", "check": "اجمع كل شيء — ما هو النظم؟" }
+    ],
+    "acls": [
+      { "title": "توقف قابل للصدم", "subtitle": "توقف القلب (VF/pVT)", "steps": ["ابدأ CPR + أكسجين + جهاز صدمات", "صدمة 200 جول ثنائي الطور", "CPR دقيقتين + خط وريدي/عظمي", "إبينفرين 1 ملغ كل 3-5 دقائق", "صدمة + أميودارون 300 ثم 150 ملغ"] },
+      { "title": "توقف غير قابل للصدم", "subtitle": "توقف القلب (Asystole/PEA)", "steps": ["CPR + أكسجين + فحص النظم", "لا توجد صدمة", "إبينفرين 1 ملغ كل 3-5 دقائق", "عالج الأسباب العكوسة", "أعد تقييم النظم كل دقيقتين"] },
+      { "title": "بطء القلب", "subtitle": "بطء القلب مع نبض", "steps": ["قيّم علامات عدم الاستقرار", "أتروبين 0.5 ملغ كل 3-5 دقائق (حد أقصى 3 ملغ)", "تنظيم عبر الجلد", "دوبامين 5-20 مكغ/كغ/دقيقة", "إبينفرين 2-10 مكغ/دقيقة"] },
+      { "title": "تسارع ضيق المركب", "subtitle": "تسارع القلب مع نبض (ضيق)", "steps": ["مناورات مبهمية", "أدينوسين 6 ملغ سريع IV", "ثم 12 ملغ ثم 12 ملغ", "فكر ببيتا بلوكر أو CCB", "غير مستقر: تقويم متزامن 50-100 جول"] },
+      { "title": "تسارع واسع المركب", "subtitle": "تسارع القلب مع نبض (واسع)", "steps": ["اعتبره VT عند الشك", "مستقر: أميودارون 150 ملغ خلال 10 دقائق", "غير مستقر: تقويم متزامن 100 جول", "بدون نبض: صدمة + CPR", "صحح H's و T's"] }
+    ],
+    "hsTs": ["نقص حجم الدم", "نقص الأوكسجين", "الحموضة", "نقص/فرط البوتاسيوم", "انخفاض الحرارة", "استرواح صدري ضاغط", "اندحاس قلبي", "السموم", "خثار رئوي", "خثار تاجي"],
+    "clinicalTips": [
+      { "title": "وضع الأقطاب", "content": "تأكد من مواضع 12 اشتقاق بشكل صحيح: V1 بالمسافة الوربية الرابعة يمين القص وV6 بالخط الإبطي المتوسط." },
+      { "title": "هل هو حقيقي؟", "content": "فرق بين Artifact واضطراب النظم: افحص المريض أولاً ثم التوصيلات ثم النمط المتكرر." },
+      { "title": "حساب المعدل", "content": "استخدم طرق 300 أو 1500 أو 6 ثوانٍ حسب انتظام النظم." },
+      { "title": "المحور", "content": "طريقة سريعة للمحور باستخدام Lead I وaVF." },
+      { "title": "إحصار الحزم", "content": "التمييز بين RBBB وLBBB باستخدام WiLLiaM MaRRoW." },
+      { "title": "أدوية تطيل QT", "content": "أدوية شائعة: Amiodarone, Haloperidol, Ondansetron, Fluoroquinolones, Azithromycin, Methadone." },
+      { "title": "معايير الأطفال", "content": "قيم النبض للأطفال تختلف حسب العمر؛ قارن بالقيم الطبيعية المناسبة للعمر." },
+      { "title": "المحاكيات", "content": "فرط البوتاسيوم، انخفاض الحرارة، وWPW قد تحاكي VT أو STEMI." }
+    ]
+  },
+  "rhythms": [
+    { "id": 1, "category": "NORMAL_BASICS", "nameEn": "Normal Sinus Rhythm (NSR)", "nameAr": "النظم الجيبي الطبيعي", "rate": "60–100 bpm", "characteristics": "P present upright in Lead II | PR 0.12–0.20 sec | QRS < 0.12 sec", "interventions": ["None required"], "tipsEn": "The gold standard — always compare other rhythms to this.", "tipsAr": "المعيار الذهبي — قارن دائماً النظم الأخرى بهذا.", "severity": "BENIGN", "wave": "normal" },
+    { "id": 2, "category": "NORMAL_BASICS", "nameEn": "Sinus Bradycardia", "nameAr": "بطء القلب الجيبي", "rate": "< 60 bpm", "characteristics": "Regular sinus rhythm with normal PR and QRS", "interventions": ["Asymptomatic: monitor", "Symptomatic: Atropine 0.5mg IV q3-5min (max 3mg)", "If ineffective: transcutaneous pacing", "Consider Dopamine or Epinephrine infusion"], "tipsEn": "Treat the patient, not the monitor. Check beta-blockers/CCB causes.", "tipsAr": "عالج المريض مو الشاشة. تأكد من تأثير حاصرات بيتا أو الكالسيوم.", "severity": "MONITOR", "wave": "normal" },
+    { "id": 3, "category": "NORMAL_BASICS", "nameEn": "Sinus Tachycardia", "nameAr": "تسارع القلب الجيبي", "rate": "> 100 bpm", "characteristics": "Regular with normal P, PR, QRS", "interventions": ["Treat underlying cause (pain, fever, hypovolemia, anxiety, PE, sepsis)", "Do NOT cardiovert sinus tachycardia"], "tipsEn": "Ask WHY before treating — sinus tach is a symptom.", "tipsAr": "اسأل ليش قبل العلاج — التسارع الجيبي عرض وليس مرضاً مستقلاً.", "severity": "MONITOR", "wave": "normal" },
+    { "id": 4, "category": "NORMAL_BASICS", "nameEn": "Sinus Arrhythmia", "nameAr": "اللانظمية الجيبية", "rate": "60–100 bpm (respiratory variation)", "characteristics": "Rate rises with inspiration and falls with expiration", "interventions": ["None — normal variant"], "tipsEn": "Very common in young adults.", "tipsAr": "شائع جداً عند الشباب.", "severity": "BENIGN", "wave": "normal" },
+
+    { "id": 5, "category": "ATRIAL", "nameEn": "Atrial Fibrillation (AFib)", "nameAr": "الرجفان الأذيني", "rate": "Ventricular 60–170+ (irregular)", "characteristics": "No P waves, irregularly irregular baseline", "interventions": ["Unstable: synchronized cardioversion", "Stable RVR: Diltiazem/Metoprolol/Amiodarone", "Anticoagulation guided by CHA₂DS₂-VASc", "If onset >48h/unknown: TEE before cardioversion"], "tipsEn": "If onset unknown, assume >48h and assess stroke risk.", "tipsAr": "إذا البداية غير معروفة اعتبرها أكثر من 48 ساعة واحسب خطر الجلطة.", "severity": "URGENT", "wave": "irregular" },
+    { "id": 6, "category": "ATRIAL", "nameEn": "Atrial Flutter", "nameAr": "الرفرفة الأذينية", "rate": "Atrial 250–350; ventricular depends on block", "characteristics": "Sawtooth flutter waves (II, III, aVF, V1)", "interventions": ["Rate control similar to AFib", "Synchronized cardioversion 50-100J often effective"], "tipsEn": "A ventricular rate of 150 strongly suggests 2:1 flutter.", "tipsAr": "معدل بطيني 150 غالباً يعني رفرفة بإحصار 2:1.", "severity": "URGENT", "wave": "flutter" },
+    { "id": 7, "category": "ATRIAL", "nameEn": "Supraventricular Tachycardia (SVT)", "nameAr": "تسارع فوق بطيني", "rate": "150–250 bpm", "characteristics": "Regular narrow QRS, P often hidden", "interventions": ["Vagal maneuvers first", "Adenosine 6mg IV push then 12mg then 12mg", "Unstable: synchronized cardioversion 50-100J", "Recurrent: Diltiazem or Metoprolol"], "tipsEn": "Adenosine half-life is ~6 seconds: push fast and flush.", "tipsAr": "الأدينوسين عمره النصفي 6 ثواني: ادفع بسرعة مع فلش.", "severity": "URGENT", "wave": "tachy" },
+    { "id": 8, "category": "ATRIAL", "nameEn": "Premature Atrial Complex (PAC)", "nameAr": "انقباض أذيني مبكر", "rate": "Normal with early beats", "characteristics": "Early abnormal P then narrow QRS", "interventions": ["Usually none", "Reduce caffeine/stress", "Frequent PACs: monitor for AFib"], "tipsEn": "Isolated PACs are usually benign.", "tipsAr": "الانقباضات المفردة غالباً حميدة.", "severity": "BENIGN", "wave": "ectopy" },
+    { "id": 9, "category": "ATRIAL", "nameEn": "Wandering Atrial Pacemaker (WAP)", "nameAr": "منظم أذيني متجول", "rate": "Usually <100 bpm", "characteristics": "≥3 P-wave morphologies with irregular rhythm", "interventions": ["Usually none", "Treat COPD/HF contributors"], "tipsEn": "If rate exceeds 100, classify as MAT.", "tipsAr": "إذا المعدل فوق 100 يسمى MAT.", "severity": "MONITOR", "wave": "irregular" },
+    { "id": 10, "category": "ATRIAL", "nameEn": "Multifocal Atrial Tachycardia (MAT)", "nameAr": "تسارع أذيني متعدد البؤر", "rate": ">100 bpm", "characteristics": "≥3 P-wave morphologies, irregular tachycardia", "interventions": ["Treat COPD/hypoxia/CHF", "Magnesium 2g IV", "Avoid beta-blocker if severe COPD"], "tipsEn": "MAT is not AFib: P waves are present with varying shape.", "tipsAr": "MAT ليس رجفاناً أذينياً: موجات P موجودة لكنها مختلفة.", "severity": "URGENT", "wave": "irregular" },
+
+    { "id": 11, "category": "JUNCTIONAL", "nameEn": "Junctional Rhythm", "nameAr": "نظم وصلي", "rate": "40–60 bpm", "characteristics": "Absent/inverted/retrograde P waves with narrow QRS", "interventions": ["Asymptomatic: monitor", "Symptomatic: Atropine then pacing"], "tipsEn": "AV node takes over when SA node fails.", "tipsAr": "العقدة الأذينية البطينية تأخذ القيادة عند فشل العقدة الجيبية.", "severity": "MONITOR", "wave": "junctional" },
+    { "id": 12, "category": "JUNCTIONAL", "nameEn": "Accelerated Junctional Rhythm", "nameAr": "نظم وصلي متسارع", "rate": "60–100 bpm", "characteristics": "Junctional rhythm in accelerated rate", "interventions": ["Usually benign", "Check digoxin level and post-op context"], "tipsEn": "Classic clue for digoxin toxicity.", "tipsAr": "علامة كلاسيكية لتسمم الديجوكسين.", "severity": "MONITOR", "wave": "junctional" },
+    { "id": 13, "category": "JUNCTIONAL", "nameEn": "Junctional Tachycardia", "nameAr": "تسارع وصلي", "rate": ">100 bpm", "characteristics": "Narrow QRS with retrograde/absent P", "interventions": ["Amiodarone or beta-blockers", "Assess digoxin toxicity", "Unstable: cardioversion"], "tipsEn": "Consider myocarditis and post-cardiac surgery.", "tipsAr": "فكر بالتهاب العضلة القلبية أو ما بعد جراحة القلب.", "severity": "URGENT", "wave": "tachy" },
+
+    { "id": 14, "category": "VENTRICULAR", "nameEn": "Premature Ventricular Complex (PVC)", "nameAr": "انقباض بطيني مبكر", "rate": "Variable", "characteristics": "Wide bizarre QRS without preceding P + compensatory pause", "interventions": ["Isolated: monitor, correct K+ and Mg2+", "Frequent/symptomatic: Amiodarone or Lidocaine", "R-on-T: urgent treatment"], "tipsEn": "Check K+ and Mg2+ first; R-on-T and couplets are warning signs.", "tipsAr": "افحص K+ وMg2+ أولاً؛ R-on-T والأزواج علامات تحذيرية.", "severity": "MONITOR", "wave": "pvc" },
+    { "id": 15, "category": "VENTRICULAR", "nameEn": "Ventricular Tachycardia (VT) — Monomorphic", "nameAr": "تسارع بطيني أحادي الشكل", "rate": "100–250 bpm", "characteristics": "Wide regular tachycardia with AV dissociation", "interventions": ["Pulseless: CPR + Defib 200J + Epinephrine + Amiodarone", "Stable with pulse: Amiodarone 150mg over 10 min then infusion", "Unstable with pulse: synchronized cardioversion 100J"], "tipsEn": "Always check pulse first; if unsure, treat wide tachycardia as VT.", "tipsAr": "تحقق من النبض أولاً؛ عند الشك عالج التسارع الواسع كـ VT.", "severity": "LIFE_THREATENING", "wave": "vt" },
+    { "id": 16, "category": "VENTRICULAR", "nameEn": "Polymorphic VT (Torsades de Pointes)", "nameAr": "تسارع بطيني متعدد الأشكال (التواء النقاط)", "rate": "150–300 bpm", "characteristics": "Twisting QRS axis with prolonged QT", "interventions": ["Pulseless: defibrillation (unsynchronized)", "With pulse: Magnesium 2g IV", "Stop QT-prolonging drugs and correct electrolytes"], "tipsEn": "Magnesium is key; avoid Amiodarone in Torsades.", "tipsAr": "المغنيسيوم هو الأساس؛ تجنب الأميودارون في Torsades.", "severity": "LIFE_THREATENING", "wave": "torsades" },
+    { "id": 17, "category": "VENTRICULAR", "nameEn": "Ventricular Fibrillation (VFib)", "nameAr": "الرجفان البطيني", "rate": "Chaotic", "characteristics": "No organized QRS, chaotic waveform", "interventions": ["Immediate CPR", "Defibrillation 200J biphasic ASAP", "Epinephrine 1mg q3-5min", "Amiodarone 300mg then 150mg", "Search reversible H's and T's"], "tipsEn": "Every minute without defibrillation reduces survival 7-10%.", "tipsAr": "كل دقيقة بدون صدمة تنقص البقاء 7-10٪.", "severity": "LIFE_THREATENING", "wave": "vf" },
+    { "id": 18, "category": "VENTRICULAR", "nameEn": "Idioventricular Rhythm / AIVR", "nameAr": "نظم بطيني ذاتي / متسارع", "rate": "Idioventricular 20–40 | AIVR 40–100", "characteristics": "Wide ventricular rhythm, often reperfusion-related", "interventions": ["AIVR: monitor (often benign after reperfusion)", "Slow idioventricular: Atropine then pacing"], "tipsEn": "AIVR post-PCI is often a reperfusion sign.", "tipsAr": "AIVR بعد PCI غالباً علامة إعادة تروية جيدة.", "severity": "MONITOR", "wave": "vt" },
+
+    { "id": 19, "category": "BLOCKS", "nameEn": "First Degree AV Block", "nameAr": "إحصار أذيني بطيني من الدرجة الأولى", "rate": "Usually normal", "characteristics": "PR >0.20 sec, all P conducted", "interventions": ["No acute therapy", "Monitor and review AV nodal medications"], "tipsEn": "Delay, not complete block.", "tipsAr": "هو تأخير وليس إحصاراً كاملاً.", "severity": "BENIGN", "wave": "normal" },
+    { "id": 20, "category": "BLOCKS", "nameEn": "Second Degree AV Block — Type I (Wenckebach)", "nameAr": "إحصار من الدرجة الثانية — النوع الأول", "rate": "Variable", "characteristics": "Progressive PR prolongation then dropped QRS", "interventions": ["Usually observe", "If symptomatic: Atropine then pacing"], "tipsEn": "Longer, longer, longer, drop.", "tipsAr": "أطول، أطول، أطول، ثم سقوط.", "severity": "MONITOR", "wave": "block1" },
+    { "id": 21, "category": "BLOCKS", "nameEn": "Second Degree AV Block — Type II (Mobitz II)", "nameAr": "إحصار من الدرجة الثانية — النوع الثاني", "rate": "Often slow", "characteristics": "Constant PR with sudden dropped QRS", "interventions": ["High risk progression to complete block", "Prepare transcutaneous pacing", "Atropine may fail", "Transvenous then permanent pacemaker"], "tipsEn": "Dangerous infranodal block; do not confuse with Type I.", "tipsAr": "إحصار خطير تحت العقدة؛ لا تخلطه مع النوع الأول.", "severity": "URGENT", "wave": "block2" },
+    { "id": 22, "category": "BLOCKS", "nameEn": "Third Degree AV Block (Complete Heart Block)", "nameAr": "إحصار أذيني بطيني كامل", "rate": "Escape rhythm 20–60 bpm", "characteristics": "Complete AV dissociation", "interventions": ["Immediate transcutaneous pacing", "Atropine trial may help only junctional escape", "Dopamine/Epinephrine bridge", "Transvenous then permanent pacemaker"], "tipsEn": "P and QRS march independently; wide escape is more dangerous.", "tipsAr": "P وQRS يمشون باستقلال؛ الهروبي الواسع أخطر.", "severity": "LIFE_THREATENING", "wave": "block3" },
+
+    { "id": 23, "category": "ST", "nameEn": "ST Elevation (STEMI pattern)", "nameAr": "ارتفاع مقطع ST (نمط STEMI)", "rate": "N/A", "characteristics": "ST elevation in contiguous leads", "interventions": ["Activate cath lab/STEMI alert", "Aspirin + Heparin + Nitroglycerin when appropriate", "PCI target within 90 min", "12-lead ECG within 10 min"], "tipsEn": "Time is muscle; know coronary territories.", "tipsAr": "الوقت = عضلة؛ اعرف مناطق الشرايين.", "severity": "LIFE_THREATENING", "wave": "st_elev" },
+    { "id": 24, "category": "ST", "nameEn": "ST Depression / T-wave Inversion", "nameAr": "انخفاض ST / انقلاب موجة T", "rate": "N/A", "characteristics": "Ischemic ST depression or T inversion", "interventions": ["Serial troponins", "Anticoagulation", "Cardiology consult", "Continuous monitoring"], "tipsEn": "Diffuse ST depression + ST elevation in aVR suggests left main disease.", "tipsAr": "انخفاض ST منتشر مع ارتفاع aVR يوحي بمرض الشريان الرئيسي الأيسر.", "severity": "URGENT", "wave": "st_depress" },
+    { "id": 25, "category": "ST", "nameEn": "Pericarditis Pattern", "nameAr": "نمط التهاب التامور", "rate": "N/A", "characteristics": "Diffuse concave ST elevation + PR depression", "interventions": ["NSAIDs + Colchicine", "Exclude tamponade with echo"], "tipsEn": "Diffuse concave ST with PR depression favors pericarditis over STEMI.", "tipsAr": "ارتفاع ST المقعر المنتشر مع انخفاض PR يرجح التهاب التامور.", "severity": "URGENT", "wave": "st_elev" },
+    { "id": 26, "category": "ST", "nameEn": "Hyperacute T-waves", "nameAr": "موجات T مفرطة الحدة", "rate": "N/A", "characteristics": "Tall broad symmetric T waves", "interventions": ["Treat as evolving STEMI", "Serial ECGs every 15 min", "Activate cath lab if clinically suspicious"], "tipsEn": "Earliest MI sign — do not wait for ST elevation.", "tipsAr": "أبكر علامة للاحتشاء — لا تنتظر ارتفاع ST.", "severity": "LIFE_THREATENING", "wave": "t_peaked" },
+
+    { "id": 27, "category": "PACEMAKER", "nameEn": "Atrial Paced Rhythm", "nameAr": "نظم أذيني بمنظم", "rate": "Set by device", "characteristics": "Pacing spike before P wave with normal QRS", "interventions": ["Verify capture/sensing", "Check pacemaker settings"], "tipsEn": "Spike → P → QRS indicates effective atrial pacing.", "tipsAr": "شوكة ثم P ثم QRS يدل على تنظيم أذيني فعّال.", "severity": "MONITOR", "wave": "paced_atrial" },
+    { "id": 28, "category": "PACEMAKER", "nameEn": "Ventricular Paced Rhythm", "nameAr": "نظم بطيني بمنظم", "rate": "Set by device", "characteristics": "Pacing spike before wide QRS (LBBB-like)", "interventions": ["Verify capture/sensing/rate", "Know device mode (VVI, DDD...)"], "tipsEn": "Failure to capture = spikes without QRS.", "tipsAr": "فشل الالتقاط = شوكات بدون QRS.", "severity": "MONITOR", "wave": "paced_vent" },
+
+    { "id": 29, "category": "ELECTROLYTE", "nameEn": "Hyperkalemia ECG Changes", "nameAr": "تغيرات تخطيط فرط البوتاسيوم", "rate": "Variable", "characteristics": "Peaked T → wide QRS → sine wave progression", "interventions": ["Calcium gluconate/chloride first", "Insulin + D50", "Albuterol", "Potassium elimination and dialysis if severe"], "tipsEn": "First ECG clue is peaked T waves; membrane stabilization first.", "tipsAr": "أول علامة هي T المدببة؛ ثبّت الغشاء بالكالسيوم أولاً.", "severity": "LIFE_THREATENING", "wave": "t_peaked" },
+    { "id": 30, "category": "ELECTROLYTE", "nameEn": "Hypokalemia ECG Changes", "nameAr": "تغيرات تخطيط نقص البوتاسيوم", "rate": "Variable", "characteristics": "Flat T, U waves, ST depression, prolonged QT", "interventions": ["Potassium replacement", "IV if severe/symptomatic", "Correct magnesium simultaneously"], "tipsEn": "You cannot correct K+ effectively without Mg2+.", "tipsAr": "لا يمكن تصحيح K+ بشكل فعّال بدون تصحيح Mg2+.", "severity": "URGENT", "wave": "u_wave" },
+    { "id": 31, "category": "ELECTROLYTE", "nameEn": "Hypercalcemia ECG Changes", "nameAr": "تغيرات تخطيط فرط الكالسيوم", "rate": "Variable", "characteristics": "Short QT interval", "interventions": ["NS hydration", "Furosemide", "Calcitonin/Bisphosphonates", "Dialysis if severe"], "tipsEn": "Short QT should prompt hypercalcemia workup.", "tipsAr": "قصر QT يستدعي التفكير بفرط الكالسيوم.", "severity": "URGENT", "wave": "short_qt" },
+    { "id": 32, "category": "ELECTROLYTE", "nameEn": "Hypomagnesemia ECG Changes", "nameAr": "تغيرات تخطيط نقص المغنيسيوم", "rate": "Variable", "characteristics": "Prolonged QT with flat T/U waves", "interventions": ["Magnesium 2-4g IV", "Continuous monitoring due to Torsades risk"], "tipsEn": "If K+ correction fails, check Mg2+ promptly.", "tipsAr": "إذا فشل تصحيح K+ فتحقق من Mg2+ فوراً.", "severity": "URGENT", "wave": "u_wave" }
+  ]
+}

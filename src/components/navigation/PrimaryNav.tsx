@@ -11,6 +11,7 @@ import {
   GitBranch,
   Pill,
   Droplets,
+  FileText,
 } from "lucide-react";
 import { usePreferences } from "@/contexts/PreferencesContext";
 
@@ -28,6 +29,7 @@ const PrimaryNav = () => {
     { path: "/drugs", icon: Pill, label: language === "ar" ? "الأدوية" : "DRUGS" },
     { path: "/fluids", icon: Droplets, label: language === "ar" ? "السوائل" : "FLUIDS" },
     { path: "/ecg", icon: Activity, label: language === "ar" ? "تخطيط القلب" : "ECG" },
+    { path: "/docs", icon: FileText, label: language === "ar" ? "التوثيق" : "DOCS" },
     { path: "/flashcards", icon: Sparkles, label: t.navFlashcards },
     { path: "/mind-maps", icon: GitBranch, label: t.navMindMaps },
     { path: "/ai-assistant", icon: Bot, label: t.navAssistant },

@@ -22,6 +22,10 @@ import Drugs from "./pages/Drugs";
 import DrugDetail from "./pages/DrugDetail";
 import Fluids from "./pages/Fluids";
 import ECG from "./pages/ECG";
+import DocsHub from "./pages/DocsHub";
+import DocsPatient from "./pages/DocsPatient";
+import DocsProfessional from "./pages/DocsProfessional";
+import DocsTools from "./pages/DocsTools";
 
 const queryClient = new QueryClient();
 
@@ -49,6 +53,10 @@ const App = () => (
               <Route path="/flashcards" element={<Flashcards />} />
               <Route path="/mind-maps" element={<MindMaps />} />
               <Route path="/ecg" element={<ECG />} />
+              <Route path="/docs" element={<DocsHub />} />
+              <Route path="/docs/patient" element={<DocsPatient />} />
+              <Route path="/docs/professional" element={<DocsProfessional />} />
+              <Route path="/docs/tools" element={<DocsTools />} />
               <Route path="/scale/:id" element={<ScaleDetail />} />
             </Route>
             <Route path="*" element={<NotFound />} />

@@ -26,6 +26,9 @@ import DocsHub from "./pages/DocsHub";
 import DocsPatient from "./pages/DocsPatient";
 import DocsProfessional from "./pages/DocsProfessional";
 import DocsTools from "./pages/DocsTools";
+import BodyAtlas from "./pages/BodyAtlas";
+import PathophysiologyMaps from "./pages/PathophysiologyMaps";
+import PharmacokineticsVisualizer from "./pages/PharmacokineticsVisualizer";
 
 const queryClient = new QueryClient();
 
@@ -52,6 +55,9 @@ const App = () => (
               <Route path="/ai-assistant" element={<AIAssistant />} />
               <Route path="/flashcards" element={<Flashcards />} />
               <Route path="/mind-maps" element={<MindMaps />} />
+              <Route path="/atlas" element={<BodyAtlas />} />
+              <Route path="/pathways" element={<PathophysiologyMaps />} />
+              <Route path="/pharma" element={<PharmacokineticsVisualizer />} />
               <Route path="/ecg" element={<ECG />} />
               <Route path="/docs" element={<DocsHub />} />
               <Route path="/docs/patient" element={<DocsPatient />} />

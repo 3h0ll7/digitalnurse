@@ -1,0 +1,65 @@
+{
+  "header": {
+    "en": { "title": "Pharmacokinetics Visualizer", "subtitle": "DRUG JOURNEY THROUGH THE BODY — ADME" },
+    "ar": { "title": "حركية الأدوية", "subtitle": "رحلة الدواء في الجسم — ADME" }
+  },
+  "phases": [
+    {"key":"A","en":"Absorption","ar":"الامتصاص","location":"GI / injection site / lungs","color":"#22c55e"},
+    {"key":"D","en":"Distribution","ar":"التوزيع","location":"Blood to tissues","color":"#3b82f6"},
+    {"key":"M","en":"Metabolism","ar":"الاستقلاب","location":"Liver","color":"#f97316"},
+    {"key":"E","en":"Excretion","ar":"الإطراح","location":"Kidneys","color":"#ef4444"}
+  ],
+  "labels": {
+    "compareDrugs": {"en":"Compare Drugs","ar":"مقارنة الأدوية"},
+    "selectDrug1": {"en":"Select Drug 1","ar":"اختر الدواء الأول"},
+    "selectDrug2": {"en":"Select Drug 2","ar":"اختر الدواء الثاني"},
+    "fasterOnset": {"en":"Faster Onset","ar":"بداية أسرع"},
+    "longerDuration": {"en":"Longer Duration","ar":"مدة أطول"},
+    "shorterHalfLife": {"en":"Shorter Half-Life","ar":"عمر نصف أقصر"},
+    "animated": {"en":"Animated View","ar":"عرض متحرك"},
+    "static": {"en":"Static View","ar":"عرض ثابت"},
+    "renal": {"en":"Renal Impairment","ar":"قصور كلوي"},
+    "hepatic": {"en":"Hepatic Impairment","ar":"قصور كبدي"},
+    "obesity": {"en":"Obesity","ar":"سمنة"},
+    "elderly": {"en":"Elderly","ar":"كبار السن"},
+    "pediatric": {"en":"Pediatric","ar":"أطفال"}
+  },
+  "drugs": [
+    {"name":"Norepinephrine","route":"IV","onset":"Immediate","peak":"Immediate","duration":"1-2 min after stop","halfLife":"2.5 min","metabolism":"COMT/MAO","excretion":"Renal","pk":"Ultra-short, titrate by effect","relatedOrgans":["Heart","Vessels"]},
+    {"name":"Propofol","route":"IV","onset":"15-30 sec","peak":"1 min","duration":"5-10 min","halfLife":"Initial 2-8 min; terminal 4-7 h","metabolism":"Hepatic CYP2B6","excretion":"Renal","pk":"Context-sensitive half-time increases","relatedOrgans":["Brain","Liver"]},
+    {"name":"Fentanyl","route":"IV","onset":"1-2 min","peak":"3-5 min","duration":"30-60 min","halfLife":"2-4 h","metabolism":"Hepatic CYP3A4","excretion":"Renal","pk":"Lipophilic, accumulates with prolonged infusion","relatedOrgans":["Brain","Liver"]},
+    {"name":"Midazolam","route":"IV","onset":"1-5 min","peak":"5-15 min","duration":"1-6 h","halfLife":"1.5-2.5 h","metabolism":"Hepatic CYP3A4","excretion":"Renal","pk":"Active metabolite accumulates in renal failure","relatedOrgans":["Brain","Kidneys"]},
+    {"name":"Morphine","route":"IV","onset":"5-10 min","peak":"20 min","duration":"3-5 h","halfLife":"2-3 h","metabolism":"Hepatic glucuronidation","excretion":"Renal","pk":"M6G metabolite accumulates in renal failure","relatedOrgans":["Brain","Kidneys"]},
+    {"name":"Heparin","route":"IV","onset":"Immediate","peak":"Minutes","duration":"Dose-dependent","halfLife":"1-2 h","metabolism":"RES","excretion":"RES","pk":"Not renally cleared, monitor aPTT","relatedOrgans":["Vessels"]},
+    {"name":"Vancomycin","route":"IV","onset":"Infusion","peak":"1-2 h post","duration":"12-24 h","halfLife":"4-6 h normal renal","metabolism":"Minimal","excretion":"Renal 90%","pk":"Trough-based dosing; nephro/ototoxic risk","relatedOrgans":["Kidneys"]},
+    {"name":"Amiodarone","route":"IV","onset":"Hours-days","peak":"Days","duration":"Weeks-months","halfLife":"40-55 days","metabolism":"Hepatic CYP3A4","excretion":"Biliary/fecal","pk":"Very long half-life, broad interactions","relatedOrgans":["Heart","Liver"]},
+    {"name":"Insulin Regular","route":"IV","onset":"15-30 min","peak":"30-60 min","duration":"2-4 h","halfLife":"5-6 min","metabolism":"Hepatic + renal","excretion":"Renal","pk":"Effect outlasts plasma presence","relatedOrgans":["Pancreas","Liver"]},
+    {"name":"Furosemide","route":"IV","onset":"5 min","peak":"30 min","duration":"2 h","halfLife":"1.5-2 h","metabolism":"Minimal hepatic","excretion":"Renal 60%","pk":"Ceiling dose concept","relatedOrgans":["Kidneys"]},
+    {"name":"Dexmedetomidine","route":"IV","onset":"5-10 min","peak":"15 min","duration":"Variable","halfLife":"2 h","metabolism":"Hepatic CYP2A6","excretion":"Renal","pk":"Cooperative sedation without respiratory depression","relatedOrgans":["Brain","Liver"]},
+    {"name":"Rocuronium","route":"IV","onset":"60-90 sec","peak":"1-3 min","duration":"30-40 min","halfLife":"1-2 h","metabolism":"Minimal hepatic","excretion":"Biliary + renal","pk":"Reversed by Sugammadex encapsulation","relatedOrgans":["NMJ","Liver"]},
+    {"name":"Epinephrine","route":"IV","onset":"Immediate","peak":"Immediate","duration":"1-2 min","halfLife":"2 min","metabolism":"COMT/MAO","excretion":"Renal","pk":"Dose-dependent receptor selectivity","relatedOrgans":["Heart","Bronchi"]},
+    {"name":"Nitroglycerin","route":"IV","onset":"1-2 min","peak":"2-5 min","duration":"3-5 min","halfLife":"1-3 min","metabolism":"Hepatic","excretion":"Renal","pk":"Tolerance develops in 24-48h","relatedOrgans":["Heart","Vessels"]},
+    {"name":"Alteplase (tPA)","route":"IV","onset":"Immediate","peak":"Minutes","duration":"Short","halfLife":"4-5 min","metabolism":"Hepatic","excretion":"Hepatic","pk":"Very fast clearance but prolonged fibrinolytic effect","relatedOrgans":["Brain","Coronary arteries"]}
+  ],
+  "concepts": [
+    {"nameEn":"Half-Life","nameAr":"عمر النصف","visual":"50% elimination each half-life; ~97% by five half-lives."},
+    {"nameEn":"Steady State","nameAr":"الحالة المستقرة","visual":"Repeated dosing accumulates to plateau by ~5 half-lives."},
+    {"nameEn":"Loading Dose","nameAr":"جرعة التحميل","visual":"Immediate therapeutic level vs gradual accumulation."},
+    {"nameEn":"First-Pass Metabolism","nameAr":"تأثير المرور الأول","visual":"PO drug loss in liver before systemic circulation."},
+    {"nameEn":"Bioavailability","nameAr":"التوافر الحيوي","visual":"IV is 100%; PO variable by absorption and first pass."},
+    {"nameEn":"Volume of Distribution","nameAr":"حجم التوزيع","visual":"Large Vd tissue binding vs small Vd vascular confinement."},
+    {"nameEn":"Protein Binding","nameAr":"الارتباط البروتيني","visual":"Free drug active, bound fraction reservoir."},
+    {"nameEn":"Therapeutic Index","nameAr":"النافذة العلاجية","visual":"Range between MEC and toxicity threshold."},
+    {"nameEn":"Clearance","nameAr":"التصفية","visual":"Renal + hepatic elimination capacity."},
+    {"nameEn":"Context-Sensitive Half-Time","nameAr":"عمر النصف المعتمد على المدة","visual":"Longer infusion increases recovery time."},
+    {"nameEn":"Receptor Occupancy","nameAr":"إشغال المستقبلات","visual":"Dose-response: threshold, linear, plateau."},
+    {"nameEn":"PK Drug Interactions","nameAr":"التداخلات الحركية","visual":"CYP inhibition increases levels; induction decreases."}
+  ],
+  "cyp": [
+    {"enzyme":"CYP3A4","substrates":"Midazolam, Fentanyl, Amiodarone","inhibitors":"Azoles, macrolides","inducers":"Rifampin","risk":"High"},
+    {"enzyme":"CYP2D6","substrates":"Beta-blockers, opioids","inhibitors":"Fluoxetine","inducers":"None major","risk":"Moderate"},
+    {"enzyme":"CYP2C9","substrates":"Warfarin","inhibitors":"Amiodarone","inducers":"Carbamazepine","risk":"High"},
+    {"enzyme":"CYP2C19","substrates":"Clopidogrel","inhibitors":"Omeprazole","inducers":"Rifampin","risk":"Moderate"},
+    {"enzyme":"CYP1A2","substrates":"Theophylline","inhibitors":"Ciprofloxacin","inducers":"Smoking","risk":"Low"}
+  ]
+}

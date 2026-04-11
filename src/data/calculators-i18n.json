@@ -1,0 +1,62 @@
+{
+  "en": {
+    "countLabel": "10 CALCULATORS",
+    "categories": {
+      "all": "ALL",
+      "dosing": "DOSING & INFUSION",
+      "body": "BODY METRICS",
+      "obstetric": "OBSTETRIC",
+      "general": "GENERAL"
+    },
+    "calculators": {
+      "dosage": { "name": "Dosage Calculation", "description": "Quick dosage-volume conversions" },
+      "iv-drip": { "name": "IV Drip Rate", "description": "Infusion and drop rate converter" },
+      "bmi": { "name": "BMI Calculator", "description": "Body mass index and category" },
+      "creatinine": { "name": "Creatinine Clearance", "description": "Cockcroft-Gault estimate" },
+      "vasopressor": { "name": "Vasopressor Dose Calculator", "description": "Calculate mcg/kg/min for vasoactive infusions" },
+      "heparin": { "name": "Heparin Drip Calculator", "description": "Weight-based heparin dosing with aPTT titration" },
+      "insulin": { "name": "Insulin Drip Calculator", "description": "DKA/HHS insulin drip + sliding scale reference" },
+      "ibw": { "name": "Ideal Body Weight (IBW)", "description": "Calculate IBW and Adjusted BW for drug dosing & ventilation" },
+      "bsa": { "name": "Body Surface Area (BSA)", "description": "Calculate BSA for burn assessment, chemo dosing & pediatrics" },
+      "edd": { "name": "Pregnancy Due Date (EDD)", "description": "Calculate EDD and gestational age" }
+    },
+    "labels": {
+      "withinRange": "Current dose is within range",
+      "exceedsStandard": "⚠️ Dose exceeds standard range",
+      "exceedsMax": "🔴 Dose exceeds max recommended",
+      "vasoNote": "Vasopressin is typically used at a fixed dose of 0.04 units/min, not titrated",
+      "requiredField": "Required Field",
+      "invalidInput": "Invalid Input"
+    }
+  },
+  "ar": {
+    "countLabel": "10 حاسبات",
+    "categories": {
+      "all": "الكل",
+      "dosing": "الجرعات والتسريب",
+      "body": "قياسات الجسم",
+      "obstetric": "توليد",
+      "general": "عام"
+    },
+    "calculators": {
+      "dosage": { "name": "حاسبة الجرعات", "description": "تحويل سريع بين الجرعة والحجم" },
+      "iv-drip": { "name": "حاسبة سرعة التسريب", "description": "حساب التسريب والقطرات" },
+      "bmi": { "name": "حاسبة مؤشر كتلة الجسم", "description": "حساب BMI وتصنيف الوزن" },
+      "creatinine": { "name": "تصفية الكرياتينين", "description": "تقدير Cockcroft-Gault" },
+      "vasopressor": { "name": "حاسبة جرعة رافعات الضغط", "description": "حساب mcg/kg/min للتسريبات الفعالة وعائياً" },
+      "heparin": { "name": "حاسبة تسريب الهيبارين", "description": "جرعات الهيبارين حسب الوزن مع معايرة aPTT" },
+      "insulin": { "name": "حاسبة تسريب الأنسولين", "description": "تسريب أنسولين DKA/HHS + جدول الأنسولين المتدرج" },
+      "ibw": { "name": "الوزن المثالي للجسم", "description": "حساب الوزن المثالي والمعدل" },
+      "bsa": { "name": "مساحة سطح الجسم", "description": "حساب مساحة سطح الجسم للحروق والجرعات" },
+      "edd": { "name": "حاسبة موعد الولادة المتوقع", "description": "حساب موعد الولادة المتوقع وعمر الحمل" }
+    },
+    "labels": {
+      "withinRange": "الجرعة الحالية ضمن المدى",
+      "exceedsStandard": "⚠️ الجرعة تتجاوز المدى القياسي",
+      "exceedsMax": "🔴 الجرعة تتجاوز الحد الأقصى",
+      "vasoNote": "الفاسوبريسين عادة يُستخدم بجرعة ثابتة 0.04 وحدة/دقيقة، لا يُعاير",
+      "requiredField": "حقل مطلوب",
+      "invalidInput": "إدخال غير صالح"
+    }
+  }
+}

@@ -296,5 +296,62 @@ export const assessmentScales: AssessmentScale[] = [
       "0: Alert and calm (goal for most patients)",
       "Negative scores: Sedation"
     ]
+  }  ,
+  {
+    id: "sofa",
+    name: "SOFA Score (Sequential Organ Failure Assessment)",
+    description: "Assess organ dysfunction in critically ill patients — Sepsis-3 criteria",
+    category: "SEPSIS",
+    components: []
+  },
+  {
+    id: "cam-icu",
+    name: "CAM-ICU (Delirium Assessment)",
+    description: "Rapid delirium screening for ICU patients",
+    category: "DELIRIUM",
+    components: []
+  },
+  {
+    id: "news2",
+    name: "NEWS2 (National Early Warning Score)",
+    description: "Detect clinical deterioration early — standardized vital signs scoring",
+    category: "EARLY WARNING",
+    components: []
+  },
+  {
+    id: "cha2ds2-vasc",
+    name: "CHA₂DS₂-VASc Score",
+    description: "Stroke risk assessment in atrial fibrillation — guides anticoagulation",
+    category: "CARDIAC",
+    components: []
+  },
+  {
+    id: "wells-pe",
+    name: "Wells Score (PE)",
+    description: "Clinical probability assessment for pulmonary embolism",
+    category: "PULMONARY",
+    components: []
+  },
+  {
+    id: "must",
+    name: "MUST Score (Malnutrition Screening)",
+    description: "Screen for malnutrition risk on admission and weekly",
+    category: "NUTRITION",
+    components: []
+  },
+  {
+    id: "phq9",
+    name: "PHQ-9 (Depression Screening)",
+    description: "Screen and monitor depression severity",
+    category: "PSYCHIATRIC",
+    components: []
+  },
+  {
+    id: "waterlow",
+    name: "Waterlow Score (Pressure Injury Risk)",
+    description: "Comprehensive pressure injury risk assessment — widely used in UK/international",
+    category: "SKIN INTEGRITY",
+    components: []
   }
+
 ];

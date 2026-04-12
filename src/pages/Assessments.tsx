@@ -8,17 +8,35 @@ import { Input } from "@/components/ui/input";
 import { Sparkles } from "lucide-react";
 import { usePreferences } from "@/contexts/PreferencesContext";
 
+const categoryLabels: Record<string, { en: string; ar: string }> = {
+  All: { en: "All", ar: "الكل" },
+  Neurological: { en: "Neurological", ar: "عصبي" },
+  "Skin Integrity": { en: "Skin Integrity", ar: "سلامة الجلد" },
+  Safety: { en: "Safety", ar: "سلامة" },
+  Pain: { en: "Pain", ar: "ألم" },
+  Neonatal: { en: "Neonatal", ar: "حديثي الولادة" },
+  SEPSIS: { en: "SEPSIS", ar: "إنتان" },
+  CARDIAC: { en: "CARDIAC", ar: "قلبي" },
+  "EARLY WARNING": { en: "EARLY WARNING", ar: "إنذار مبكر" },
+  DELIRIUM: { en: "DELIRIUM", ar: "هذيان" },
+  PULMONARY: { en: "PULMONARY", ar: "رئوي" },
+  NUTRITION: { en: "NUTRITION", ar: "تغذية" },
+  PSYCHIATRIC: { en: "PSYCHIATRIC", ar: "نفسي" },
+  "SKIN INTEGRITY": { en: "SKIN INTEGRITY", ar: "سلامة الجلد" },
+};
+
 const Assessments = () => {
   const navigate = useNavigate();
-  const { t } = usePreferences();
+  const { t, language } = usePreferences();
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("All");
 
   const dataset = assessmentScales;
+  const isArabic = language === "ar";
 
   const categories = useMemo(
     () => ["All", ...Array.from(new Set(dataset.map((scale) => scale.category)))],
-    [dataset]
+    [dataset],
   );
 
   const filteredScales = dataset.filter((scale) => {
@@ -28,6 +46,11 @@ const Assessments = () => {
     const matchesCategory = category === "All" || scale.category === category;
     return matchesQuery && matchesCategory;
   });
+
+  const getCategoryLabel = (cat: string) => {
+    const mapped = categoryLabels[cat];
+    return mapped ? (isArabic ? mapped.ar : mapped.en) : cat;
+  };
 
   return (
     <AppLayout title={t.assessmentHubTitle} subtitle={t.assessmentHubSubtitle}>
@@ -43,7 +66,7 @@ const Assessments = () => {
             />
           </div>
           <div className="text-xs uppercase tracking-[0.4em] text-muted-foreground">
-            {filteredScales.length} {t.modules}
+            {dataset.length} {isArabic ? "وحدة" : "MODULES"}
             <p className="text-[10px] text-primary">{t.sourceAssessmentCatalog}</p>
           </div>
         </div>
@@ -60,7 +83,7 @@ const Assessments = () => {
               }`}
               onClick={() => setCategory(cat)}
             >
-              {cat === "All" ? t.allLabel : cat}
+              {getCategoryLabel(cat)}
             </Button>
           ))}
         </div>
@@ -75,7 +98,7 @@ const Assessments = () => {
           >
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <div>
-                <p className="text-xs uppercase tracking-[0.4em] text-primary">{scale.category}</p>
+                <p className="text-xs uppercase tracking-[0.4em] text-primary">{getCategoryLabel(scale.category)}</p>
                 <p className="text-2xl font-semibold">{scale.name}</p>
                 <p className="text-sm text-muted-foreground">{scale.description}</p>
               </div>

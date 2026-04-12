@@ -146,6 +146,11 @@ const Home = () => {
     },
   ];
 
+  return (
+    <AppLayout
+      title={t.homeTitle}
+      subtitle={t.homeSubtitle}
+    >
       <section className="grid gap-3 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4">
         {sections.map((section) => {
           const Icon = section.icon;

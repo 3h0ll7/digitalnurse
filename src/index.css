@@ -10,56 +10,54 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 218 42% 6%;
-    --foreground: 210 40% 96%;
+    --background: 0 0% 100%;
+    --foreground: 215 25% 15%;
 
-    --card: 216 36% 12%;
-    --card-foreground: 210 40% 96%;
+    --card: 0 0% 100%;
+    --card-foreground: 215 25% 15%;
 
-    --popover: 215 36% 14%;
-    --popover-foreground: 210 40% 96%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 215 25% 15%;
 
-    --primary: 195 94% 56%;
-    --primary-foreground: 213 32% 10%;
+    --primary: 200 90% 42%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 225 25% 20%;
-    --secondary-foreground: 210 40% 96%;
+    --secondary: 210 20% 96%;
+    --secondary-foreground: 215 25% 15%;
 
-    --muted: 220 20% 30%;
-    --muted-foreground: 215 17% 72%;
+    --muted: 210 15% 95%;
+    --muted-foreground: 215 15% 45%;
 
-    --accent: 192 100% 47%;
+    --accent: 200 90% 42%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 70% 52%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 215 30% 22%;
-    --input: 215 30% 22%;
-    --ring: 195 94% 56%;
+    --border: 215 20% 88%;
+    --input: 215 20% 88%;
+    --ring: 200 90% 42%;
 
     --radius: 1.2rem;
 
-    --medical-blue: 195 94% 56%;
-    --medical-blue-light: 195 80% 88%;
-    --medical-green: 160 84% 45%;
-    --medical-yellow: 42 94% 54%;
-    --medical-red: 350 82% 56%;
+    --medical-blue: 200 90% 42%;
+    --medical-blue-light: 200 80% 90%;
+    --medical-green: 160 70% 40%;
+    --medical-yellow: 42 90% 50%;
+    --medical-red: 350 80% 50%;
 
-    --shadow-card: 0 25px 60px rgba(2, 6, 15, 0.65);
-    --shadow-card-hover: 0 30px 80px rgba(6, 16, 35, 0.7);
+    --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.06);
+    --shadow-card-hover: 0 8px 30px rgba(0, 0, 0, 0.1);
 
-    --sidebar-background: 218 42% 6%;
-    --sidebar-foreground: 210 40% 96%;
-    --sidebar-primary: 195 94% 56%;
-    --sidebar-primary-foreground: 213 32% 10%;
-    --sidebar-accent: 215 35% 18%;
-    --sidebar-accent-foreground: 210 40% 96%;
-    --sidebar-border: 215 30% 25%;
-    --sidebar-ring: 195 94% 56%;
-    --app-shell-gradient: radial-gradient(circle at 20% 20%, rgba(47, 134, 255, 0.25), transparent 55%),
-      radial-gradient(circle at 80% 0%, rgba(35, 210, 255, 0.15), transparent 45%),
-      linear-gradient(180deg, #030711 0%, #010409 100%);
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 215 25% 15%;
+    --sidebar-primary: 200 90% 42%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 210 20% 96%;
+    --sidebar-accent-foreground: 215 25% 15%;
+    --sidebar-border: 215 20% 88%;
+    --sidebar-ring: 200 90% 42%;
+    --app-shell-gradient: none;
   }
 
   .dark {

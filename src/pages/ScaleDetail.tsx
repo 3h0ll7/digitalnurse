@@ -7,6 +7,17 @@ import AppLayout from "@/components/layout/AppLayout";
 import { usePreferences } from "@/contexts/PreferencesContext";
 import { AdvancedAssessment } from "@/pages/assessmentTools";
 
+const ADVANCED_ASSESSMENT_IDS = new Set([
+  "sofa",
+  "cam-icu",
+  "news2",
+  "cha2ds2-vasc",
+  "wells-pe",
+  "must",
+  "phq9",
+  "waterlow",
+]);
+
 const ScaleDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -23,7 +34,8 @@ const ScaleDetail = () => {
   }
 
   const totalScore = Object.values(selections).reduce((sum, val) => sum + val, 0);
-  const advancedAssessment = id ? <AdvancedAssessment id={id} /> : null;
+  const showAdvancedAssessment = Boolean(id && ADVANCED_ASSESSMENT_IDS.has(id));
+
 
   return (
     <AppLayout
@@ -36,8 +48,8 @@ const ScaleDetail = () => {
         <p className="text-sm text-muted-foreground">{scale.description}</p>
       </Card>
 
-      {advancedAssessment ? (
-        advancedAssessment
+      {showAdvancedAssessment && id ? (
+        <AdvancedAssessment id={id} />
       ) : (
         <>
           {scale.components.map((component, idx) => (

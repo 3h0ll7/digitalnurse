@@ -43,6 +43,19 @@ const PreferencesDrawer = () => {
             </Select>
           </div>
 
+          <div className="flex items-center justify-between rounded-xl border p-3">
+            <div>
+              <p className="text-sm font-medium text-card-foreground">{t.themeLabel}</p>
+              <p className="text-xs text-muted-foreground">
+                {theme === "light" ? t.lightTheme : t.darkTheme}
+              </p>
+            </div>
+            <div className="flex items-center gap-2">
+              <Sun size={18} className={theme === "light" ? "text-primary" : "text-muted-foreground"} />
+              <Switch checked={theme === "dark"} onCheckedChange={(checked) => setTheme(checked ? "dark" : "light")} />
+              <Moon size={18} className={theme === "dark" ? "text-primary" : "text-muted-foreground"} />
+            </div>
+          </div>
         </div>
         <DrawerFooter>
           <Button variant="outline" onClick={() => setOpen(false)}>

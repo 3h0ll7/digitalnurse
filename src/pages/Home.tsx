@@ -10,6 +10,7 @@ import {
   GitBranch,
   Microscope,
   Pill,
+  ShieldAlert,
   Sparkles,
   TestTube2,
   FileText,
@@ -109,6 +110,13 @@ const Home = () => {
       icon: BookOpen,
       to: "/pathways",
       accent: "from-indigo-500/20 to-blue-500/20 border-indigo-500/30",
+    },
+    {
+      title: language === "ar" ? "دليل العدوى" : "Infection Guide",
+      description: language === "ar" ? "بروتوكولات مكافحة العدوى والمضادات الحيوية" : "Infection control protocols & antibiotic guidance",
+      icon: ShieldAlert,
+      to: "/infection-guide",
+      accent: "from-orange-500/20 to-red-500/20 border-orange-500/30",
     },
     {
       title: language === "ar" ? "الحركية الدوائية" : "Pharmacokinetics",

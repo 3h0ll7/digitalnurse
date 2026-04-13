@@ -553,6 +553,16 @@ const AIAssistant = () => {
           </div>
         )}
 
+        {lastError && !isLoading && (
+          <div className="bg-destructive/10 border border-destructive/30 rounded-2xl p-3 w-fit">
+            <p className="text-sm text-destructive mb-2">{lastError}</p>
+            <Button size="sm" variant="outline" onClick={retryLastMessage} className="gap-1">
+              <RefreshCw size={14} />
+              {isArabic ? "إعادة المحاولة" : "Retry"}
+            </Button>
+          </div>
+        )}
+
         <div ref={messagesEndRef} />
       </div>
 

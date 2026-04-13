@@ -111,6 +111,13 @@ const Home = () => {
       accent: "from-indigo-500/20 to-blue-500/20 border-indigo-500/30",
     },
     {
+      title: language === "ar" ? "دليل العدوى" : "Infection Guide",
+      description: language === "ar" ? "بروتوكولات مكافحة العدوى والمضادات الحيوية" : "Infection control protocols & antibiotic guidance",
+      icon: ShieldAlert,
+      to: "/infection-guide",
+      accent: "from-orange-500/20 to-red-500/20 border-orange-500/30",
+    },
+    {
       title: language === "ar" ? "الحركية الدوائية" : "Pharmacokinetics",
       description: language === "ar" ? "تصور امتصاص وتوزيع الأدوية" : "Drug absorption, distribution & metabolism visualizer",
       icon: FlaskConical,

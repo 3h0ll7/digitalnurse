@@ -85,8 +85,7 @@ interface Conversation {
   updatedAt: string;
 }
 
-const OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions";
-const OPENROUTER_MODEL = "meta-llama/llama-3.2-3b-instruct:free";
+const LOVABLE_CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-chat`;
 const HISTORY_KEY = "dn-chat-history";
 
 const modeConfig: Record<ClinicalMode, { icon: typeof MessageCircle; en: string; ar: string; prompt: string; placeholderEn: string; placeholderAr: string }> = {
@@ -291,27 +290,24 @@ ${isArabic ? "أقدر أساعدك فوراً في الأدوية، ECG، ال�
     setMessages((prev) => [...prev, { id: uid(), role: "assistant", content: "" }]);
 
     try {
-      const resp = await fetch(OPENROUTER_URL, {
+      const resp = await fetch(LOVABLE_CHAT_URL, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          model: OPENROUTER_MODEL,
-          messages: [
-            { role: "system", content: modeConfig[mode].prompt },
-            ...allMessages.map((m) => ({ role: m.role, content: m.content })),
-          ],
-          temperature: 0.3,
+          messages: allMessages.map((m) => ({ role: m.role, content: m.content })),
+          language,
+          modePrompt: modeConfig[mode].prompt,
         }),
         signal: controller.signal,
       });
 
       if (!resp.ok) {
-        throw new Error("openrouter_unavailable");
+        throw new Error("lovable_ai_unavailable");
       }
       const data = await resp.json();
-      const assistantText = data?.choices?.[0]?.message?.content?.trim();
+      const assistantText = String(data?.content || "").trim();
       if (!assistantText) {
         throw new Error("empty_ai_response");
       }

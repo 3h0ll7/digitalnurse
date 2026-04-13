@@ -29,6 +29,7 @@ import DocsTools from "./pages/DocsTools";
 import BodyAtlas from "./pages/BodyAtlas";
 import PathophysiologyMaps from "./pages/PathophysiologyMaps";
 import PharmacokineticsVisualizer from "./pages/PharmacokineticsVisualizer";
+import InfectionGuide from "./pages/InfectionGuide";
 
 const queryClient = new QueryClient();
 
@@ -63,6 +64,7 @@ const App = () => (
               <Route path="/docs/patient" element={<DocsPatient />} />
               <Route path="/docs/professional" element={<DocsProfessional />} />
               <Route path="/docs/tools" element={<DocsTools />} />
+              <Route path="/infection" element={<InfectionGuide />} />
               <Route path="/scale/:id" element={<ScaleDetail />} />
             </Route>
             <Route path="*" element={<NotFound />} />

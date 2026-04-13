@@ -20,6 +20,7 @@ import {
   MessageCircle,
   Mic,
   Pill,
+  RefreshCw,
   Send,
   Settings,
   Share2,
@@ -30,6 +31,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { usePreferences } from "@/contexts/PreferencesContext";
+import { supabase } from "@/integrations/supabase/client";
 import drugsCatalog from "@/data/drugs-catalog.json";
 import useOnlineStatus from "@/hooks/useOnlineStatus";
 
@@ -84,7 +86,9 @@ interface Conversation {
   updatedAt: string;
 }
 
-const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-chat`;
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL ?? `https://${import.meta.env.VITE_SUPABASE_PROJECT_ID}.supabase.co`;
+const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+const CHAT_URL = `${SUPABASE_URL}/functions/v1/ai-chat`;
 const HISTORY_KEY = "dn-chat-history";
 
 const modeConfig: Record<ClinicalMode, { icon: typeof MessageCircle; en: string; ar: string; prompt: string; placeholderEn: string; placeholderAr: string }> = {
@@ -162,6 +166,7 @@ const AIAssistant = () => {
   const [drugB, setDrugB] = useState("");
   const [scenarioTopic, setScenarioTopic] = useState("Septic Shock management");
   const [reportForm, setReportForm] = useState({ patient: "", ageSex: "", diagnosis: "", points: "", format: "SBAR" });
+  const [lastError, setLastError] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const abortControllerRef = useRef<AbortController | null>(null);
   const recognitionRef = useRef<SpeechRecognition | null>(null);
@@ -202,11 +207,22 @@ const AIAssistant = () => {
   const streamFromEdgeFunction = async (allMessages: Message[]) => {
     const controller = new AbortController();
     abortControllerRef.current = controller;
+
+    // Get the current session token for authenticated requests
+    const { data: { session } } = await supabase.auth.getSession();
+    const authToken = session?.access_token ?? SUPABASE_KEY;
+
+    if (!SUPABASE_URL || SUPABASE_URL.includes('undefined')) {
+      throw new Error(isArabic ? "خطأ في إعداد الخادم. يرجى المحاولة لاحقاً." : "Server configuration error. Please try again later.");
+    }
+
+    console.log("[AI] Sending request to:", CHAT_URL);
+
     const resp = await fetch(CHAT_URL, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+        Authorization: `Bearer ${authToken}`,
       },
       body: JSON.stringify({
         messages: allMessages.map((m) => ({ role: m.role, content: m.content })),
@@ -220,7 +236,21 @@ const AIAssistant = () => {
 
     if (!resp.ok) {
       const data = await resp.json().catch(() => ({}));
-      throw new Error(data?.error || "AI service error");
+      console.error("[AI] Error response:", resp.status, data);
+
+      if (resp.status === 429) {
+        throw new Error(isArabic
+          ? "تم تجاوز الحد اليومي. حاول مرة أخرى غداً."
+          : "Daily limit reached. Try again tomorrow.");
+      }
+      if (resp.status === 401) {
+        throw new Error(isArabic
+          ? "يرجى تسجيل الدخول لاستخدام المساعد الذكي."
+          : "Please sign in to use the AI Assistant.");
+      }
+      throw new Error(data?.error || (isArabic
+        ? "تعذر الاتصال بالذكاء الاصطناعي. حاول مرة أخرى."
+        : "Could not connect to AI. Please try again."));
     }
 
     if (!resp.body) throw new Error("No response body");
@@ -260,10 +290,12 @@ const AIAssistant = () => {
     }
   };
 
+
   const sendMessage = async (override?: string) => {
-    if (!isOnline) return toast.error("AI Assistant requires internet connection");
+    if (!isOnline) return toast.error(isArabic ? "المساعد الذكي يحتاج اتصال بالإنترنت" : "AI Assistant requires internet connection");
     const text = (override ?? input).trim();
     if (!text || isLoading) return;
+    setLastError(null);
     const nextUser: Message = { id: uid(), role: "user", content: text };
     const updatedMessages = [...messages, nextUser];
     setMessages(updatedMessages);
@@ -273,12 +305,26 @@ const AIAssistant = () => {
     try {
       await streamFromEdgeFunction(updatedMessages);
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Failed to get response");
+      if (error instanceof DOMException && error.name === "AbortError") {
+        // User cancelled - don't show error
+      } else {
+        const errorMsg = error instanceof Error ? error.message : (isArabic ? "تعذر الحصول على رد" : "Failed to get response");
+        setLastError(errorMsg);
+        toast.error(errorMsg);
+      }
       setMessages((prev) => prev.filter((m, i) => !(i === prev.length - 1 && m.role === "assistant" && !m.content)));
     } finally {
       setIsLoading(false);
       setIsStreaming(false);
       abortControllerRef.current = null;
+    }
+  };
+
+  const retryLastMessage = () => {
+    const lastUser = [...messages].reverse().find((m) => m.role === "user");
+    if (lastUser) {
+      setLastError(null);
+      sendMessage(lastUser.content);
     }
   };
 
@@ -504,6 +550,16 @@ const AIAssistant = () => {
               <span className="text-xs">{isArabic ? "...الذكاء الاصطناعي يفكر" : "AI is thinking..."}</span>
               <Button size="sm" variant="ghost" onClick={() => abortControllerRef.current?.abort()}><Square size={14} /></Button>
             </div>
+          </div>
+        )}
+
+        {lastError && !isLoading && (
+          <div className="bg-destructive/10 border border-destructive/30 rounded-2xl p-3 w-fit">
+            <p className="text-sm text-destructive mb-2">{lastError}</p>
+            <Button size="sm" variant="outline" onClick={retryLastMessage} className="gap-1">
+              <RefreshCw size={14} />
+              {isArabic ? "إعادة المحاولة" : "Retry"}
+            </Button>
           </div>
         )}
 

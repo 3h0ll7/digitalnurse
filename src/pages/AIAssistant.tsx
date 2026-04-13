@@ -289,10 +289,13 @@ const AIAssistant = () => {
     }
   };
 
+  const [lastError, setLastError] = useState<string | null>(null);
+
   const sendMessage = async (override?: string) => {
-    if (!isOnline) return toast.error("AI Assistant requires internet connection");
+    if (!isOnline) return toast.error(isArabic ? "المساعد الذكي يحتاج اتصال بالإنترنت" : "AI Assistant requires internet connection");
     const text = (override ?? input).trim();
     if (!text || isLoading) return;
+    setLastError(null);
     const nextUser: Message = { id: uid(), role: "user", content: text };
     const updatedMessages = [...messages, nextUser];
     setMessages(updatedMessages);
@@ -302,12 +305,26 @@ const AIAssistant = () => {
     try {
       await streamFromEdgeFunction(updatedMessages);
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Failed to get response");
+      if (error instanceof DOMException && error.name === "AbortError") {
+        // User cancelled - don't show error
+      } else {
+        const errorMsg = error instanceof Error ? error.message : (isArabic ? "تعذر الحصول على رد" : "Failed to get response");
+        setLastError(errorMsg);
+        toast.error(errorMsg);
+      }
       setMessages((prev) => prev.filter((m, i) => !(i === prev.length - 1 && m.role === "assistant" && !m.content)));
     } finally {
       setIsLoading(false);
       setIsStreaming(false);
       abortControllerRef.current = null;
+    }
+  };
+
+  const retryLastMessage = () => {
+    const lastUser = [...messages].reverse().find((m) => m.role === "user");
+    if (lastUser) {
+      setLastError(null);
+      sendMessage(lastUser.content);
     }
   };
 

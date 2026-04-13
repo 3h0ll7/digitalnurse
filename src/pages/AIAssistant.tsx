@@ -206,11 +206,22 @@ const AIAssistant = () => {
   const streamFromEdgeFunction = async (allMessages: Message[]) => {
     const controller = new AbortController();
     abortControllerRef.current = controller;
+
+    // Get the current session token for authenticated requests
+    const { data: { session } } = await supabase.auth.getSession();
+    const authToken = session?.access_token ?? SUPABASE_KEY;
+
+    if (!SUPABASE_URL || SUPABASE_URL.includes('undefined')) {
+      throw new Error(isArabic ? "خطأ في إعداد الخادم. يرجى المحاولة لاحقاً." : "Server configuration error. Please try again later.");
+    }
+
+    console.log("[AI] Sending request to:", CHAT_URL);
+
     const resp = await fetch(CHAT_URL, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+        Authorization: `Bearer ${authToken}`,
       },
       body: JSON.stringify({
         messages: allMessages.map((m) => ({ role: m.role, content: m.content })),
@@ -224,7 +235,21 @@ const AIAssistant = () => {
 
     if (!resp.ok) {
       const data = await resp.json().catch(() => ({}));
-      throw new Error(data?.error || "AI service error");
+      console.error("[AI] Error response:", resp.status, data);
+
+      if (resp.status === 429) {
+        throw new Error(isArabic
+          ? "تم تجاوز الحد اليومي. حاول مرة أخرى غداً."
+          : "Daily limit reached. Try again tomorrow.");
+      }
+      if (resp.status === 401) {
+        throw new Error(isArabic
+          ? "يرجى تسجيل الدخول لاستخدام المساعد الذكي."
+          : "Please sign in to use the AI Assistant.");
+      }
+      throw new Error(data?.error || (isArabic
+        ? "تعذر الاتصال بالذكاء الاصطناعي. حاول مرة أخرى."
+        : "Could not connect to AI. Please try again."));
     }
 
     if (!resp.body) throw new Error("No response body");

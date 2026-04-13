@@ -1,12 +1,9 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
-
-const MAX_REQUESTS_PER_DAY = 10;
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -14,7 +11,7 @@ serve(async (req) => {
   }
 
   try {
-    const { messages, language, provider = 'groq', modePrompt = '' } = await req.json();
+    const { messages, language, modePrompt = '' } = await req.json();
     const isArabic = language === 'ar';
 
     // Validate input
@@ -35,90 +32,14 @@ serve(async (req) => {
       }
     }
 
-    // Require authentication
-    const authHeader = req.headers.get('Authorization');
-    if (!authHeader?.startsWith('Bearer ')) {
-      return new Response(JSON.stringify({ error: 'Authentication required' }), {
-        status: 401,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      });
-    }
-
-    const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
-    const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
-    const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey);
-
-    const anonKey = Deno.env.get('SUPABASE_ANON_KEY')!;
-    const supabaseUser = createClient(supabaseUrl, anonKey, {
-      global: { headers: { Authorization: authHeader } },
-    });
-    const { data: { user }, error: authError } = await supabaseUser.auth.getUser();
-    if (authError || !user) {
-      return new Response(JSON.stringify({ error: 'Invalid or expired token' }), {
-        status: 401,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      });
-    }
-
-    const userIdentifier = `user_${user.id}`;
-
-    // --- Rate Limiting ---
-    const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
-
-    const { data: rateData, error: rateError } = await supabaseAdmin
-      .from('ai_rate_limits')
-      .select('request_count')
-      .eq('user_identifier', userIdentifier)
-      .eq('request_date', today)
-      .maybeSingle();
-
-    if (rateError) {
-      console.error('Rate limit check error:', rateError);
-    }
-
-    const currentCount = rateData?.request_count ?? 0;
-
-    if (currentCount >= MAX_REQUESTS_PER_DAY) {
-      return new Response(
-        JSON.stringify({
-          error: `Daily limit reached. You can send up to ${MAX_REQUESTS_PER_DAY} messages per day. Try again tomorrow.`,
-          rateLimitExceeded: true,
-          remaining: 0,
-        }),
-        {
-          status: 429,
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        }
-      );
-    }
-
-    // Increment request count (upsert)
-    await supabaseAdmin
-      .from('ai_rate_limits')
-      .upsert(
-        {
-          user_identifier: userIdentifier,
-          request_date: today,
-          request_count: currentCount + 1,
-          updated_at: new Date().toISOString(),
-        },
-        { onConflict: 'user_identifier,request_date' }
-      );
-
-    // --- Call Lovable AI Gateway (Google Gemini 3 Flash) ---
-    const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
-    if (!LOVABLE_API_KEY) {
-      throw new Error('AI service is not configured');
-    }
-
+    // --- Call Lovable AI Gateway (Google Gemini built-in connector) ---
     const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${LOVABLE_API_KEY}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: provider === 'gemini' ? 'google/gemini-3-flash-preview' : 'groq/llama-3.3-70b-versatile',
+        model: 'google/gemini-2.5-flash',
         messages: [
           {
             role: 'system',
@@ -153,9 +74,9 @@ Always:
 - Remind users to verify with institutional policies and qualified professionals
 - State clearly: "For educational purposes only. Always verify with a qualified healthcare professional."`}\n\n${modePrompt}` ,
           },
-          ...messages,
+          ...messages.filter((message) => message.role !== 'system'),
         ],
-        stream: true,
+        stream: false,
       }),
     });
 
@@ -182,13 +103,20 @@ Always:
       });
     }
 
-    // Stream response back
-    return new Response(response.body, {
+    const data = await response.json();
+    const content = data?.choices?.[0]?.message?.content?.trim();
+
+    if (!content) {
+      return new Response(JSON.stringify({ error: 'Empty AI response' }), {
+        status: 502,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
+    return new Response(JSON.stringify({ content }), {
       headers: {
         ...corsHeaders,
-        'Content-Type': 'text/event-stream',
-        'X-RateLimit-Remaining': String(MAX_REQUESTS_PER_DAY - currentCount - 1),
-        'X-RateLimit-Limit': String(MAX_REQUESTS_PER_DAY),
+        'Content-Type': 'application/json',
       },
     });
 

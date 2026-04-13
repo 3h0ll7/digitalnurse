@@ -32,7 +32,6 @@ const Home = () => {
   const { t, language } = usePreferences();
 
   const sections: SectionItem[] = [
-    // 1. Procedures
     {
       title: t.proceduralPlaybooks,
       description: t.proceduralPlaybooksDesc,
@@ -40,7 +39,6 @@ const Home = () => {
       to: "/procedures",
       accent: "from-emerald-500/20 to-teal-500/20 border-emerald-500/30",
     },
-    // 2. Assessments
     {
       title: t.assessmentCoPilot,
       description: t.assessmentCoPilotDesc,
@@ -48,15 +46,6 @@ const Home = () => {
       to: "/assessments",
       accent: "from-blue-500/20 to-indigo-500/20 border-blue-500/30",
     },
-    // 3. Calculators
-    {
-      title: language === "ar" ? "الحاسبات السريرية" : "Clinical Calculators",
-      description: language === "ar" ? "حسابات الجرعات والسوائل ومؤشرات الجسم" : "Dosage, IV drip rate, BMI & fluid calculations",
-      icon: Calculator,
-      to: "/calculators",
-      accent: "from-violet-500/20 to-purple-500/20 border-violet-500/30",
-    },
-    // 4. Labs
     {
       title: t.labIntelligence,
       description: t.labIntelligenceDesc,
@@ -64,7 +53,6 @@ const Home = () => {
       to: "/labs",
       accent: "from-amber-500/20 to-orange-500/20 border-amber-500/30",
     },
-    // 5. Drugs
     {
       title: t.drugReference,
       description: t.drugReferenceDesc,
@@ -72,7 +60,13 @@ const Home = () => {
       to: "/drugs",
       accent: "from-rose-500/20 to-pink-500/20 border-rose-500/30",
     },
-    // 6. Fluids
+    {
+      title: language === "ar" ? "الحاسبات السريرية" : "Clinical Calculators",
+      description: language === "ar" ? "حسابات الجرعات والسوائل ومؤشرات الجسم" : "Dosage, IV drip rate, BMI & fluid calculations",
+      icon: Calculator,
+      to: "/calculators",
+      accent: "from-violet-500/20 to-purple-500/20 border-violet-500/30",
+    },
     {
       title: language === "ar" ? "السوائل الوريدية" : "IV Fluids",
       description: language === "ar" ? "أنواع السوائل ومعدلات التسريب" : "Fluid types, rates & electrolyte content",
@@ -80,7 +74,6 @@ const Home = () => {
       to: "/fluids",
       accent: "from-cyan-500/20 to-sky-500/20 border-cyan-500/30",
     },
-    // 7. ECG
     {
       title: language === "ar" ? "تخطيط القلب" : "ECG Interpretation",
       description: language === "ar" ? "تحليل وتفسير تخطيط القلب" : "ECG rhythms, patterns & interpretation guide",
@@ -88,7 +81,6 @@ const Home = () => {
       to: "/ecg",
       accent: "from-red-500/20 to-rose-500/20 border-red-500/30",
     },
-    // 8. Docs
     {
       title: language === "ar" ? "التوثيق السريري" : "Clinical Documentation",
       description: language === "ar" ? "نماذج وأدوات التوثيق التمريضي" : "Nursing notes, templates & documentation tools",
@@ -96,7 +88,6 @@ const Home = () => {
       to: "/docs",
       accent: "from-slate-500/20 to-gray-500/20 border-slate-500/30",
     },
-    // 9. Flashcards
     {
       title: language === "ar" ? "البطاقات التعليمية" : "Flashcards",
       description: language === "ar" ? "بطاقات مراجعة سريعة للمفاهيم التمريضية" : "Quick review cards for nursing concepts",
@@ -104,31 +95,6 @@ const Home = () => {
       to: "/flashcards",
       accent: "from-yellow-500/20 to-amber-500/20 border-yellow-500/30",
     },
-    // 10. Body Atlas
-    {
-      title: language === "ar" ? "أطلس الجسم" : "Body Atlas",
-      description: language === "ar" ? "تشريح الجسم البشري التفاعلي" : "Interactive human anatomy reference",
-      icon: Microscope,
-      to: "/atlas",
-      accent: "from-teal-500/20 to-emerald-500/20 border-teal-500/30",
-    },
-    // 11. Pathophysiology
-    {
-      title: language === "ar" ? "الفيزيولوجيا المرضية" : "Pathophysiology",
-      description: language === "ar" ? "المسارات المرضية والآليات السريرية" : "Disease pathways & clinical mechanisms",
-      icon: BookOpen,
-      to: "/pathways",
-      accent: "from-indigo-500/20 to-blue-500/20 border-indigo-500/30",
-    },
-    // 12. Pharmacokinetics
-    {
-      title: language === "ar" ? "حركية الأدوية" : "Pharmacokinetics",
-      description: language === "ar" ? "امتصاص وتوزيع واستقلاب الأدوية" : "Drug absorption, distribution & metabolism",
-      icon: Activity,
-      to: "/pharma",
-      accent: "from-orange-500/20 to-amber-500/20 border-orange-500/30",
-    },
-    // 13. Mind Maps
     {
       title: language === "ar" ? "الخرائط الذهنية" : "Mind Maps",
       description: language === "ar" ? "خرائط مفاهيمية للمواضيع السريرية" : "Visual concept maps for clinical topics",
@@ -136,13 +102,19 @@ const Home = () => {
       to: "/mind-maps",
       accent: "from-fuchsia-500/20 to-pink-500/20 border-fuchsia-500/30",
     },
-    // 14. AI Assistant
     {
-      title: language === "ar" ? "المساعد الذكي AI" : "AI Nursing Assistant",
-      description: language === "ar" ? "اسأل عن الإجراءات والأدوية والحالات السريرية" : "Ask about procedures, medications & clinical scenarios",
-      icon: Bot,
-      to: "/ai-assistant",
-      accent: "from-primary/20 to-accent/20 border-primary/30",
+      title: language === "ar" ? "أطلس الجسم" : "Body Atlas",
+      description: language === "ar" ? "تشريح الجسم البشري التفاعلي" : "Interactive human anatomy reference",
+      icon: Microscope,
+      to: "/atlas",
+      accent: "from-teal-500/20 to-emerald-500/20 border-teal-500/30",
+    },
+    {
+      title: language === "ar" ? "المكتبة العلمية" : "Pathophysiology",
+      description: language === "ar" ? "الفيزيولوجيا المرضية والمسارات السريرية" : "Disease pathways & clinical mechanisms",
+      icon: BookOpen,
+      to: "/pathways",
+      accent: "from-indigo-500/20 to-blue-500/20 border-indigo-500/30",
     },
   ];
 
@@ -151,6 +123,32 @@ const Home = () => {
       title={t.homeTitle}
       subtitle={t.homeSubtitle}
     >
+      {/* AI Assistant - Featured */}
+      <button
+        onClick={() => navigate("/ai-assistant")}
+        className="group w-full rounded-2xl border border-primary/30 bg-gradient-to-r from-primary/15 via-primary/10 to-accent/10 p-5 text-start transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/50 hover:shadow-[0_10px_40px_rgba(21,154,255,0.2)]"
+      >
+        <div className="flex items-center gap-4">
+          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-primary/40 bg-primary/20">
+            <Bot className="text-primary" size={24} />
+          </div>
+          <div className="min-w-0 flex-1">
+            <h3 className="text-lg font-semibold text-foreground">
+              {language === "ar" ? "المساعد الذكي AI" : "AI Nursing Assistant"}
+            </h3>
+            <p className="text-sm text-muted-foreground">
+              {language === "ar"
+                ? "اسأل عن الإجراءات والأدوية والحالات السريرية"
+                : "Ask about procedures, medications & clinical scenarios"}
+            </p>
+          </div>
+          <span className="shrink-0 text-xs font-medium uppercase tracking-wider text-primary opacity-0 transition-opacity group-hover:opacity-100">
+            {t.open} →
+          </span>
+        </div>
+      </button>
+
+      {/* All Sections Grid */}
       <section className="grid gap-3 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4">
         {sections.map((section) => {
           const Icon = section.icon;

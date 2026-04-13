@@ -13,6 +13,7 @@ import {
   Droplets,
   FileText,
   BookOpen,
+  ShieldCheck,
 } from "lucide-react";
 import { usePreferences } from "@/contexts/PreferencesContext";
 import {
@@ -37,6 +38,7 @@ const PrimaryNav = () => {
     { path: "/fluids", icon: Droplets, label: language === "ar" ? "السوائل" : "FLUIDS" },
     { path: "/ecg", icon: Activity, label: language === "ar" ? "تخطيط القلب" : "ECG" },
     { path: "/docs", icon: FileText, label: language === "ar" ? "التوثيق" : "DOCS" },
+    { path: "/infection", icon: ShieldCheck, label: language === "ar" ? "العدوى" : "INFECTION" },
     { path: "/flashcards", icon: Sparkles, label: t.navFlashcards },
     { path: "/library", icon: BookOpen, label: language === "ar" ? "المكتبة" : "LIBRARY" },
     { path: "/mind-maps", icon: GitBranch, label: t.navMindMaps },

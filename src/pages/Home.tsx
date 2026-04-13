@@ -14,6 +14,7 @@ import {
   TestTube2,
   FileText,
   BookOpen,
+  FlaskConical,
   LucideIcon,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -47,6 +48,13 @@ const Home = () => {
       accent: "from-blue-500/20 to-indigo-500/20 border-blue-500/30",
     },
     {
+      title: language === "ar" ? "الحاسبات السريرية" : "Clinical Calculators",
+      description: language === "ar" ? "حسابات الجرعات والسوائل ومؤشرات الجسم" : "Dosage, IV drip rate, BMI & fluid calculations",
+      icon: Calculator,
+      to: "/calculators",
+      accent: "from-violet-500/20 to-purple-500/20 border-violet-500/30",
+    },
+    {
       title: t.labIntelligence,
       description: t.labIntelligenceDesc,
       icon: TestTube2,
@@ -59,13 +67,6 @@ const Home = () => {
       icon: Pill,
       to: "/drugs",
       accent: "from-rose-500/20 to-pink-500/20 border-rose-500/30",
-    },
-    {
-      title: language === "ar" ? "الحاسبات السريرية" : "Clinical Calculators",
-      description: language === "ar" ? "حسابات الجرعات والسوائل ومؤشرات الجسم" : "Dosage, IV drip rate, BMI & fluid calculations",
-      icon: Calculator,
-      to: "/calculators",
-      accent: "from-violet-500/20 to-purple-500/20 border-violet-500/30",
     },
     {
       title: language === "ar" ? "السوائل الوريدية" : "IV Fluids",
@@ -96,13 +97,6 @@ const Home = () => {
       accent: "from-yellow-500/20 to-amber-500/20 border-yellow-500/30",
     },
     {
-      title: language === "ar" ? "الخرائط الذهنية" : "Mind Maps",
-      description: language === "ar" ? "خرائط مفاهيمية للمواضيع السريرية" : "Visual concept maps for clinical topics",
-      icon: GitBranch,
-      to: "/mind-maps",
-      accent: "from-fuchsia-500/20 to-pink-500/20 border-fuchsia-500/30",
-    },
-    {
       title: language === "ar" ? "أطلس الجسم" : "Body Atlas",
       description: language === "ar" ? "تشريح الجسم البشري التفاعلي" : "Interactive human anatomy reference",
       icon: Microscope,
@@ -115,6 +109,20 @@ const Home = () => {
       icon: BookOpen,
       to: "/pathways",
       accent: "from-indigo-500/20 to-blue-500/20 border-indigo-500/30",
+    },
+    {
+      title: language === "ar" ? "الحركية الدوائية" : "Pharmacokinetics",
+      description: language === "ar" ? "تصور امتصاص وتوزيع الأدوية" : "Drug absorption, distribution & metabolism visualizer",
+      icon: FlaskConical,
+      to: "/pharmacokinetics",
+      accent: "from-lime-500/20 to-green-500/20 border-lime-500/30",
+    },
+    {
+      title: language === "ar" ? "الخرائط الذهنية" : "Mind Maps",
+      description: language === "ar" ? "خرائط مفاهيمية للمواضيع السريرية" : "Visual concept maps for clinical topics",
+      icon: GitBranch,
+      to: "/mind-maps",
+      accent: "from-fuchsia-500/20 to-pink-500/20 border-fuchsia-500/30",
     },
   ];
 

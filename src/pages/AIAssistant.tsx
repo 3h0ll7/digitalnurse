@@ -290,7 +290,6 @@ const AIAssistant = () => {
     }
   };
 
-  const [lastError, setLastError] = useState<string | null>(null);
 
   const sendMessage = async (override?: string) => {
     if (!isOnline) return toast.error(isArabic ? "المساعد الذكي يحتاج اتصال بالإنترنت" : "AI Assistant requires internet connection");

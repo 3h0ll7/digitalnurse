@@ -166,6 +166,7 @@ const AIAssistant = () => {
   const [drugB, setDrugB] = useState("");
   const [scenarioTopic, setScenarioTopic] = useState("Septic Shock management");
   const [reportForm, setReportForm] = useState({ patient: "", ageSex: "", diagnosis: "", points: "", format: "SBAR" });
+  const [lastError, setLastError] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const abortControllerRef = useRef<AbortController | null>(null);
   const recognitionRef = useRef<SpeechRecognition | null>(null);

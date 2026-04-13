@@ -20,6 +20,7 @@ import {
   MessageCircle,
   Mic,
   Pill,
+  RefreshCw,
   Send,
   Settings,
   Share2,
@@ -30,6 +31,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { usePreferences } from "@/contexts/PreferencesContext";
+import { supabase } from "@/integrations/supabase/client";
 import drugsCatalog from "@/data/drugs-catalog.json";
 import useOnlineStatus from "@/hooks/useOnlineStatus";
 
@@ -84,7 +86,9 @@ interface Conversation {
   updatedAt: string;
 }
 
-const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-chat`;
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL ?? `https://${import.meta.env.VITE_SUPABASE_PROJECT_ID}.supabase.co`;
+const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+const CHAT_URL = `${SUPABASE_URL}/functions/v1/ai-chat`;
 const HISTORY_KEY = "dn-chat-history";
 
 const modeConfig: Record<ClinicalMode, { icon: typeof MessageCircle; en: string; ar: string; prompt: string; placeholderEn: string; placeholderAr: string }> = {

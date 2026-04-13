@@ -10,6 +10,7 @@ import {
   GitBranch,
   Microscope,
   Pill,
+  ShieldAlert,
   Sparkles,
   TestTube2,
   FileText,

@@ -14,7 +14,7 @@ serve(async (req) => {
   }
 
   try {
-    const { messages, language } = await req.json();
+    const { messages, language, provider = 'groq', modePrompt = '' } = await req.json();
     const isArabic = language === 'ar';
 
     // Validate input
@@ -118,11 +118,11 @@ serve(async (req) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'google/gemini-3-flash-preview',
+        model: provider === 'gemini' ? 'google/gemini-3-flash-preview' : 'groq/llama-3.3-70b-versatile',
         messages: [
           {
             role: 'system',
-            content: isArabic
+            content: `${isArabic
               ? `أنت مساعد تمريض ذكي ذو معرفة عالية. قدّم إرشادات سريرية قائمة على الأدلة باللغة العربية الفصحى حول:
 - إجراءات وتقنيات التمريض
 - آليات عمل الأدوية والجرعات والاعتبارات التمريضية
@@ -151,7 +151,7 @@ Always:
 - Provide step-by-step guidance when appropriate
 - Highlight red flags or escalation criteria
 - Remind users to verify with institutional policies and qualified professionals
-- State clearly: "For educational purposes only. Always verify with a qualified healthcare professional."`,
+- State clearly: "For educational purposes only. Always verify with a qualified healthcare professional."`}\n\n${modePrompt}` ,
           },
           ...messages,
         ],

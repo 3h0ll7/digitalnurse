@@ -31,6 +31,7 @@ import { toast } from "sonner";
 import { usePreferences } from "@/contexts/PreferencesContext";
 import drugsCatalog from "@/data/drugs-catalog.json";
 import useOnlineStatus from "@/hooks/useOnlineStatus";
+import { supabase } from "@/integrations/supabase/client";
 import ecgData from "@/data/ecg-i18n.json";
 import { assessmentScales } from "@/data/assessmentScales";
 import pathwaysData from "@/data/pathways-i18n.json";

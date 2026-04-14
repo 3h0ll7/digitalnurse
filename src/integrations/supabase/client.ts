@@ -2,33 +2,15 @@
 import { createClient } from '@supabase/supabase-js';
 import type { Database } from './types';
 
-// Fallback placeholders keep createClient from throwing at module-load time
-// when the Vite env vars are missing in the build environment. Any real
-// request will still fail cleanly at call-time instead of taking the whole
-// app bundle down and producing a blank screen.
-const FALLBACK_URL = 'https://placeholder.supabase.co';
-const FALLBACK_KEY = 'public-anon-placeholder-key';
-
-const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || FALLBACK_URL;
-const SUPABASE_PUBLISHABLE_KEY =
-  import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || FALLBACK_KEY;
-
-if (
-  !import.meta.env.VITE_SUPABASE_URL ||
-  !import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY
-) {
-  // eslint-disable-next-line no-console
-  console.warn(
-    '[supabase] VITE_SUPABASE_URL / VITE_SUPABASE_PUBLISHABLE_KEY not set; using placeholder client. Supabase-backed features will be unavailable until env vars are configured.',
-  );
-}
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
+const SUPABASE_PUBLISHABLE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
 
 // Import the supabase client like this:
 // import { supabase } from "@/integrations/supabase/client";
 
 export const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
   auth: {
-    storage: typeof window !== 'undefined' ? window.localStorage : undefined,
+    storage: localStorage,
     persistSession: true,
     autoRefreshToken: true,
   }

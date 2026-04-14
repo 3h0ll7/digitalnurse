@@ -31,6 +31,7 @@ import { toast } from "sonner";
 import { usePreferences } from "@/contexts/PreferencesContext";
 import drugsCatalog from "@/data/drugs-catalog.json";
 import useOnlineStatus from "@/hooks/useOnlineStatus";
+import { supabase } from "@/integrations/supabase/client";
 import ecgData from "@/data/ecg-i18n.json";
 import { assessmentScales } from "@/data/assessmentScales";
 import pathwaysData from "@/data/pathways-i18n.json";
@@ -85,7 +86,6 @@ interface Conversation {
   updatedAt: string;
 }
 
-const LOVABLE_CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-chat`;
 const HISTORY_KEY = "dn-chat-history";
 
 const modeConfig: Record<ClinicalMode, { icon: typeof MessageCircle; en: string; ar: string; prompt: string; placeholderEn: string; placeholderAr: string }> = {
@@ -291,24 +291,17 @@ ${isArabic ? "أقدر أساعدك فوراً في الأدوية، ECG، ال�
     setMessages((prev) => [...prev, { id: uid(), role: "assistant", content: "" }]);
 
     try {
-      const resp = await fetch(LOVABLE_CHAT_URL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
-        },
-        body: JSON.stringify({
+      const { data, error } = await supabase.functions.invoke('ai-chat', {
+        body: {
           messages: allMessages.map((m) => ({ role: m.role, content: m.content })),
           language,
           modePrompt: modeConfig[mode].prompt,
-        }),
-        signal: controller.signal,
+        },
       });
 
-      if (!resp.ok) {
+      if (error) {
         throw new Error("lovable_ai_unavailable");
       }
-      const data = await resp.json();
       const assistantText = String(data?.content || "").trim();
       if (!assistantText) {
         throw new Error("empty_ai_response");
@@ -323,6 +316,7 @@ ${isArabic ? "أقدر أساعدك فوراً في الأدوية، ECG، ال�
       if (error instanceof DOMException && error.name === "AbortError") {
         throw error;
       }
+      console.error("AI call failed, using fallback:", error);
       const fallback = buildLocalClinicalFallback(allMessages[allMessages.length - 1]?.content || "");
       setMessages((prev) => {
         const updated = [...prev];

@@ -2,7 +2,7 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version',
 };
 
 serve(async (req) => {
@@ -11,10 +11,18 @@ serve(async (req) => {
   }
 
   try {
+    const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
+    if (!LOVABLE_API_KEY) {
+      console.error("LOVABLE_API_KEY is not configured");
+      return new Response(JSON.stringify({ error: "AI service not configured" }), {
+        status: 500,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
     const { messages, language, modePrompt = '' } = await req.json();
     const isArabic = language === 'ar';
 
-    // Validate input
     if (!Array.isArray(messages) || messages.length === 0 || messages.length > 50) {
       return new Response(JSON.stringify({ error: 'Invalid messages array' }), {
         status: 400,
@@ -22,7 +30,6 @@ serve(async (req) => {
       });
     }
 
-    // Validate each message
     for (const msg of messages) {
       if (!msg.role || !msg.content || typeof msg.content !== 'string' || msg.content.length > 10000) {
         return new Response(JSON.stringify({ error: 'Invalid message format' }), {
@@ -32,19 +39,8 @@ serve(async (req) => {
       }
     }
 
-    // --- Call Lovable AI Gateway (Google Gemini built-in connector) ---
-    const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        model: 'google/gemini-2.5-flash',
-        messages: [
-          {
-            role: 'system',
-            content: `${isArabic
-              ? `أنت مساعد تمريض ذكي ذو معرفة عالية. قدّم إرشادات سريرية قائمة على الأدلة باللغة العربية الفصحى حول:
+    const systemPrompt = `${isArabic
+      ? `أنت مساعد تمريض ذكي ذو معرفة عالية. قدّم إرشادات سريرية قائمة على الأدلة باللغة العربية الفصحى حول:
 - إجراءات وتقنيات التمريض
 - آليات عمل الأدوية والجرعات والاعتبارات التمريضية
 - التقييم السريري والتوثيق (صيغ SOAP وSBAR)
@@ -59,7 +55,7 @@ serve(async (req) => {
 - ذكّر المستخدمين بالتحقق من السياسات المؤسسية والمتخصصين المؤهلين
 - اذكر بوضوح: "للأغراض التعليمية فقط. يُرجى التحقق دائمًا مع متخصصي الرعاية الصحية المؤهلين."
 - أجب دائمًا باللغة العربية الفصحى فقط`
-              : `You are a highly knowledgeable AI Nursing Assistant. Provide evidence-based, concise clinical guidance on:
+      : `You are a highly knowledgeable AI Nursing Assistant. Provide evidence-based, concise clinical guidance on:
 - Nursing procedures and techniques
 - Medication mechanisms, dosages, and nursing considerations
 - Clinical assessment and documentation (SOAP, SBAR formats)
@@ -72,9 +68,21 @@ Always:
 - Provide step-by-step guidance when appropriate
 - Highlight red flags or escalation criteria
 - Remind users to verify with institutional policies and qualified professionals
-- State clearly: "For educational purposes only. Always verify with a qualified healthcare professional."`}\n\n${modePrompt}` ,
-          },
-          ...messages.filter((message) => message.role !== 'system'),
+- State clearly: "For educational purposes only. Always verify with a qualified healthcare professional."`}\n\n${modePrompt}`;
+
+    console.log("Calling Lovable AI Gateway with model google/gemini-2.5-flash");
+
+    const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${LOVABLE_API_KEY}`,
+      },
+      body: JSON.stringify({
+        model: 'google/gemini-2.5-flash',
+        messages: [
+          { role: 'system', content: systemPrompt },
+          ...messages.filter((message: any) => message.role !== 'system'),
         ],
         stream: false,
       }),
@@ -106,6 +114,8 @@ Always:
     const data = await response.json();
     const content = data?.choices?.[0]?.message?.content?.trim();
 
+    console.log("AI response received, length:", content?.length || 0);
+
     if (!content) {
       return new Response(JSON.stringify({ error: 'Empty AI response' }), {
         status: 502,
@@ -114,10 +124,7 @@ Always:
     }
 
     return new Response(JSON.stringify({ content }), {
-      headers: {
-        ...corsHeaders,
-        'Content-Type': 'application/json',
-      },
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
 
   } catch (error) {

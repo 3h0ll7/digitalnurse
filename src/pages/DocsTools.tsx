@@ -8,8 +8,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea";
 import { useDocsI18n, copyText } from "./DocsShared";
 import { toast } from "sonner";
+import { SUPABASE_URL } from "@/integrations/supabase/client";
 
-const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-chat`;
+const CHAT_URL = `${SUPABASE_URL}/functions/v1/ai-chat`;
 
 const DocsTools = () => {
   const navigate = useNavigate();

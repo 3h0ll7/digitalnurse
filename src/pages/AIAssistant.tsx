@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import {
   Activity,
@@ -19,8 +20,8 @@ import {
   MessageCircle,
   Mic,
   Pill,
-  RefreshCw,
   Send,
+  Settings,
   Share2,
   Square,
   Stethoscope,
@@ -31,10 +32,6 @@ import { toast } from "sonner";
 import { usePreferences } from "@/contexts/PreferencesContext";
 import drugsCatalog from "@/data/drugs-catalog.json";
 import useOnlineStatus from "@/hooks/useOnlineStatus";
-import { supabase } from "@/integrations/supabase/client";
-import ecgData from "@/data/ecg-i18n.json";
-import { assessmentScales } from "@/data/assessmentScales";
-import pathwaysData from "@/data/pathways-i18n.json";
 
 declare global {
   interface Window {
@@ -59,6 +56,7 @@ interface SpeechRecognitionEvent extends Event {
 }
 
 type Role = "user" | "assistant";
+type AIProvider = "groq" | "gemini";
 type ClinicalMode =
   | "general"
   | "drug"
@@ -86,6 +84,7 @@ interface Conversation {
   updatedAt: string;
 }
 
+const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-chat`;
 const HISTORY_KEY = "dn-chat-history";
 
 const modeConfig: Record<ClinicalMode, { icon: typeof MessageCircle; en: string; ar: string; prompt: string; placeholderEn: string; placeholderAr: string }> = {
@@ -150,6 +149,7 @@ const AIAssistant = () => {
   const { language, direction } = usePreferences();
   const isArabic = language === "ar";
   const isOnline = useOnlineStatus();
+  const [provider, setProvider] = useState<AIProvider>(() => (window.localStorage.getItem("dn-ai-provider") as AIProvider) || "groq");
   const [mode, setMode] = useState<ClinicalMode>("general");
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
@@ -162,15 +162,15 @@ const AIAssistant = () => {
   const [drugB, setDrugB] = useState("");
   const [scenarioTopic, setScenarioTopic] = useState("Septic Shock management");
   const [reportForm, setReportForm] = useState({ patient: "", ageSex: "", diagnosis: "", points: "", format: "SBAR" });
-  const [lastError, setLastError] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const abortControllerRef = useRef<AbortController | null>(null);
   const recognitionRef = useRef<SpeechRecognition | null>(null);
 
   const drugNames = useMemo(() => drugsCatalog.drugs.map((d) => d.genericName), []);
-  const ecgRhythms = useMemo(() => ecgData.rhythms ?? [], []);
-  const pathwayMaps = useMemo(() => pathwaysData.maps ?? [], []);
 
+  useEffect(() => {
+    window.localStorage.setItem("dn-ai-provider", provider);
+  }, [provider]);
 
   useEffect(() => {
     const raw = window.localStorage.getItem(HISTORY_KEY);
@@ -199,139 +199,71 @@ const AIAssistant = () => {
     window.localStorage.setItem(HISTORY_KEY, JSON.stringify(updated));
   }, [messages]);
 
-  const buildLocalClinicalFallback = (question: string) => {
-    const q = question.toLowerCase();
-    const matchedDrug = drugsCatalog.drugs.find((drug) => q.includes(drug.genericName.toLowerCase()));
-    const matchedRhythm = ecgRhythms.find((rhythm) => {
-      const en = String(rhythm.nameEn || "").toLowerCase();
-      const ar = String(rhythm.nameAr || "").toLowerCase();
-      return q.includes(en) || q.includes(ar);
-    });
-    const matchedAssessment = assessmentScales.find((scale) => q.includes(scale.id.toLowerCase()) || q.includes(scale.name.toLowerCase()));
-    const matchedPathway = pathwayMaps.find((item) => q.includes(item.id.toLowerCase()) || q.includes(item.name.toLowerCase()));
-    const fluidHints = [
-      "Normal Saline 0.9% (NS): isotonic crystalloid, common in shock/hypovolemia.",
-      "Lactated Ringer's (LR): balanced isotonic fluid for trauma/burns.",
-      "3% Hypertonic Saline: severe symptomatic hyponatremia or raised ICP with close sodium monitoring.",
-      "PRBCs: for symptomatic anemia/hemorrhagic shock with transfusion monitoring.",
-    ];
-
-    const langNote = isArabic
-      ? "تم تشغيل وضع المرجع السريري المحلي تلقائياً ليتابع المساعد العمل بدون إعدادات."
-      : "Local clinical reference mode activated automatically so the assistant works without setup.";
-
-    if (matchedDrug) {
-      const d = matchedDrug as any;
-      return `${langNote}
-
-### ${isArabic ? "ملخص دوائي" : "Drug quick reference"}
-- ${isArabic ? "الدواء" : "Drug"}: ${d.genericName}
-- ${isArabic ? "الفئة" : "Class"}: ${d.class ?? d.category ?? "—"}
-- ${isArabic ? "الاستطبابات" : "Indications"}: ${d.indications ?? "—"}
-- ${isArabic ? "الجرعة" : "Dose"}: ${d.dose ?? "—"}
-- ${isArabic ? "الطريق" : "Route"}: ${d.route ?? (d.routes || []).join(", ") ?? "—"}
-- ${isArabic ? "المراقبة التمريضية" : "Nursing monitoring"}: ${d.monitoring ?? "—"}
-- ${isArabic ? "تحذير" : "Safety"}: ${d.warnings ?? "—"}
-
-${isArabic ? "⚠️ راجع البروتوكول المحلي قبل التنفيذ." : "⚠️ Verify against local protocol before acting."}`;
-    }
-
-    if (matchedRhythm) {
-      return `${langNote}
-
-### ${isArabic ? "مراجعة ECG" : "ECG quick reference"}
-- ${isArabic ? "النظم" : "Rhythm"}: ${matchedRhythm.nameEn} / ${matchedRhythm.nameAr}
-- ${isArabic ? "الخصائص" : "Characteristics"}: ${matchedRhythm.characteristics}
-- ${isArabic ? "الشدة" : "Severity"}: ${matchedRhythm.severity}
-- ${isArabic ? "التدخلات" : "Interventions"}:
-${(matchedRhythm.interventions || []).map((step: string) => `  - ${step}`).join("\n")}
-- ${isArabic ? "نصيحة" : "Tip"}: ${isArabic ? matchedRhythm.tipsAr : matchedRhythm.tipsEn}`;
-    }
-
-    if (matchedAssessment) {
-      return `${langNote}
-
-### ${isArabic ? "مقياس تقييم" : "Assessment scale"}
-- ${isArabic ? "المقياس" : "Scale"}: ${matchedAssessment.name}
-- ${isArabic ? "الوصف" : "Description"}: ${matchedAssessment.description}
-- ${isArabic ? "الفئة" : "Category"}: ${matchedAssessment.category}
-- ${isArabic ? "العناصر" : "Components"}: ${matchedAssessment.components.map((c) => c.factor).join(", ")}
-${matchedAssessment.interpretation?.length ? `- ${isArabic ? "التفسير" : "Interpretation"}: ${matchedAssessment.interpretation.join(" | ")}` : ""}`;
-    }
-
-    if (matchedPathway) {
-      return `${langNote}
-
-### ${isArabic ? "خريطة مرضية" : "Pathophysiology map"}
-- ${isArabic ? "الحالة" : "Condition"}: ${matchedPathway.name} / ${matchedPathway.ar}
-- ${isArabic ? "التعريف" : "Definition"}: ${matchedPathway.definition}
-- ${isArabic ? "العرض" : "Presentation"}: ${matchedPathway.presentation}
-- ${isArabic ? "التمريض" : "Nursing"}: ${matchedPathway.nursing}
-- ${isArabic ? "العلاج" : "Medical"}: ${matchedPathway.medical}
-- ${isArabic ? "نصيحة" : "Tip"}: ${matchedPathway.tips}`;
-    }
-
-    if (q.includes("fluid") || q.includes("iv") || q.includes("saline") || q.includes("سوائل")) {
-      return `${langNote}
-
-### ${isArabic ? "مرجع السوائل" : "Fluid quick reference"}
-${fluidHints.map((item) => `- ${item}`).join("\n")}
-
-${isArabic ? "اذكر الحالة السريرية (مثلاً septic shock أو hyponatremia) لأعطيك توصية أدق." : "Share the exact clinical context (e.g., septic shock or hyponatremia) for a more precise recommendation."}`;
-    }
-
-    return `${langNote}
-
-${isArabic ? "أقدر أساعدك فوراً في الأدوية، ECG، المختبر، التقييمات، بروتوكولات الكود، والسوائل. اكتب سؤالاً مباشراً وسأرجع لك بخلاصة عملية." : "I can immediately help with drugs, ECG, labs, assessments, code protocols, and fluids. Ask a direct clinical question for a practical summary."}`;
-  };
-
   const streamFromEdgeFunction = async (allMessages: Message[]) => {
     const controller = new AbortController();
     abortControllerRef.current = controller;
+    const resp = await fetch(CHAT_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+      },
+      body: JSON.stringify({
+        messages: allMessages.map((m) => ({ role: m.role, content: m.content })),
+        language,
+        provider,
+        mode,
+        modePrompt: modeConfig[mode].prompt,
+      }),
+      signal: controller.signal,
+    });
+
+    if (!resp.ok) {
+      const data = await resp.json().catch(() => ({}));
+      throw new Error(data?.error || "AI service error");
+    }
+
+    if (!resp.body) throw new Error("No response body");
+
+    const reader = resp.body.getReader();
+    const decoder = new TextDecoder();
+    let textBuffer = "";
+    let assistantText = "";
+
     setMessages((prev) => [...prev, { id: uid(), role: "assistant", content: "" }]);
 
-    try {
-      const { data, error } = await supabase.functions.invoke('ai-chat', {
-        body: {
-          messages: allMessages.map((m) => ({ role: m.role, content: m.content })),
-          language,
-          modePrompt: modeConfig[mode].prompt,
-        },
-      });
-
-      if (error) {
-        throw new Error("lovable_ai_unavailable");
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      textBuffer += decoder.decode(value, { stream: true });
+      const lines = textBuffer.split("\n");
+      textBuffer = lines.pop() || "";
+      for (const line of lines) {
+        if (!line.startsWith("data: ")) continue;
+        const jsonStr = line.slice(6).trim();
+        if (jsonStr === "[DONE]") continue;
+        try {
+          const parsed = JSON.parse(jsonStr);
+          const chunk = parsed.choices?.[0]?.delta?.content as string | undefined;
+          if (chunk) {
+            assistantText += chunk;
+            setMessages((prev) => {
+              const updated = [...prev];
+              updated[updated.length - 1] = { ...updated[updated.length - 1], content: assistantText };
+              return updated;
+            });
+          }
+        } catch {
+          // ignore parse issues for partial chunks
+        }
       }
-      const assistantText = String(data?.content || "").trim();
-      if (!assistantText) {
-        throw new Error("empty_ai_response");
-      }
-
-      setMessages((prev) => {
-        const updated = [...prev];
-        updated[updated.length - 1] = { ...updated[updated.length - 1], content: assistantText };
-        return updated;
-      });
-    } catch (error) {
-      if (error instanceof DOMException && error.name === "AbortError") {
-        throw error;
-      }
-      console.error("AI call failed, using fallback:", error);
-      const fallback = buildLocalClinicalFallback(allMessages[allMessages.length - 1]?.content || "");
-      setMessages((prev) => {
-        const updated = [...prev];
-        updated[updated.length - 1] = { ...updated[updated.length - 1], content: fallback };
-        return updated;
-      });
     }
   };
 
-
   const sendMessage = async (override?: string) => {
-    if (!isOnline) return toast.error(isArabic ? "المساعد الذكي يحتاج اتصال بالإنترنت" : "AI Assistant requires internet connection");
+    if (!isOnline) return toast.error("AI Assistant requires internet connection");
     const text = (override ?? input).trim();
     if (!text || isLoading) return;
-    setLastError(null);
     const nextUser: Message = { id: uid(), role: "user", content: text };
     const updatedMessages = [...messages, nextUser];
     setMessages(updatedMessages);
@@ -341,26 +273,12 @@ ${isArabic ? "أقدر أساعدك فوراً في الأدوية، ECG، ال�
     try {
       await streamFromEdgeFunction(updatedMessages);
     } catch (error) {
-      if (error instanceof DOMException && error.name === "AbortError") {
-        // User cancelled - don't show error
-      } else {
-        const errorMsg = error instanceof Error ? error.message : (isArabic ? "تعذر الحصول على رد" : "Failed to get response");
-        setLastError(errorMsg);
-        toast.error(errorMsg);
-      }
+      toast.error(error instanceof Error ? error.message : "Failed to get response");
       setMessages((prev) => prev.filter((m, i) => !(i === prev.length - 1 && m.role === "assistant" && !m.content)));
     } finally {
       setIsLoading(false);
       setIsStreaming(false);
       abortControllerRef.current = null;
-    }
-  };
-
-  const retryLastMessage = () => {
-    const lastUser = [...messages].reverse().find((m) => m.role === "user");
-    if (lastUser) {
-      setLastError(null);
-      sendMessage(lastUser.content);
     }
   };
 
@@ -417,6 +335,10 @@ ${isArabic ? "أقدر أساعدك فوراً في الأدوية، ECG، ال�
     setChatId(null);
   };
 
+  const providerBadge = provider === "groq"
+    ? (isArabic ? "مدعوم بواسطة Llama 3.3 عبر Groq" : "Powered by Llama 3.3 via Groq")
+    : (isArabic ? "مدعوم بواسطة Gemini" : "Powered by Gemini");
+
   const selectedSuggestions = modeSuggestions[mode] || [];
 
   return (
@@ -453,7 +375,17 @@ ${isArabic ? "أقدر أساعدك فوراً في الأدوية، ECG، ال�
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <p className="text-xs text-cyan-200">{isArabic ? "جاهز فوراً • بدون تسجيل دخول" : "Ready instantly • No sign-in"}</p>
+            <Badge className="bg-cyan-500/20 text-cyan-200 border border-cyan-400/40">{providerBadge}</Badge>
+            <Sheet>
+              <SheetTrigger asChild><Button size="icon" variant="ghost"><Settings size={18} /></Button></SheetTrigger>
+              <SheetContent className="bg-slate-950 text-white border-white/10">
+                <SheetHeader><SheetTitle>{isArabic ? "الإعدادات" : "Settings"}</SheetTitle></SheetHeader>
+                <div className="mt-4 space-y-2">
+                  <Button variant={provider === "groq" ? "default" : "outline"} className="w-full" onClick={() => setProvider("groq")}>Llama 3.3 via Groq</Button>
+                  <Button variant={provider === "gemini" ? "default" : "outline"} className="w-full" onClick={() => setProvider("gemini")}>Gemini</Button>
+                </div>
+              </SheetContent>
+            </Sheet>
             <div className="text-xs text-cyan-200 flex items-center gap-1"><Wifi size={14} />{isOnline ? "Online" : "Offline"}</div>
           </div>
         </div>
@@ -572,16 +504,6 @@ ${isArabic ? "أقدر أساعدك فوراً في الأدوية، ECG، ال�
               <span className="text-xs">{isArabic ? "...الذكاء الاصطناعي يفكر" : "AI is thinking..."}</span>
               <Button size="sm" variant="ghost" onClick={() => abortControllerRef.current?.abort()}><Square size={14} /></Button>
             </div>
-          </div>
-        )}
-
-        {lastError && !isLoading && (
-          <div className="bg-destructive/10 border border-destructive/30 rounded-2xl p-3 w-fit">
-            <p className="text-sm text-destructive mb-2">{lastError}</p>
-            <Button size="sm" variant="outline" onClick={retryLastMessage} className="gap-1">
-              <RefreshCw size={14} />
-              {isArabic ? "إعادة المحاولة" : "Retry"}
-            </Button>
           </div>
         )}
 

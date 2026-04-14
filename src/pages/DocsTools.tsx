@@ -61,16 +61,13 @@ const DocsTools = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
         },
-        body: JSON.stringify({
-          messages: [{ role: "user", content: input }],
-          language,
-          modePrompt: system,
-        }),
+        body: JSON.stringify({ messages: [{ role: "system", content: system }, { role: "user", content: input }], language }),
       });
       if (!resp.ok) throw new Error("AI request failed");
-      const data = await resp.json();
-      setOutput(String(data?.content || "").slice(0, 4000));
+      const text = await resp.text();
+      setOutput(text.slice(0, 4000));
     } catch {
       toast.error(language === "ar" ? "خطأ في إنشاء الملاحظة" : "Failed to generate note");
     } finally {

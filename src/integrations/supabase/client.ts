@@ -2,8 +2,29 @@
 import { createClient } from '@supabase/supabase-js';
 import type { Database } from './types';
 
-const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
-const SUPABASE_PUBLISHABLE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+// Fallbacks let the app still boot when build-time env vars are missing
+// (e.g. on the Lovable preview deployment). The project URL is public and
+// already checked into supabase/config.toml. The publishable key is also a
+// public key by design, but if it isn't provided we use a harmless
+// placeholder so createClient() doesn't throw at module load time and crash
+// the whole React tree. Supabase-dependent features will fail at call time
+// instead of rendering a blank page.
+const FALLBACK_SUPABASE_URL = 'https://gugdclgdpuyhykrjyhph.supabase.co';
+const FALLBACK_SUPABASE_PUBLISHABLE_KEY = 'public-anon-key-missing';
+
+const envUrl = import.meta.env.VITE_SUPABASE_URL as string | undefined;
+const envKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY as string | undefined;
+
+export const SUPABASE_URL = envUrl && envUrl.length > 0 ? envUrl : FALLBACK_SUPABASE_URL;
+const SUPABASE_PUBLISHABLE_KEY =
+  envKey && envKey.length > 0 ? envKey : FALLBACK_SUPABASE_PUBLISHABLE_KEY;
+
+if (!envUrl || !envKey) {
+  // eslint-disable-next-line no-console
+  console.warn(
+    '[supabase] VITE_SUPABASE_URL / VITE_SUPABASE_PUBLISHABLE_KEY not set; using fallback values. Supabase-backed features will not work until these env vars are configured.'
+  );
+}
 
 // Import the supabase client like this:
 // import { supabase } from "@/integrations/supabase/client";

@@ -30,10 +30,12 @@ import BodyAtlas from "./pages/BodyAtlas";
 import PathophysiologyMaps from "./pages/PathophysiologyMaps";
 import PharmacokineticsVisualizer from "./pages/PharmacokineticsVisualizer";
 import InfectionGuide from "./pages/InfectionGuide";
+import ErrorBoundary from "./components/ErrorBoundary";
 
 const queryClient = new QueryClient();
 
 const App = () => (
+  <ErrorBoundary>
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <PreferencesProvider>
@@ -74,6 +76,7 @@ const App = () => (
       </PreferencesProvider>
     </TooltipProvider>
   </QueryClientProvider>
+  </ErrorBoundary>
 );
 
 export default App;

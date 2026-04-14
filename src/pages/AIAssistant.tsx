@@ -221,16 +221,17 @@ const AIAssistant = () => {
       : "Local clinical reference mode activated automatically so the assistant works without setup.";
 
     if (matchedDrug) {
+      const d = matchedDrug as any;
       return `${langNote}
 
 ### ${isArabic ? "ملخص دوائي" : "Drug quick reference"}
-- ${isArabic ? "الدواء" : "Drug"}: ${matchedDrug.genericName}
-- ${isArabic ? "الفئة" : "Class"}: ${matchedDrug.class}
-- ${isArabic ? "الاستطبابات" : "Indications"}: ${matchedDrug.indications}
-- ${isArabic ? "الجرعة" : "Dose"}: ${matchedDrug.dose}
-- ${isArabic ? "الطريق" : "Route"}: ${matchedDrug.route}
-- ${isArabic ? "المراقبة التمريضية" : "Nursing monitoring"}: ${matchedDrug.monitoring}
-- ${isArabic ? "تحذير" : "Safety"}: ${matchedDrug.warnings}
+- ${isArabic ? "الدواء" : "Drug"}: ${d.genericName}
+- ${isArabic ? "الفئة" : "Class"}: ${d.class ?? d.category ?? "—"}
+- ${isArabic ? "الاستطبابات" : "Indications"}: ${d.indications ?? "—"}
+- ${isArabic ? "الجرعة" : "Dose"}: ${d.dose ?? "—"}
+- ${isArabic ? "الطريق" : "Route"}: ${d.route ?? (d.routes || []).join(", ") ?? "—"}
+- ${isArabic ? "المراقبة التمريضية" : "Nursing monitoring"}: ${d.monitoring ?? "—"}
+- ${isArabic ? "تحذير" : "Safety"}: ${d.warnings ?? "—"}
 
 ${isArabic ? "⚠️ راجع البروتوكول المحلي قبل التنفيذ." : "⚠️ Verify against local protocol before acting."}`;
     }

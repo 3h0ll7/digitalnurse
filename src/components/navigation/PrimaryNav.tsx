@@ -14,6 +14,7 @@ import {
   FileText,
   BookOpen,
   ShieldCheck,
+  BookA,
 } from "lucide-react";
 import { usePreferences } from "@/contexts/PreferencesContext";
 import {
@@ -39,6 +40,7 @@ const PrimaryNav = () => {
     { path: "/ecg", icon: Activity, label: language === "ar" ? "تخطيط القلب" : "ECG" },
     { path: "/docs", icon: FileText, label: language === "ar" ? "التوثيق" : "DOCS" },
     { path: "/infection", icon: ShieldCheck, label: language === "ar" ? "العدوى" : "INFECTION" },
+    { path: "/terminology", icon: BookA, label: language === "ar" ? "المصطلحات" : "TERMS" },
     { path: "/flashcards", icon: Sparkles, label: t.navFlashcards },
     { path: "/library", icon: BookOpen, label: language === "ar" ? "المكتبة" : "LIBRARY" },
     { path: "/mind-maps", icon: GitBranch, label: t.navMindMaps },

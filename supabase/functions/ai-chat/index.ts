@@ -3,10 +3,16 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version',
 };
 
 const MAX_REQUESTS_PER_DAY = 10;
+
+function getClientIP(req: Request): string {
+  return req.headers.get('x-forwarded-for')?.split(',')[0]?.trim()
+    || req.headers.get('x-real-ip')
+    || 'unknown';
+}
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -14,116 +20,67 @@ serve(async (req) => {
   }
 
   try {
-    const { messages, language, provider = 'groq', modePrompt = '' } = await req.json();
+    const { messages, language, modePrompt = '' } = await req.json();
     const isArabic = language === 'ar';
 
-    // Validate input
     if (!Array.isArray(messages) || messages.length === 0 || messages.length > 50) {
       return new Response(JSON.stringify({ error: 'Invalid messages array' }), {
-        status: 400,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
 
-    // Validate each message
     for (const msg of messages) {
       if (!msg.role || !msg.content || typeof msg.content !== 'string' || msg.content.length > 10000) {
         return new Response(JSON.stringify({ error: 'Invalid message format' }), {
-          status: 400,
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         });
       }
-    }
-
-    // Require authentication
-    const authHeader = req.headers.get('Authorization');
-    if (!authHeader?.startsWith('Bearer ')) {
-      return new Response(JSON.stringify({ error: 'Authentication required' }), {
-        status: 401,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      });
     }
 
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
     const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
     const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey);
 
-    const anonKey = Deno.env.get('SUPABASE_ANON_KEY')!;
-    const supabaseUser = createClient(supabaseUrl, anonKey, {
-      global: { headers: { Authorization: authHeader } },
-    });
-    const { data: { user }, error: authError } = await supabaseUser.auth.getUser();
-    if (authError || !user) {
-      return new Response(JSON.stringify({ error: 'Invalid or expired token' }), {
-        status: 401,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      });
-    }
+    // IP-based rate limiting (no auth required)
+    const clientIP = getClientIP(req);
+    const userIdentifier = `ip_${clientIP}`;
+    const today = new Date().toISOString().split('T')[0];
 
-    const userIdentifier = `user_${user.id}`;
-
-    // --- Rate Limiting ---
-    const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
-
-    const { data: rateData, error: rateError } = await supabaseAdmin
+    const { data: rateData } = await supabaseAdmin
       .from('ai_rate_limits')
       .select('request_count')
       .eq('user_identifier', userIdentifier)
       .eq('request_date', today)
       .maybeSingle();
 
-    if (rateError) {
-      console.error('Rate limit check error:', rateError);
-    }
-
     const currentCount = rateData?.request_count ?? 0;
 
     if (currentCount >= MAX_REQUESTS_PER_DAY) {
       return new Response(
         JSON.stringify({
-          error: `Daily limit reached. You can send up to ${MAX_REQUESTS_PER_DAY} messages per day. Try again tomorrow.`,
+          error: `Daily limit reached (${MAX_REQUESTS_PER_DAY} messages/day). Try again tomorrow.`,
           rateLimitExceeded: true,
           remaining: 0,
         }),
-        {
-          status: 429,
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        }
+        { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
 
-    // Increment request count (upsert)
     await supabaseAdmin
       .from('ai_rate_limits')
       .upsert(
-        {
-          user_identifier: userIdentifier,
-          request_date: today,
-          request_count: currentCount + 1,
-          updated_at: new Date().toISOString(),
-        },
+        { user_identifier: userIdentifier, request_date: today, request_count: currentCount + 1, updated_at: new Date().toISOString() },
         { onConflict: 'user_identifier,request_date' }
       );
 
-    // --- Call Lovable AI Gateway (Google Gemini 3 Flash) ---
+    // Call Lovable AI Gateway
     const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
     if (!LOVABLE_API_KEY) {
       throw new Error('AI service is not configured');
     }
 
-    const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${LOVABLE_API_KEY}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        model: provider === 'gemini' ? 'google/gemini-3-flash-preview' : 'groq/llama-3.3-70b-versatile',
-        messages: [
-          {
-            role: 'system',
-            content: `${isArabic
-              ? `أنت مساعد تمريض ذكي ذو معرفة عالية. قدّم إرشادات سريرية قائمة على الأدلة باللغة العربية الفصحى حول:
+    const systemPrompt = `${isArabic
+      ? `أنت مساعد تمريض ذكي ذو معرفة عالية. قدّم إرشادات سريرية قائمة على الأدلة باللغة العربية الفصحى حول:
 - إجراءات وتقنيات التمريض
 - آليات عمل الأدوية والجرعات والاعتبارات التمريضية
 - التقييم السريري والتوثيق (صيغ SOAP وSBAR)
@@ -138,7 +95,7 @@ serve(async (req) => {
 - ذكّر المستخدمين بالتحقق من السياسات المؤسسية والمتخصصين المؤهلين
 - اذكر بوضوح: "للأغراض التعليمية فقط. يُرجى التحقق دائمًا مع متخصصي الرعاية الصحية المؤهلين."
 - أجب دائمًا باللغة العربية الفصحى فقط`
-              : `You are a highly knowledgeable AI Nursing Assistant. Provide evidence-based, concise clinical guidance on:
+      : `You are a highly knowledgeable AI Nursing Assistant. Provide evidence-based, concise clinical guidance on:
 - Nursing procedures and techniques
 - Medication mechanisms, dosages, and nursing considerations
 - Clinical assessment and documentation (SOAP, SBAR formats)
@@ -151,10 +108,17 @@ Always:
 - Provide step-by-step guidance when appropriate
 - Highlight red flags or escalation criteria
 - Remind users to verify with institutional policies and qualified professionals
-- State clearly: "For educational purposes only. Always verify with a qualified healthcare professional."`}\n\n${modePrompt}` ,
-          },
-          ...messages,
-        ],
+- State clearly: "For educational purposes only. Always verify with a qualified healthcare professional."`}\n\n${modePrompt}`;
+
+    const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${LOVABLE_API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: 'google/gemini-3-flash-preview',
+        messages: [{ role: 'system', content: systemPrompt }, ...messages],
         stream: true,
       }),
     });
@@ -165,24 +129,20 @@ Always:
 
       if (response.status === 429) {
         return new Response(JSON.stringify({ error: 'AI service rate limit exceeded. Please try again later.' }), {
-          status: 429,
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         });
       }
       if (response.status === 402) {
         return new Response(JSON.stringify({ error: 'AI service credits exhausted. Please contact support.' }), {
-          status: 402,
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          status: 402, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         });
       }
 
       return new Response(JSON.stringify({ error: 'AI service temporarily unavailable' }), {
-        status: 500,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
 
-    // Stream response back
     return new Response(response.body, {
       headers: {
         ...corsHeaders,
@@ -196,10 +156,7 @@ Always:
     console.error('Error in ai-chat function:', error);
     return new Response(
       JSON.stringify({ error: 'An internal error occurred. Please try again later.' }),
-      {
-        status: 500,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      }
+      { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
   }
 });

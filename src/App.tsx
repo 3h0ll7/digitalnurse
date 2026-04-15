@@ -30,6 +30,7 @@ import BodyAtlas from "./pages/BodyAtlas";
 import PathophysiologyMaps from "./pages/PathophysiologyMaps";
 import PharmacokineticsVisualizer from "./pages/PharmacokineticsVisualizer";
 import InfectionGuide from "./pages/InfectionGuide";
+import Terminology from "./pages/Terminology";
 
 const queryClient = new QueryClient();
 
@@ -65,6 +66,7 @@ const App = () => (
               <Route path="/docs/professional" element={<DocsProfessional />} />
               <Route path="/docs/tools" element={<DocsTools />} />
               <Route path="/infection" element={<InfectionGuide />} />
+              <Route path="/terminology" element={<Terminology />} />
               <Route path="/scale/:id" element={<ScaleDetail />} />
             </Route>
             <Route path="*" element={<NotFound />} />

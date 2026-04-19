@@ -15,6 +15,7 @@ import {
   BookOpen,
   ShieldCheck,
   BookA,
+  Clock,
 } from "lucide-react";
 import { usePreferences } from "@/contexts/PreferencesContext";
 import {
@@ -45,6 +46,8 @@ const PrimaryNav = () => {
     { path: "/library", icon: BookOpen, label: language === "ar" ? "المكتبة" : "LIBRARY" },
     { path: "/mind-maps", icon: GitBranch, label: t.navMindMaps },
     { path: "/ai-assistant", icon: Bot, label: t.navAssistant },
+    { path: "/shift-toolkit", icon: Clock, label: language === "ar" ? "الشفت" : "SHIFT" },
+
   ];
 
   return (

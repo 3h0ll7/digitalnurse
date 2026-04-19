@@ -31,8 +31,15 @@ import PathophysiologyMaps from "./pages/PathophysiologyMaps";
 import PharmacokineticsVisualizer from "./pages/PharmacokineticsVisualizer";
 import InfectionGuide from "./pages/InfectionGuide";
 import Terminology from "./pages/Terminology";
+import Settings from "./pages/Settings";
 
 const queryClient = new QueryClient();
+const getStartPage = () => {
+  if (typeof window === "undefined") return "/home";
+  const saved = window.localStorage.getItem("dn-start-page") || "/home";
+  const allowed = new Set(["/home", "/drugs", "/ecg", "/assessments", "/calculators", "/docs", "/ai-assistant"]);
+  return allowed.has(saved) ? saved : "/home";
+};
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
@@ -43,7 +50,7 @@ const App = () => (
         <BrowserRouter>
           <Routes>
             <Route element={<SecureShell />}>
-              <Route path="/" element={<Navigate to="/home" replace />} />
+              <Route path="/" element={<Navigate to={getStartPage()} replace />} />
               <Route path="/home" element={<Home />} />
               <Route path="/drugs" element={<Drugs />} />
               <Route path="/drugs/:id" element={<DrugDetail />} />
@@ -67,6 +74,7 @@ const App = () => (
               <Route path="/docs/tools" element={<DocsTools />} />
               <Route path="/infection" element={<InfectionGuide />} />
               <Route path="/terminology" element={<Terminology />} />
+              <Route path="/settings" element={<Settings />} />
               <Route path="/scale/:id" element={<ScaleDetail />} />
             </Route>
             <Route path="*" element={<NotFound />} />

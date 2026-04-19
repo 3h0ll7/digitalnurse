@@ -59,7 +59,7 @@ const AppLayout = ({
               {subtitle &&
                 <p className="text-xs uppercase tracking-[0.4em] text-muted-foreground">{subtitle}</p>
                 }
-              <h1 className="text-2xl font-semibold leading-tight tracking-tight text-white text-start sm:text-xl border border-secondary-foreground border-none font-mono">
+              <h1 className="text-2xl font-semibold leading-tight tracking-tight text-foreground text-start sm:text-xl border border-secondary-foreground border-none font-mono">
                 {title}
               </h1>
             </div>
@@ -74,7 +74,7 @@ const AppLayout = ({
           <span className="rounded-full border border-white/10 px-3 py-1 text-medical-green bg-background font-serif">
             {badgeLabel ?? t.appBadge}
           </span>
-          <span className="rounded-full border border-white/10 bg-transparent px-3 py-1 text-white/60">
+          <span className="rounded-full border border-white/10 bg-transparent px-3 py-1 text-muted-foreground">
             {subBadgeLabel ?? t.appSubBadge}
           </span>
         </div>
@@ -84,10 +84,10 @@ const AppLayout = ({
 
       <footer className="mt-12 mb-4 text-center space-y-2">
         <p className="text-xs text-muted-foreground tracking-wide">
-          Developed by : <span className="text-white/80 font-medium">𝓗𝓪𝓼𝓼𝓪𝓷 𝓼𝓪𝓵𝓶𝓪𝓷</span>
+          Developed by : <span className="text-foreground/80 font-medium">𝓗𝓪𝓼𝓼𝓪𝓷 𝓼𝓪𝓵𝓶𝓪𝓷</span>
         </p>
         <p className="text-[11px] text-muted-foreground/80 tracking-wide">
-          Nurse ICU — <span className="text-white/60 font-medium">Al-Najaf Teaching Hospital</span>
+          Nurse ICU — <span className="text-foreground/60 font-medium">Al-Najaf Teaching Hospital</span>
         </p>
         <a
             href="https://hassanaii.lovable.app/"

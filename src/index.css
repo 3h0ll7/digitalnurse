@@ -10,6 +10,7 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
+    --font-base: 16px;
     --background: 218 42% 6%;
     --foreground: 210 40% 96%;
 
@@ -96,23 +97,23 @@ All colors MUST be HSL.
   }
 
   .light {
-    --background: 220 32% 18%;
-    --foreground: 210 40% 96%;
+    --background: 210 30% 99%;
+    --foreground: 221 39% 11%;
 
-    --card: 220 28% 24%;
-    --card-foreground: 210 40% 96%;
+    --card: 0 0% 100%;
+    --card-foreground: 221 39% 11%;
 
-    --popover: 219 30% 28%;
-    --popover-foreground: 210 40% 96%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 221 39% 11%;
 
     --primary: 200 90% 60%;
     --primary-foreground: 213 32% 12%;
 
-    --secondary: 218 25% 32%;
-    --secondary-foreground: 210 40% 96%;
+    --secondary: 210 30% 96%;
+    --secondary-foreground: 221 39% 11%;
 
-    --muted: 210 20% 46%;
-    --muted-foreground: 210 18% 88%;
+    --muted: 210 25% 94%;
+    --muted-foreground: 221 15% 35%;
 
     --accent: 192 100% 47%;
     --accent-foreground: 0 0% 100%;
@@ -120,8 +121,8 @@ All colors MUST be HSL.
     --destructive: 0 70% 52%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 215 20% 40%;
-    --input: 215 20% 40%;
+    --border: 214 20% 86%;
+    --input: 214 20% 86%;
     --ring: 200 90% 60%;
 
     --medical-blue: 199 89% 65%;
@@ -130,20 +131,20 @@ All colors MUST be HSL.
     --medical-yellow: 40 100% 60%;
     --medical-red: 350 82% 56%;
 
-    --shadow-card: 0 25px 60px rgba(11, 25, 55, 0.35);
-    --shadow-card-hover: 0 30px 80px rgba(10, 20, 40, 0.4);
+    --shadow-card: 0 20px 55px rgba(15, 23, 42, 0.09);
+    --shadow-card-hover: 0 28px 70px rgba(15, 23, 42, 0.14);
 
-    --sidebar-background: 218 32% 18%;
-    --sidebar-foreground: 210 40% 96%;
+    --sidebar-background: 210 30% 99%;
+    --sidebar-foreground: 221 39% 11%;
     --sidebar-primary: 200 90% 60%;
     --sidebar-primary-foreground: 213 32% 12%;
-    --sidebar-accent: 215 32% 24%;
-    --sidebar-accent-foreground: 210 40% 96%;
-    --sidebar-border: 215 20% 36%;
+    --sidebar-accent: 210 25% 94%;
+    --sidebar-accent-foreground: 221 39% 11%;
+    --sidebar-border: 214 20% 86%;
     --sidebar-ring: 200 90% 60%;
-    --app-shell-gradient: radial-gradient(circle at 10% 5%, rgba(99, 179, 237, 0.35), transparent 60%),
-      radial-gradient(circle at 90% 0%, rgba(134, 239, 172, 0.2), transparent 45%),
-      linear-gradient(180deg, #0d1833 0%, #060e1e 65%, #030711 100%);
+    --app-shell-gradient: radial-gradient(circle at 10% 5%, rgba(56, 189, 248, 0.15), transparent 60%),
+      radial-gradient(circle at 90% 0%, rgba(45, 212, 191, 0.14), transparent 45%),
+      linear-gradient(180deg, #f7fbff 0%, #eef6ff 100%);
   }
 }
 
@@ -159,6 +160,7 @@ All colors MUST be HSL.
     color: hsl(var(--foreground));
     min-height: 100vh;
     letter-spacing: 0.01em;
+    font-size: var(--font-base);
     transition: background-color 0.3s ease, color 0.3s ease;
   }
 

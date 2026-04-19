@@ -3,12 +3,14 @@ import { translations, type SupportedLanguage } from "@/lib/i18n";
 
 type Translation = (typeof translations)[SupportedLanguage];
 
-type Theme = "light" | "dark";
+export type ThemeMode = "light" | "dark" | "auto";
+type ResolvedTheme = "light" | "dark";
 type Direction = "ltr" | "rtl";
 
 interface PreferencesContextValue {
-  theme: Theme;
-  setTheme: (theme: Theme) => void;
+  theme: ThemeMode;
+  resolvedTheme: ResolvedTheme;
+  setTheme: (theme: ThemeMode) => void;
   toggleTheme: () => void;
   language: SupportedLanguage;
   setLanguage: (language: SupportedLanguage) => void;
@@ -19,46 +21,82 @@ interface PreferencesContextValue {
 
 const PreferencesContext = createContext<PreferencesContextValue | undefined>(undefined);
 
-const getInitialTheme = (): Theme => {
-  if (typeof window === "undefined") {
-    return "light";
+const resolveTheme = (mode: ThemeMode): ResolvedTheme => {
+  if (typeof window === "undefined") return "dark";
+  if (mode === "auto") {
+    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
   }
-  const stored = window.localStorage.getItem("theme");
-  if (stored === "light" || stored === "dark") {
+  return mode;
+};
+
+const getInitialTheme = (): ThemeMode => {
+  if (typeof window === "undefined") {
+    return "dark";
+  }
+  const stored = window.localStorage.getItem("dn-theme") || window.localStorage.getItem("theme");
+  if (stored === "light" || stored === "dark" || stored === "auto") {
     return stored;
   }
-  return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  return "dark";
 };
 
 const getInitialLanguage = (): SupportedLanguage => {
   if (typeof window === "undefined") {
     return "en";
   }
-  const stored = window.localStorage.getItem("language");
+  const stored = window.localStorage.getItem("dn-language") || window.localStorage.getItem("language");
   if (stored === "ar" || stored === "en") {
     return stored;
   }
   return "en";
 };
 
+const applyFontBase = () => {
+  if (typeof document === "undefined") return;
+  const raw = window.localStorage.getItem("dn-font-size");
+  const allowed = new Set(["14", "16", "18"]);
+  const px = raw && allowed.has(raw) ? raw : "16";
+  document.documentElement.style.setProperty("--font-base", `${px}px`);
+};
+
 export const PreferencesProvider = ({ children }: { children: ReactNode }) => {
-  const [theme, setTheme] = useState<Theme>(getInitialTheme);
+  const [theme, setTheme] = useState<ThemeMode>(getInitialTheme);
+  const [resolvedTheme, setResolvedTheme] = useState<ResolvedTheme>(() => resolveTheme(getInitialTheme()));
   const [language, setLanguage] = useState<SupportedLanguage>(getInitialLanguage);
   const direction: Direction = language === "ar" ? "rtl" : "ltr";
   const isRTL = direction === "rtl";
 
   useEffect(() => {
-    if (typeof document === "undefined") return;
-    const root = document.documentElement;
-    const body = document.body;
-    root.classList.toggle("dark", theme === "dark");
-    body.classList.toggle("dark", theme === "dark");
-    root.classList.toggle("light", theme === "light");
-    body.classList.toggle("light", theme === "light");
-    root.dataset.theme = theme;
-    body.dataset.theme = theme;
-    root.style.colorScheme = theme;
-    window.localStorage.setItem("theme", theme);
+    applyFontBase();
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const applyTheme = () => {
+      const nextResolved = resolveTheme(theme);
+      setResolvedTheme(nextResolved);
+      const root = document.documentElement;
+      const body = document.body;
+      root.classList.toggle("dark", nextResolved === "dark");
+      body.classList.toggle("dark", nextResolved === "dark");
+      root.classList.toggle("light", nextResolved === "light");
+      body.classList.toggle("light", nextResolved === "light");
+      root.dataset.theme = nextResolved;
+      body.dataset.theme = nextResolved;
+      root.style.colorScheme = nextResolved;
+    };
+
+    applyTheme();
+    window.localStorage.setItem("dn-theme", theme);
+
+    const media = window.matchMedia("(prefers-color-scheme: dark)");
+    const onThemeChange = () => {
+      if (theme === "auto") applyTheme();
+    };
+    media.addEventListener("change", onThemeChange);
+
+    return () => media.removeEventListener("change", onThemeChange);
   }, [theme]);
 
   useEffect(() => {
@@ -71,21 +109,22 @@ export const PreferencesProvider = ({ children }: { children: ReactNode }) => {
     body.dir = direction;
     root.classList.toggle("rtl", isRTL);
     body.classList.toggle("rtl", isRTL);
-    window.localStorage.setItem("language", language);
+    window.localStorage.setItem("dn-language", language);
   }, [language, direction, isRTL]);
 
   const value = useMemo(
     () => ({
       theme,
+      resolvedTheme,
       setTheme,
-      toggleTheme: () => setTheme((prev) => (prev === "light" ? "dark" : "light")),
+      toggleTheme: () => setTheme((prev) => (prev === "dark" ? "light" : "dark")),
       language,
       setLanguage,
       direction,
       isRTL,
       t: translations[language],
     }),
-    [theme, language, direction, isRTL],
+    [theme, resolvedTheme, language, direction, isRTL],
   );
 
   return <PreferencesContext.Provider value={value}>{children}</PreferencesContext.Provider>;

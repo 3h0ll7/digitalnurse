@@ -32,6 +32,7 @@ import PharmacokineticsVisualizer from "./pages/PharmacokineticsVisualizer";
 import InfectionGuide from "./pages/InfectionGuide";
 import Terminology from "./pages/Terminology";
 import Settings from "./pages/Settings";
+import ShiftToolkit from "./pages/ShiftToolkit";
 
 const queryClient = new QueryClient();
 const getStartPage = () => {
@@ -75,6 +76,7 @@ const App = () => (
               <Route path="/infection" element={<InfectionGuide />} />
               <Route path="/terminology" element={<Terminology />} />
               <Route path="/settings" element={<Settings />} />
+              <Route path="/shift-toolkit" element={<ShiftToolkit />} />
               <Route path="/scale/:id" element={<ScaleDetail />} />
             </Route>
             <Route path="*" element={<NotFound />} />

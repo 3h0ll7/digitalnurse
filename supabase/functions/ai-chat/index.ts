@@ -119,7 +119,7 @@ Always:
       body: JSON.stringify({
         model: 'google/gemini-3.1-flash-lite',
         messages: [{ role: 'system', content: systemPrompt }, ...messages],
-        stream: true,
+        stream,
       }),
     });
 

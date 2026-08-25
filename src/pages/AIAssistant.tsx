@@ -165,6 +165,7 @@ const AIAssistant = () => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const abortControllerRef = useRef<AbortController | null>(null);
   const recognitionRef = useRef<SpeechRecognition | null>(null);
+  const requestInFlightRef = useRef(false);
 
   const drugNames = useMemo(() => drugsCatalog.drugs.map((d) => d.genericName), []);
 
@@ -206,6 +207,7 @@ const AIAssistant = () => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Accept: "text/event-stream",
         apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
       },
       body: JSON.stringify({
@@ -229,41 +231,49 @@ const AIAssistant = () => {
     const decoder = new TextDecoder();
     let textBuffer = "";
     let assistantText = "";
+    const assistantId = uid();
 
-    setMessages((prev) => [...prev, { id: uid(), role: "assistant", content: "" }]);
+    setMessages((prev) => [...prev, { id: assistantId, role: "assistant", content: "" }]);
+
+    const applyEventLine = (line: string) => {
+      const normalizedLine = line.trim();
+      if (!normalizedLine.startsWith("data:")) return;
+      const jsonStr = normalizedLine.slice(5).trim();
+      if (!jsonStr || jsonStr === "[DONE]") return;
+
+      try {
+        const parsed = JSON.parse(jsonStr);
+        const chunk = parsed.choices?.[0]?.delta?.content;
+        if (typeof chunk !== "string" || chunk.length === 0) return;
+
+        assistantText += chunk;
+        setMessages((prev) => prev.map((message) => (
+          message.id === assistantId ? { ...message, content: assistantText } : message
+        )));
+      } catch {
+        // A complete SSE line can still be a provider metadata event; ignore it safely.
+      }
+    };
 
     while (true) {
       const { done, value } = await reader.read();
       if (done) break;
       textBuffer += decoder.decode(value, { stream: true });
-      const lines = textBuffer.split("\n");
+      const lines = textBuffer.split(/\r?\n/);
       textBuffer = lines.pop() || "";
-      for (const line of lines) {
-        if (!line.startsWith("data: ")) continue;
-        const jsonStr = line.slice(6).trim();
-        if (jsonStr === "[DONE]") continue;
-        try {
-          const parsed = JSON.parse(jsonStr);
-          const chunk = parsed.choices?.[0]?.delta?.content as string | undefined;
-          if (chunk) {
-            assistantText += chunk;
-            setMessages((prev) => {
-              const updated = [...prev];
-              updated[updated.length - 1] = { ...updated[updated.length - 1], content: assistantText };
-              return updated;
-            });
-          }
-        } catch {
-          // ignore parse issues for partial chunks
-        }
-      }
+      lines.forEach(applyEventLine);
     }
+
+    textBuffer += decoder.decode();
+    if (textBuffer.trim()) applyEventLine(textBuffer);
+    if (!assistantText.trim()) throw new Error(isArabic ? "لم يصل رد من النموذج. حاول مرة أخرى." : "The model returned no answer. Please try again.");
   };
 
   const sendMessage = async (override?: string) => {
     if (!isOnline) return toast.error("AI Assistant requires internet connection");
     const text = (override ?? input).trim();
-    if (!text || isLoading) return;
+    if (!text || requestInFlightRef.current) return;
+    requestInFlightRef.current = true;
     const nextUser: Message = { id: uid(), role: "user", content: text };
     const updatedMessages = [...messages, nextUser];
     setMessages(updatedMessages);
@@ -276,6 +286,7 @@ const AIAssistant = () => {
       toast.error(error instanceof Error ? error.message : "Failed to get response");
       setMessages((prev) => prev.filter((m, i) => !(i === prev.length - 1 && m.role === "assistant" && !m.content)));
     } finally {
+      requestInFlightRef.current = false;
       setIsLoading(false);
       setIsStreaming(false);
       abortControllerRef.current = null;

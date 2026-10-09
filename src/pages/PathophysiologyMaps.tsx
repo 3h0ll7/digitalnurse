@@ -36,7 +36,7 @@ const PathophysiologyMaps = () => {
   const nodes = selected.cascade.split("→").map((n) => n.trim());
 
   return (
-    <AppLayout title={header.title} subtitle={header.subtitle} actions={<Badge>{filtered.length} maps</Badge>}>
+    <AppLayout illustration="pathways" title={header.title} subtitle={header.subtitle} actions={<Badge>{filtered.length} maps</Badge>}>
       <div className="relative">
         <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground rtl:left-auto rtl:right-3" />
         <Input value={query} onChange={(e) => setQuery(e.target.value)} placeholder={header.search} className="pl-10 rtl:pl-4 rtl:pr-10" />
@@ -53,7 +53,7 @@ const PathophysiologyMaps = () => {
       <div className="grid gap-4 xl:grid-cols-[360px,1fr]">
         <Card className="p-3 max-h-[70vh] overflow-auto space-y-2">
           {filtered.map((m) => (
-            <button key={m.id} onClick={() => setSelectedId(m.id)} className={`w-full rounded-xl border p-3 text-left ${selected.id === m.id ? "border-cyan-400 bg-cyan-500/10" : "border-white/10"}`}>
+            <button key={m.id} onClick={() => setSelectedId(m.id)} className={`w-full rounded-xl border p-3 text-left ${selected.id === m.id ? "border-cyan-400 bg-cyan-500/10" : "border-foreground/10"}`}>
               <p className="font-semibold text-sm">{m.name}</p>
               <p className="text-xs text-muted-foreground">{m.ar}</p>
               <Badge variant="outline" className="mt-2">{m.category}</Badge>
@@ -78,7 +78,7 @@ const PathophysiologyMaps = () => {
             <p className="md:col-span-2"><strong>Nursing Tips:</strong> {selected.tips}</p>
           </div>
 
-          <div className="rounded-xl border border-white/10 bg-slate-950/40 p-3 space-y-3">
+          <div className="rounded-xl border border-foreground/10 bg-card/40 p-3 space-y-3">
             <p className="text-sm font-semibold">Cascade Flow</p>
             <svg viewBox={`0 0 ${Math.max(900, nodes.length * 150)} 120`} className="w-full">
               {nodes.map((node, idx) => {
@@ -96,7 +96,7 @@ const PathophysiologyMaps = () => {
             </svg>
           </div>
 
-          <div className="text-sm text-cyan-300 flex gap-4 flex-wrap">
+          <div className="text-sm text-cyan-800 dark:text-cyan-300 flex gap-4 flex-wrap">
             <Link to="/atlas" className="underline">Related anatomy</Link>
             <Link to="/pharma" className="underline">Related pharmacokinetics</Link>
             <Link to="/drugs" className="underline">Intervention drugs</Link>

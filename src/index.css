@@ -1,5 +1,3 @@
-@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap");
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -9,141 +7,205 @@ All colors MUST be HSL.
 */
 
 @layer base {
-  :root {
-    --background: 218 42% 6%;
-    --foreground: 210 40% 96%;
-
-    --card: 216 36% 12%;
-    --card-foreground: 210 40% 96%;
-
-    --popover: 215 36% 14%;
-    --popover-foreground: 210 40% 96%;
-
-    --primary: 195 94% 56%;
-    --primary-foreground: 213 32% 10%;
-
-    --secondary: 225 25% 20%;
-    --secondary-foreground: 210 40% 96%;
-
-    --muted: 220 20% 30%;
-    --muted-foreground: 215 17% 72%;
-
-    --accent: 192 100% 47%;
-    --accent-foreground: 0 0% 100%;
-
-    --destructive: 0 70% 52%;
+  /* Day: pastel isometric palette. Night: calm indigo for night shifts. All colors HSL (shadcn tokens). */
+  :root,
+  .light {
+    --background: 33 53% 97%;
+    --foreground: 231 36% 18%;
+    --card: 0 0% 100%;
+    --card-foreground: 231 36% 18%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 231 36% 18%;
+    --primary: 232 61% 58%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 233 100% 97%;
+    --secondary-foreground: 231 36% 18%;
+    --muted: 36 38% 92%;
+    --muted-foreground: 230 17% 44%;
+    --accent: 173 48% 45%;
+    --accent-foreground: 231 36% 18%;
+    --destructive: 350 60% 49%;
     --destructive-foreground: 0 0% 100%;
+    --border: 35 37% 88%;
+    --input: 36 33% 84%;
+    --ring: 232 61% 58%;
+    --medical-blue: 230 56% 52%;
+    --medical-blue-light: 230 100% 93%;
+    --medical-green: 153 64% 29%;
+    --medical-yellow: 41 100% 30%;
+    --medical-red: 350 60% 49%;
+    --pastel-peach: 23 87% 72%;
+    --pastel-sand: 41 87% 76%;
+    --pastel-pink: 340 82% 76%;
+    --pastel-periwinkle: 230 83% 75%;
+    --pastel-teal: 173 48% 45%;
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 231 36% 18%;
+    --sidebar-primary: 232 61% 58%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 233 100% 97%;
+    --sidebar-accent-foreground: 231 36% 18%;
+    --sidebar-border: 35 37% 88%;
+    --sidebar-ring: 232 61% 58%;
+    --iso-slab-l: #6F7FD6;
+    --iso-slab-r: #5A69C4;
+    --iso-floor: #F6E6CC;
+    --iso-floor-line: #EBD5B2;
+    --iso-rug: #8B9CF4;
+    --iso-rug-in: #A9B5F7;
+    --iso-wall-x: #AEB9F6;
+    --iso-wall-y: #C7CFFB;
+    --iso-skirting: #97A4EE;
+    --iso-wall-cap: #8B9CF4;
+    --iso-wall-cap-side: #7686E4;
+    --iso-frame: #FFFFFF;
+    --iso-frame-sill: #E9ECFF;
+    --iso-sky: #BDE8F2;
+    --iso-sun: #FFD36E;
+    --iso-clock: #F6A97A;
+    --iso-sign: #3BA99C;
+    --iso-shelf-back: #9AA7F0;
+    --iso-shelf-top: #FFFFFF;
+    --iso-shelf-fy: #F1EEE9;
+    --iso-shelf-fx: #DDD8D0;
+    --iso-c1: #3BA99C;
+    --iso-c1s: #2E8C80;
+    --iso-c1x: #257368;
+    --iso-c2: #F48FB1;
+    --iso-c2s: #E07399;
+    --iso-c2x: #C95F84;
+    --iso-c3: #F7D58B;
+    --iso-c3s: #E9BF6A;
+    --iso-c3x: #D5A851;
+    --iso-c4: #F6A97A;
+    --iso-c4s: #E58E5C;
+    --iso-c4x: #CF7746;
+    --iso-c5: #FFFFFF;
+    --iso-c5s: #E9ECF5;
+    --iso-c5x: #D5DAE8;
+    --iso-metal: #C9CEDB;
+    --iso-metal-s: #AEB4C6;
+    --iso-screen: #1E2340;
+    --iso-screen-frame: #2C3A70;
+    --iso-trace: #7FE0C9;
+    --iso-glass: #D7F3F8;
+    --iso-pot: #F48FB1;
+    --iso-pot-top: #E07399;
+    --iso-leaf: #3BA99C;
+    --iso-leaf2: #2E8C80;
+    --iso-lamp: #F7D58B;
+    --iso-ink: #1E2340;
+    --iso-skin: #C98B62;
+    --iso-skin-d: #A86D47;
+    --iso-skin-2: #B87A52;
+    --iso-hair: #22201F;
+    --iso-coat: #FFFFFF;
+    --iso-coat-line: #D5DAE8;
+    --iso-scrub: #3BA99C;
+    --iso-scrub-d: #2E8C80;
+    --iso-hijab: #2C3A70;
+    --iso-clipboard: #F6A97A;
+    --iso-dishdasha: #F4F3EF;
+    --iso-gown: #A9D8F0;
+    --iso-gown-d: #86C2E2;
+    --iso-shadow: rgba(30,35,64,.14);
+    --iso-glow: transparent;
 
-    --border: 215 30% 22%;
-    --input: 215 30% 22%;
-    --ring: 195 94% 56%;
-
-    --radius: 1.2rem;
-
-    --medical-blue: 195 94% 56%;
-    --medical-blue-light: 195 80% 88%;
-    --medical-green: 160 84% 45%;
-    --medical-yellow: 42 94% 54%;
-    --medical-red: 350 82% 56%;
-
-    --shadow-card: 0 25px 60px rgba(2, 6, 15, 0.65);
-    --shadow-card-hover: 0 30px 80px rgba(6, 16, 35, 0.7);
-
-    --sidebar-background: 218 42% 6%;
-    --sidebar-foreground: 210 40% 96%;
-    --sidebar-primary: 195 94% 56%;
-    --sidebar-primary-foreground: 213 32% 10%;
-    --sidebar-accent: 215 35% 18%;
-    --sidebar-accent-foreground: 210 40% 96%;
-    --sidebar-border: 215 30% 25%;
-    --sidebar-ring: 195 94% 56%;
-    --app-shell-gradient: radial-gradient(circle at 20% 20%, rgba(47, 134, 255, 0.25), transparent 55%),
-      radial-gradient(circle at 80% 0%, rgba(35, 210, 255, 0.15), transparent 45%),
-      linear-gradient(180deg, #030711 0%, #010409 100%);
+    --radius: 1.25rem;
+    --shadow-card: 0 1px 2px rgba(30, 35, 64, 0.06), 0 8px 24px rgba(30, 35, 64, 0.06);
+    --shadow-card-hover: 0 2px 4px rgba(30, 35, 64, 0.08), 0 14px 32px rgba(30, 35, 64, 0.1);
   }
 
   .dark {
-    --background: 218 42% 6%;
-    --foreground: 210 40% 96%;
+    --background: 233 43% 12%;
+    --foreground: 231 58% 95%;
+    --card: 233 40% 17%;
+    --card-foreground: 231 58% 95%;
+    --popover: 233 40% 17%;
+    --popover-foreground: 231 58% 95%;
+    --primary: 232 100% 82%;
+    --primary-foreground: 233 43% 12%;
+    --secondary: 233 37% 24%;
+    --secondary-foreground: 231 58% 95%;
+    --muted: 233 39% 23%;
+    --muted-foreground: 231 29% 72%;
+    --accent: 173 48% 53%;
+    --accent-foreground: 233 43% 12%;
+    --destructive: 353 100% 74%;
+    --destructive-foreground: 233 43% 12%;
+    --border: 233 35% 25%;
+    --input: 233 33% 31%;
+    --ring: 232 100% 82%;
+    --medical-blue: 232 100% 82%;
+    --medical-blue-light: 232 44% 31%;
+    --medical-green: 154 60% 57%;
+    --medical-yellow: 44 92% 63%;
+    --medical-red: 353 100% 74%;
+    --pastel-peach: 23 52% 61%;
+    --pastel-sand: 41 52% 65%;
+    --pastel-pink: 334 43% 63%;
+    --pastel-periwinkle: 231 56% 64%;
+    --pastel-teal: 173 49% 36%;
+    --sidebar-background: 233 40% 17%;
+    --sidebar-foreground: 231 58% 95%;
+    --sidebar-primary: 232 100% 82%;
+    --sidebar-primary-foreground: 233 43% 12%;
+    --sidebar-accent: 233 37% 24%;
+    --sidebar-accent-foreground: 231 58% 95%;
+    --sidebar-border: 233 35% 25%;
+    --sidebar-ring: 232 100% 82%;
+    --iso-slab-l: #2C3370;
+    --iso-slab-r: #242A5E;
+    --iso-floor: #4B4766;
+    --iso-floor-line: #433F5D;
+    --iso-rug: #3F4A9A;
+    --iso-rug-in: #4D59AD;
+    --iso-wall-x: #3A4384;
+    --iso-wall-y: #48529A;
+    --iso-skirting: #323A78;
+    --iso-wall-cap: #2F376F;
+    --iso-wall-cap-side: #262D5E;
+    --iso-frame: #9CA6D9;
+    --iso-frame-sill: #7E88BF;
+    --iso-sky: #141A3E;
+    --iso-sun: #F7E7B4;
+    --iso-clock: #B07A5D;
+    --iso-sign: #2E8C80;
+    --iso-shelf-back: #343C7A;
+    --iso-shelf-top: #D6D9EE;
+    --iso-shelf-fy: #C3C6DE;
+    --iso-shelf-fx: #A9ADCB;
+    --iso-c1: #2F8A80;
+    --iso-c1s: #25736A;
+    --iso-c1x: #1E5F57;
+    --iso-c2: #C9779A;
+    --iso-c2s: #B26385;
+    --iso-c2x: #9C5272;
+    --iso-c3: #D4B677;
+    --iso-c3s: #C2A263;
+    --iso-c3x: #AD8E50;
+    --iso-c4: #CF8F68;
+    --iso-c4s: #BB7A54;
+    --iso-c4x: #A56743;
+    --iso-c5: #D6D9EE;
+    --iso-c5s: #C3C6DE;
+    --iso-c5x: #A9ADCB;
+    --iso-metal: #9DA3BC;
+    --iso-metal-s: #848AA5;
+    --iso-screen: #0B0E22;
+    --iso-screen-frame: #232B5C;
+    --iso-trace: #7FE0C9;
+    --iso-glass: #5C6AA8;
+    --iso-pot: #C9779A;
+    --iso-pot-top: #B26385;
+    --iso-leaf: #2F8A80;
+    --iso-leaf2: #25736A;
+    --iso-lamp: #FFE7A8;
+    --iso-shadow: rgba(0,0,0,.28);
+    --iso-glow: rgba(255,231,168,.35);
 
-    --card: 217 35% 12%;
-    --card-foreground: 210 40% 96%;
-
-    --popover: 217 35% 12%;
-    --popover-foreground: 210 40% 96%;
-
-    --primary: 195 94% 56%;
-    --primary-foreground: 213 32% 10%;
-
-    --secondary: 225 25% 20%;
-    --secondary-foreground: 210 40% 96%;
-
-    --muted: 220 20% 30%;
-    --muted-foreground: 215 17% 72%;
-
-    --accent: 192 100% 47%;
-    --accent-foreground: 0 0% 100%;
-
-    --destructive: 0 70% 52%;
-    --destructive-foreground: 0 0% 100%;
-
-    --border: 215 30% 22%;
-    --input: 215 30% 22%;
-    --ring: 195 94% 56%;
-    --app-shell-gradient: radial-gradient(circle at 20% 20%, rgba(47, 134, 255, 0.25), transparent 55%),
-      radial-gradient(circle at 80% 0%, rgba(35, 210, 255, 0.15), transparent 45%),
-      linear-gradient(180deg, #030711 0%, #010409 100%);
-  }
-
-  .light {
-    --background: 220 32% 18%;
-    --foreground: 210 40% 96%;
-
-    --card: 220 28% 24%;
-    --card-foreground: 210 40% 96%;
-
-    --popover: 219 30% 28%;
-    --popover-foreground: 210 40% 96%;
-
-    --primary: 200 90% 60%;
-    --primary-foreground: 213 32% 12%;
-
-    --secondary: 218 25% 32%;
-    --secondary-foreground: 210 40% 96%;
-
-    --muted: 210 20% 46%;
-    --muted-foreground: 210 18% 88%;
-
-    --accent: 192 100% 47%;
-    --accent-foreground: 0 0% 100%;
-
-    --destructive: 0 70% 52%;
-    --destructive-foreground: 0 0% 100%;
-
-    --border: 215 20% 40%;
-    --input: 215 20% 40%;
-    --ring: 200 90% 60%;
-
-    --medical-blue: 199 89% 65%;
-    --medical-blue-light: 196 80% 88%;
-    --medical-green: 158 75% 52%;
-    --medical-yellow: 40 100% 60%;
-    --medical-red: 350 82% 56%;
-
-    --shadow-card: 0 25px 60px rgba(11, 25, 55, 0.35);
-    --shadow-card-hover: 0 30px 80px rgba(10, 20, 40, 0.4);
-
-    --sidebar-background: 218 32% 18%;
-    --sidebar-foreground: 210 40% 96%;
-    --sidebar-primary: 200 90% 60%;
-    --sidebar-primary-foreground: 213 32% 12%;
-    --sidebar-accent: 215 32% 24%;
-    --sidebar-accent-foreground: 210 40% 96%;
-    --sidebar-border: 215 20% 36%;
-    --sidebar-ring: 200 90% 60%;
-    --app-shell-gradient: radial-gradient(circle at 10% 5%, rgba(99, 179, 237, 0.35), transparent 60%),
-      radial-gradient(circle at 90% 0%, rgba(134, 239, 172, 0.2), transparent 45%),
-      linear-gradient(180deg, #0d1833 0%, #060e1e 65%, #030711 100%);
+    --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.25);
+    --shadow-card-hover: 0 2px 4px rgba(0, 0, 0, 0.35), 0 14px 32px rgba(0, 0, 0, 0.35);
   }
 }
 
@@ -153,36 +215,57 @@ All colors MUST be HSL.
   }
 
   body {
-    font-family: "IBM Plex Sans", "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+    font-family: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
     background-color: hsl(var(--background));
-    background-image: var(--app-shell-gradient);
     color: hsl(var(--foreground));
     min-height: 100vh;
-    letter-spacing: 0.01em;
     transition: background-color 0.3s ease, color 0.3s ease;
   }
 
-  body[dir="rtl"] {
-    font-family: "IBM Plex Sans", "Cairo", "Inter", system-ui, -apple-system, sans-serif;
+  [dir="rtl"],
+  [dir="rtl"] body {
+    font-family: "IBM Plex Sans Arabic", "IBM Plex Sans", system-ui, -apple-system, sans-serif;
   }
 
-  .app-shell {
-    background-image: var(--app-shell-gradient);
-    background-color: hsl(var(--background));
-  }
-
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    font-family: "Space Grotesk", "IBM Plex Sans", sans-serif;
-    letter-spacing: -0.01em;
+  /* Arabic letters must stay joined: no tracking or case transforms in RTL. */
+  [dir="rtl"] [class*="tracking-"],
+  [dir="rtl"] .uppercase {
+    letter-spacing: 0 !important;
+    text-transform: none !important;
   }
 
   ::selection {
-    background: rgba(35, 210, 255, 0.35);
-    color: #f8fbff;
+    background: hsl(var(--primary) / 0.25);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  /* Isometric illustrations */
+  .iso-night-only {
+    display: none;
+  }
+  .dark .iso-night-only {
+    display: inline;
+  }
+  .dark .iso-day-only {
+    display: none;
+  }
+  .dark .iso-person {
+    filter: brightness(0.82) saturate(0.85);
+  }
+  .iso-hit:focus-visible .iso-hit-shape {
+    stroke: hsl(var(--primary));
+    stroke-width: 3;
+    stroke-linejoin: round;
   }
 }

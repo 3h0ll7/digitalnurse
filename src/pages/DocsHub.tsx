@@ -15,11 +15,11 @@ const DocsHub = () => {
   ];
 
   return (
-    <AppLayout title={copy.hubTitle} subtitle={copy.hubSubtitle} badgeLabel="Documentation" subBadgeLabel="Bilingual AR/EN">
+    <AppLayout illustration="docs" title={copy.hubTitle} subtitle={copy.hubSubtitle}>
       <section dir={direction} className="space-y-5">
         <div className="rounded-3xl border border-cyan-400/20 bg-card/70 p-5 backdrop-blur-xl">
           <div className="relative">
-            <FileText className="absolute end-3 top-1/2 h-4 w-4 -translate-y-1/2 text-cyan-300" />
+            <FileText className="absolute end-3 top-1/2 h-4 w-4 -translate-y-1/2 text-cyan-800 dark:text-cyan-300" />
             <Input className="h-11 pe-10" placeholder={copy.searchPlaceholder} />
           </div>
           <p className="mt-3 text-xs text-muted-foreground">{copy.sectionLanding}</p>
@@ -32,13 +32,13 @@ const DocsHub = () => {
               <button
                 key={card.key}
                 onClick={() => navigate(card.route)}
-                className="group rounded-3xl border border-white/10 bg-gradient-to-br from-card to-card/40 p-5 text-start shadow-[0_10px_60px_rgba(13,177,255,0.2)] transition hover:-translate-y-1"
+                className="group rounded-3xl border border-foreground/10 bg-gradient-to-br from-card to-card/40 p-5 text-start shadow-card transition hover:-translate-y-1"
               >
                 <div className="flex items-center justify-between">
-                  <h3 className="text-lg font-semibold text-white">{card.title}</h3>
-                  <Icon className="h-5 w-5 text-cyan-300" />
+                  <h3 className="text-lg font-semibold text-foreground">{card.title}</h3>
+                  <Icon className="h-5 w-5 text-cyan-800 dark:text-cyan-300" />
                 </div>
-                <div className="mt-6 flex items-center justify-end gap-2 text-xs uppercase tracking-[0.2em] text-cyan-200">
+                <div className="mt-6 flex items-center justify-end gap-2 text-xs uppercase tracking-[0.2em] text-cyan-800 dark:text-cyan-200">
                   <span>{copy.openSection}</span>
                   <ArrowRight className="h-4 w-4 rtl:rotate-180" />
                 </div>

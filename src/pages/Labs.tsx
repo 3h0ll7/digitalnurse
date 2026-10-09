@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import AppLayout from "@/components/layout/AppLayout";
+import EmptyState from "@/components/EmptyState";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -100,10 +101,10 @@ const text = {
 } as const;
 
 const getStatusTone = (condition: string) => {
-  if (condition.includes("critical")) return "bg-red-500/20 text-red-300 border-red-400/30";
-  if (condition === "high" || condition === "low") return "bg-orange-500/20 text-orange-200 border-orange-300/30";
-  if (condition === "normal") return "bg-emerald-500/20 text-emerald-200 border-emerald-300/30";
-  return "bg-yellow-500/20 text-yellow-200 border-yellow-300/30";
+  if (condition.includes("critical")) return "bg-red-500/20 text-red-800 dark:text-red-300 border-red-400/30";
+  if (condition === "high" || condition === "low") return "bg-orange-500/20 text-orange-800 dark:text-orange-200 border-orange-300/30";
+  if (condition === "normal") return "bg-emerald-500/20 text-emerald-800 dark:text-emerald-200 border-emerald-300/30";
+  return "bg-yellow-500/20 text-yellow-800 dark:text-yellow-200 border-yellow-300/30";
 };
 
 const getCondition = (value: number, lab: LabInterpretation, category: PatientCategory) => {
@@ -260,7 +261,7 @@ const Labs = () => {
   }, [ph, pco2, hco3, na, cl, pao2, fio2, lactate]);
 
   return (
-    <AppLayout title={t.labsTitle} subtitle={t.labsSubtitle}>
+    <AppLayout illustration="lab" title={t.labsTitle} subtitle={t.labsSubtitle}>
       <Tabs defaultValue="reference" className="space-y-4">
         <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="reference">{tx.reference}</TabsTrigger>
@@ -269,11 +270,11 @@ const Labs = () => {
         </TabsList>
 
         <TabsContent value="reference" className="space-y-4">
-          <section className="rounded-3xl border border-white/10 bg-card/80 p-5">
+          <section className="rounded-3xl border border-foreground/10 bg-card/80 p-5">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
               <div className="relative flex-1">
                 <Activity size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-primary rtl:left-auto rtl:right-4" />
-                <Input value={search} onChange={(event) => setSearch(event.target.value)} placeholder={t.searchLabs} className="h-12 rounded-2xl border-white/10 bg-white/5 pl-12 rtl:pl-4 rtl:pr-12" />
+                <Input value={search} onChange={(event) => setSearch(event.target.value)} placeholder={t.searchLabs} className="h-12 rounded-2xl border-foreground/10 bg-foreground/5 pl-12 rtl:pl-4 rtl:pr-12" />
               </div>
               <div className="text-xs uppercase tracking-[0.4em] text-muted-foreground">{filteredReference.length} {t.results}</div>
             </div>
@@ -284,18 +285,19 @@ const Labs = () => {
             </div>
           </section>
           <section className="grid gap-3">
+            {filteredReference.length === 0 && <EmptyState variant="no-results" title={t.noResults} />}
             {filteredReference.map((lab) => (
-              <div key={lab.test} className="rounded-3xl border border-white/10 bg-card/70 p-5">
+              <div key={lab.test} className="rounded-3xl border border-foreground/10 bg-card/70 p-5">
                 <p className="text-xs uppercase tracking-[0.4em] text-primary">{lab.category}</p>
                 <p className="text-2xl font-semibold">{lab.test}</p>
-                <p className="text-sm text-white/80">{t.normal}: {lab.normalRange}</p>
+                <p className="text-sm text-foreground/80">{t.normal}: {lab.normalRange}</p>
               </div>
             ))}
           </section>
         </TabsContent>
 
         <TabsContent value="lab-interpreter" className="space-y-4">
-          <section className="rounded-3xl border border-white/10 bg-card/80 p-5">
+          <section className="rounded-3xl border border-foreground/10 bg-card/80 p-5">
             <div className="grid gap-3 md:grid-cols-2">
               <div className="space-y-2">
                 <label className="text-sm">{tx.selectLab}</label>
@@ -303,9 +305,9 @@ const Labs = () => {
                   <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
                   <Input value={labSearch} onChange={(e) => setLabSearch(e.target.value)} className="pl-8" />
                 </div>
-                <div className="max-h-44 overflow-auto rounded-xl border border-white/10 p-2">
+                <div className="max-h-44 overflow-auto rounded-xl border border-foreground/10 p-2">
                   {filteredLabs.slice(0, 20).map((lab) => (
-                    <button key={lab.id} onClick={() => setSelectedLabId(lab.id)} className={`mb-1 block w-full rounded-lg px-2 py-1 text-start text-sm ${selectedLabId === lab.id ? "bg-primary/30" : "bg-white/5"}`}>
+                    <button key={lab.id} onClick={() => setSelectedLabId(lab.id)} className={`mb-1 block w-full rounded-lg px-2 py-1 text-start text-sm ${selectedLabId === lab.id ? "bg-primary/30" : "bg-foreground/5"}`}>
                       {language === "ar" ? lab.name_ar : lab.name_en}
                     </button>
                   ))}
@@ -328,7 +330,7 @@ const Labs = () => {
           </section>
 
           {interpretation && Number.isFinite(numericValue) && (
-            <section className="space-y-3 rounded-3xl border border-white/10 bg-card/80 p-5">
+            <section className="space-y-3 rounded-3xl border border-foreground/10 bg-card/80 p-5">
               <div className="flex items-center justify-between">
                 <h3 className="text-xl font-semibold">{language === "ar" ? selectedLab.name_ar : selectedLab.name_en}</h3>
                 <Badge className={`border ${getStatusTone(activeCondition ?? "")}`}>{language === "ar" ? interpretation.status_ar : interpretation.status_en}</Badge>
@@ -345,16 +347,16 @@ const Labs = () => {
                   <Button key={id} size="sm" variant="outline" onClick={() => setSelectedLabId(id)}>{id}</Button>
                 ))}
               </div>
-              {activeCondition?.includes("critical") && <div className="rounded-xl border border-red-400/40 bg-red-500/10 p-3 text-red-200">⚠️ {tx.criticalAlert}</div>}
+              {activeCondition?.includes("critical") && <div className="rounded-xl border border-red-400/40 bg-red-500/10 p-3 text-red-800 dark:text-red-200">⚠️ {tx.criticalAlert}</div>}
             </section>
           )}
 
-          <section className="rounded-3xl border border-white/10 bg-card/80 p-5">
+          <section className="rounded-3xl border border-foreground/10 bg-card/80 p-5">
             <p className="mb-2 text-sm font-semibold">{tx.quickEntry}</p>
             <Input value={quickEntry} onChange={(e) => setQuickEntry(e.target.value)} placeholder={tx.quickPlaceholder} />
             <div className="mt-3 grid gap-2">
               {quickResults.map((row) => (
-                <div key={row.found.id} className="rounded-xl border border-white/10 p-3 text-sm">
+                <div key={row.found.id} className="rounded-xl border border-foreground/10 p-3 text-sm">
                   {language === "ar" ? row.found.name_ar : row.found.name_en}: {row.value} — {language === "ar" ? row.details?.status_ar : row.details?.status_en}
                 </div>
               ))}
@@ -364,7 +366,7 @@ const Labs = () => {
         </TabsContent>
 
         <TabsContent value="abg" className="space-y-4">
-          <section className="rounded-3xl border border-white/10 bg-card/80 p-5">
+          <section className="rounded-3xl border border-foreground/10 bg-card/80 p-5">
             <div className="mb-3 flex gap-2">
               <Button size="sm" variant={abgMode === "abg" ? "default" : "outline"} onClick={() => setAbgMode("abg")}>ABG</Button>
               <Button size="sm" variant={abgMode === "vbg" ? "default" : "outline"} onClick={() => setAbgMode("vbg")}>VBG</Button>
@@ -386,21 +388,21 @@ const Labs = () => {
 
           {abgInterpretation && (
             <section className="grid gap-3">
-              <div className="rounded-3xl border border-white/10 bg-card/80 p-4">
+              <div className="rounded-3xl border border-foreground/10 bg-card/80 p-4">
                 <p className="text-sm text-muted-foreground">{tx.primary}</p>
                 <p className="text-2xl font-semibold">{abgInterpretation.primary} — {abgInterpretation.compensation}</p>
               </div>
-              <div className="rounded-3xl border border-white/10 bg-card/80 p-4">
+              <div className="rounded-3xl border border-foreground/10 bg-card/80 p-4">
                 <p>{tx.step} 1: {abgInterpretation.acidBase}</p>
                 <p>{tx.step} 4: {abgInterpretation.agLabel} {abgInterpretation.anionGap != null ? `(${abgInterpretation.anionGap.toFixed(1)})` : ""}</p>
                 <p>{tx.oxygenation}: {abgInterpretation.oxygenation}</p>
                 <p>P/F Ratio: {abgInterpretation.pfRatio?.toFixed(1) ?? "N/A"} ({abgInterpretation.pfLabel})</p>
               </div>
-              <div className="rounded-3xl border border-white/10 bg-card/80 p-4">
+              <div className="rounded-3xl border border-foreground/10 bg-card/80 p-4">
                 <p className="font-semibold">{tx.expectedComp}</p>
                 <p>{abgInterpretation.expected || "—"}</p>
               </div>
-              <div className="rounded-3xl border border-white/10 bg-card/80 p-4">
+              <div className="rounded-3xl border border-foreground/10 bg-card/80 p-4">
                 <p className="font-semibold">{tx.likelyCauses}</p>
                 <p>{abgInterpretation.likelyCauses.join(" • ")}</p>
                 <p className="mt-2 font-semibold">{tx.nursing}</p>

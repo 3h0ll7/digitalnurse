@@ -1,7 +1,9 @@
 import { ReactNode } from "react";
-import { ChevronLeft } from "lucide-react";
+import { ChevronLeft, Settings } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { usePreferences } from "@/contexts/PreferencesContext";
+import type { SceneKey } from "@/lib/sections";
+import SectionScene from "@/components/iso/SectionScene";
 
 interface AppLayoutProps {
   title: string;
@@ -10,96 +12,67 @@ interface AppLayoutProps {
   children: ReactNode;
   onBack?: () => void;
   className?: string;
-  badgeLabel?: string;
-  subBadgeLabel?: string;
+  /** Isometric scene shown under the header row. */
+  illustration?: SceneKey;
 }
 
-const AppLayout = ({
-  title,
-  subtitle,
-  actions,
-  children,
-  onBack,
-  className,
-  badgeLabel,
-  subBadgeLabel
-}: AppLayoutProps) => {
-  const { direction, t } = usePreferences();
+const AppLayout = ({ title, subtitle, actions, children, onBack, className, illustration }: AppLayoutProps) => {
+  const { direction, t, setPreferencesOpen } = usePreferences();
 
   return (
-    <div
-      dir={direction}
-      className="app-shell relative min-h-screen overflow-x-hidden pb-[calc(10rem+env(safe-area-inset-bottom))] text-foreground">
-      
-    <div className="pointer-events-none absolute inset-0 opacity-40 [background-image:linear-gradient(90deg,rgba(255,255,255,0.04)_1px,transparent_1px),linear-gradient(rgba(255,255,255,0.04)_1px,transparent_1px)] bg-[length:120px_120px]" />
-    <div className="absolute inset-x-10 top-[-120px] h-64 rounded-[50%] bg-[radial-gradient(circle,_rgba(80,255,235,0.18),transparent_70%)] blur-3xl" />
-    <div className="relative z-10 mx-auto w-full max-w-6xl px-4 pt-[calc(2rem+env(safe-area-inset-top))] sm:px-6">
-      <header className="mb-8 rounded-3xl border border-white/10 bg-card/80 p-5 shadow-[0_25px_120px_rgba(0,168,255,0.18)] backdrop-blur-2xl">
-        <div className="flex flex-wrap items-center gap-4 shadow-card rounded-md">
+    <div dir={direction} className="relative min-h-screen overflow-x-hidden pb-4 text-foreground">
+      <div className="relative mx-auto w-full max-w-6xl px-4 pt-[calc(1rem+env(safe-area-inset-top))] sm:px-6">
+        <header className="mb-6 rounded-3xl border bg-card p-4 shadow-card">
           <div className="flex items-center gap-3">
-            {onBack ?
+            {onBack && (
               <button
+                type="button"
                 onClick={onBack}
-                className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/20 bg-gradient-to-br from-primary/40 to-primary/10 text-primary-foreground transition-all duration-300 hover:-translate-y-0.5"
-                aria-label={t.goBack}>
-                
+                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl border bg-secondary text-secondary-foreground transition-colors hover:bg-secondary/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                aria-label={t.goBack}
+              >
                 <ChevronLeft size={18} className="rtl:rotate-180" />
-              </button> :
-
-              <div className="relative flex h-12 w-12 items-center justify-center rounded-2xl border border-white/20 bg-gradient-to-br from-primary/30 to-transparent text-white shadow-[0_0_30px_rgba(0,168,255,0.35)] animate-pulse-glow">
-                <span className="absolute inset-1 rounded-2xl border border-white/10" />
-                <div className="relative h-6 w-6">
-                  <span className="absolute inset-0 rounded-full border border-white/30" />
-                  <span className="absolute inset-x-0 top-1/2 h-0.5 -translate-y-1/2 bg-primary" />
-                  <span className="absolute left-1/2 top-0 w-0.5 -translate-x-1/2 bg-primary" style={{ height: "100%" }} />
-                </div>
-              </div>
-              }
-            <div>
-              {subtitle &&
-                <p className="text-xs uppercase tracking-[0.4em] text-muted-foreground">{subtitle}</p>
-                }
-              <h1 className="text-2xl font-semibold leading-tight tracking-tight text-white text-start sm:text-xl border border-secondary-foreground border-none font-mono">
-                {title}
-              </h1>
+              </button>
+            )}
+            <div className="min-w-0 flex-1">
+              <h1 className="text-xl font-semibold leading-tight text-foreground text-balance">{title}</h1>
+              {subtitle && <p className="mt-0.5 text-sm text-muted-foreground line-clamp-2">{subtitle}</p>}
             </div>
+            {actions && <div className="hidden items-center gap-2 sm:flex">{actions}</div>}
+            {illustration && <SectionScene scene={illustration} className="w-24 shrink-0 sm:w-40" />}
+            <button
+              type="button"
+              onClick={() => setPreferencesOpen(true)}
+              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              aria-label={t.openSettings}
+            >
+              <Settings size={18} />
+            </button>
           </div>
-          {actions &&
-            <div className="flex flex-1 items-center justify-end gap-3 sm:justify-end">
-              {actions}
-            </div>
-            }
-        </div>
-        <div className="mt-4 flex flex-wrap items-center gap-2 text-[11px] uppercase tracking-[0.3em] text-muted-foreground">
-          <span className="rounded-full border border-white/10 px-3 py-1 text-medical-green bg-background font-serif">
-            {badgeLabel ?? t.appBadge}
-          </span>
-          <span className="rounded-full border border-white/10 bg-transparent px-3 py-1 text-white/60">
-            {subBadgeLabel ?? t.appSubBadge}
-          </span>
-        </div>
-      </header>
+          {actions && <div className="mt-3 flex flex-wrap items-center gap-2 sm:hidden">{actions}</div>}
+        </header>
 
-      <main className={cn("space-y-6", className)}>{children}</main>
+        <main className={cn("space-y-6", className)}>{children}</main>
 
-      <footer className="mt-12 mb-4 text-center space-y-2">
-        <p className="text-xs text-muted-foreground tracking-wide">
-          Developed by : <span className="text-white/80 font-medium">𝓗𝓪𝓼𝓼𝓪𝓷 𝓼𝓪𝓵𝓶𝓪𝓷</span>
-        </p>
-        <p className="text-[11px] text-muted-foreground/80 tracking-wide">
-          Nurse ICU — <span className="text-white/60 font-medium">Al-Najaf Teaching Hospital</span>
-        </p>
-        <a
+        <footer className="mt-12 mb-4 space-y-1 text-center">
+          <p className="text-xs text-muted-foreground">
+            Developed by : <span className="font-medium text-foreground/80">𝓗𝓪𝓼𝓼𝓪𝓷 𝓼𝓪𝓵𝓶𝓪𝓷</span>
+          </p>
+          <p className="text-[11px] text-muted-foreground">
+            Nurse ICU — <span className="font-medium text-foreground/70">Al-Najaf Teaching Hospital</span>
+          </p>
+          <a
             href="https://hassanaii.lovable.app/"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-xs text-primary hover:text-primary/80 transition-colors underline underline-offset-2">
-          hassanaii.lovable.app
-        </a>
-      </footer>
+            className="text-xs text-primary underline underline-offset-2 transition-colors hover:text-primary/80"
+          >
+            hassanaii.lovable.app
+          </a>
+        </footer>
+      </div>
     </div>
-    </div>);
-
+  );
 };
 
 export default AppLayout;

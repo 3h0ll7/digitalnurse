@@ -79,7 +79,7 @@ const DocsTools = () => {
     <AppLayout title={copy.toolsRouteTitle} subtitle={copy.hubSubtitle} onBack={() => navigate("/docs")}>
       <section dir={direction} className="space-y-4">
         <Accordion type="multiple" className="space-y-3">
-          <AccordionItem value="ai" className="rounded-2xl border border-white/10 bg-card/60 px-4">
+          <AccordionItem value="ai" className="rounded-2xl border border-foreground/10 bg-card/60 px-4">
             <AccordionTrigger>{copy.aiAssistant}</AccordionTrigger>
             <AccordionContent className="space-y-3">
               <Textarea value={input} onChange={(e) => setInput(e.target.value)} placeholder={copy.aiInput} />
@@ -94,12 +94,12 @@ const DocsTools = () => {
                 <Button variant="secondary" onClick={() => copyText(output)}>{copy.copy}</Button>
                 <Button variant="outline" onClick={handleGenerate}>{copy.regenerate}</Button>
               </div>
-              <p className="text-xs text-amber-300">{copy.aiDisclaimer}</p>
+              <p className="text-xs text-amber-800 dark:text-amber-300">{copy.aiDisclaimer}</p>
               <Textarea value={output} onChange={(e) => setOutput(e.target.value)} placeholder={copy.loading} rows={8} />
             </AccordionContent>
           </AccordionItem>
 
-          <AccordionItem value="phrases" className="rounded-2xl border border-white/10 bg-card/60 px-4">
+          <AccordionItem value="phrases" className="rounded-2xl border border-foreground/10 bg-card/60 px-4">
             <AccordionTrigger>{copy.quickPhrases}</AccordionTrigger>
             <AccordionContent className="space-y-3">
               <Input value={phraseFilter} onChange={(e) => setPhraseFilter(e.target.value)} placeholder={copy.search} />
@@ -108,7 +108,7 @@ const DocsTools = () => {
                   <h4 className="mb-2 text-sm font-semibold">{category}</h4>
                   <div className="grid gap-2">
                     {items.filter((it) => it.toLowerCase().includes(phraseFilter.toLowerCase())).map((item) => (
-                      <button key={item} onClick={() => copyText(item)} className="rounded-lg border border-white/10 p-2 text-start text-sm hover:border-cyan-300/40">{item}</button>
+                      <button key={item} onClick={() => copyText(item)} className="rounded-lg border border-foreground/10 p-2 text-start text-sm hover:border-cyan-300/40">{item}</button>
                     ))}
                   </div>
                 </div>
@@ -116,7 +116,7 @@ const DocsTools = () => {
             </AccordionContent>
           </AccordionItem>
 
-          <AccordionItem value="alerts" className="rounded-2xl border border-white/10 bg-card/60 px-4">
+          <AccordionItem value="alerts" className="rounded-2xl border border-foreground/10 bg-card/60 px-4">
             <AccordionTrigger>{copy.legalAlerts}</AccordionTrigger>
             <AccordionContent className="space-y-2">
               {legalAlerts.map(([en, ar]) => (
@@ -127,17 +127,17 @@ const DocsTools = () => {
             </AccordionContent>
           </AccordionItem>
 
-          <AccordionItem value="abbr" className="rounded-2xl border border-white/10 bg-card/60 px-4">
+          <AccordionItem value="abbr" className="rounded-2xl border border-foreground/10 bg-card/60 px-4">
             <AccordionTrigger>{copy.abbreviations}</AccordionTrigger>
             <AccordionContent className="space-y-3">
               <div className="rounded-xl border border-emerald-400/20 p-3">
-                <h4 className="mb-2 text-sm font-semibold text-emerald-300">Approved Abbreviations</h4>
+                <h4 className="mb-2 text-sm font-semibold text-emerald-800 dark:text-emerald-300">Approved Abbreviations</h4>
                 {abbreviations.map(([abbr, en, ar]) => (
                   <div key={abbr} className="text-sm">{abbr} — {language === "ar" ? ar : en}</div>
                 ))}
               </div>
               <div className="rounded-xl border border-red-400/20 p-3">
-                <h4 className="mb-2 text-sm font-semibold text-red-300">Do-Not-Use List (Joint Commission)</h4>
+                <h4 className="mb-2 text-sm font-semibold text-red-800 dark:text-red-300">Do-Not-Use List (Joint Commission)</h4>
                 {doNotUse.map(([bad, correct, whyEn, whyAr]) => (
                   <div key={bad} className="mb-2 text-sm">{bad} → {correct} ({language === "ar" ? whyAr : whyEn})</div>
                 ))}

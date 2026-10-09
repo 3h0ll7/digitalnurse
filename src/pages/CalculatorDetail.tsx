@@ -52,7 +52,7 @@ const CalculatorDetail = () => {
         const volume = n(values.volume);
         const result = available > 0 ? round((ordered / available) * volume) : null;
         return (
-          <Card className="p-4 space-y-3 bg-card/70 border-white/10 text-white">
+          <Card className="p-4 space-y-3 bg-card/70 border-foreground/10 text-foreground">
             <Field id="ordered" label={t.orderedDose} value={values.ordered} onChange={setField} />
             <Field id="available" label={t.availableDose} value={values.available} onChange={setField} />
             <Field id="volume" label={t.volumeAvailable} value={values.volume} onChange={setField} />
@@ -69,7 +69,7 @@ const CalculatorDetail = () => {
         const dropFactor = n(values.dropFactor);
         const mlPerHour = time > 0 ? round(volume / time) : null;
         const drops = time > 0 ? round(((volume / time) * dropFactor) / 60, 0) : null;
-        return <Card className="p-4 space-y-3 bg-card/70 border-white/10 text-white">
+        return <Card className="p-4 space-y-3 bg-card/70 border-foreground/10 text-foreground">
           <Field id="volume" label={t.totalVolume} value={values.volume} onChange={setField} />
           <Field id="time" label={t.timeHours} value={values.time} onChange={setField} />
           <Field id="dropFactor" label={t.dropFactor} value={values.dropFactor} onChange={setField} />
@@ -84,7 +84,7 @@ const CalculatorDetail = () => {
         const height = n(values.height);
         const bmi = height > 0 ? weight / (height / 100) ** 2 : null;
         const category = !bmi ? "" : bmi < 18.5 ? t.underweight : bmi < 25 ? t.normalWeight : bmi < 30 ? t.overweight : t.obese;
-        return <Card className="p-4 space-y-3 bg-card/70 border-white/10 text-white">
+        return <Card className="p-4 space-y-3 bg-card/70 border-foreground/10 text-foreground">
           <Field id="weight" label={t.weightKg} value={values.weight} onChange={setField} />
           <Field id="height" label={t.heightCm} value={values.height} onChange={setField} />
           <ResultBlock label="BMI" value={bmi === null ? t.heightError : `${round(bmi, 1)} - ${category}`} />
@@ -99,11 +99,11 @@ const CalculatorDetail = () => {
         const creatinine = n(values.creatinine);
         const sexAdj = values.sex === "Female" ? 0.85 : 1;
         const ccr = creatinine > 0 ? (((140 - age) * weight) / (72 * creatinine)) * sexAdj : null;
-        return <Card className="p-4 space-y-3 bg-card/70 border-white/10 text-white">
+        return <Card className="p-4 space-y-3 bg-card/70 border-foreground/10 text-foreground">
           <Field id="age" label={t.ageYears} value={values.age} onChange={setField} />
           <Field id="weight" label={t.weightKg} value={values.weight} onChange={setField} />
           <Field id="creatinine" label={t.serumCreatinine} value={values.creatinine} onChange={setField} />
-          <div className="space-y-1"><Label>{t.sex}</Label><select className="w-full rounded-md border border-white/10 bg-background/60 p-2" value={values.sex} onChange={(e)=>setField("sex",e.target.value)}><option value="Male">{t.male}</option><option value="Female">{t.female}</option></select></div>
+          <div className="space-y-1"><Label>{t.sex}</Label><select className="w-full rounded-md border border-foreground/10 bg-background/60 p-2" value={values.sex} onChange={(e)=>setField("sex",e.target.value)}><option value="Male">{t.male}</option><option value="Female">{t.female}</option></select></div>
           <ResultBlock label={t.creatinineClearanceResult} value={ccr === null ? t.creatinineError : `${round(ccr, 1)} mL/min`} />
         </Card>;
       }
@@ -136,17 +136,17 @@ const CalculatorDetail = () => {
         const pumpRate = values.vasoMode === "doseToRate"
           ? (isVaso ? (desired * 60) / (concentration || 1) : (desired * weight * 60) / (concentration || 1))
           : rate;
-        const badgeClass = dose > drugData.max ? "bg-red-500/20 text-red-300" : dose > drugData.standardHigh ? "bg-yellow-500/20 text-yellow-300" : "bg-emerald-500/20 text-emerald-300";
+        const badgeClass = dose > drugData.max ? "bg-red-500/20 text-red-800 dark:text-red-300" : dose > drugData.standardHigh ? "bg-yellow-500/20 text-yellow-800 dark:text-yellow-300" : "bg-emerald-500/20 text-emerald-800 dark:text-emerald-300";
 
-        return <Card className="p-4 space-y-3 bg-card/70 border-white/10 text-white">
+        return <Card className="p-4 space-y-3 bg-card/70 border-foreground/10 text-foreground">
           <div className="grid gap-3 md:grid-cols-2">
-            <div><Label>Drug</Label><select className="w-full rounded-md border border-white/10 bg-background/60 p-2" value={values.vasoDrug} onChange={(e)=>{const nd=e.target.value as keyof typeof vasoData;setField("vasoDrug",nd);setField("vasoAmount",String(vasoData[nd].conc[0][0]));setField("vasoVolume",String(vasoData[nd].conc[0][1]));}}>
+            <div><Label>Drug</Label><select className="w-full rounded-md border border-foreground/10 bg-background/60 p-2" value={values.vasoDrug} onChange={(e)=>{const nd=e.target.value as keyof typeof vasoData;setField("vasoDrug",nd);setField("vasoAmount",String(vasoData[nd].conc[0][0]));setField("vasoVolume",String(vasoData[nd].conc[0][1]));}}>
               {Object.keys(vasoData).map((k)=><option key={k} value={k}>{k}</option>)}
             </select></div>
             {!isVaso && <Field id="vasoWeight" label="Patient Weight (kg)" value={values.vasoWeight} onChange={setField} />}
           </div>
           <div className="grid gap-3 md:grid-cols-2"><Field id="vasoAmount" label={isVaso ? "Drug units" : "Drug mg"} value={values.vasoAmount} onChange={setField} /><Field id="vasoVolume" label="Volume (mL)" value={values.vasoVolume} onChange={setField} /></div>
-          <div><Label>{language === "ar" ? "احسب بواسطة" : "Calculate by"}</Label><div className="mt-2 flex gap-2"><button onClick={()=>setField("vasoMode","rateToDose")} className={`px-3 py-1 rounded-full border ${values.vasoMode==="rateToDose"?"border-primary text-primary":"border-white/20"}`}>Rate → Dose</button><button onClick={()=>setField("vasoMode","doseToRate")} className={`px-3 py-1 rounded-full border ${values.vasoMode==="doseToRate"?"border-primary text-primary":"border-white/20"}`}>Dose → Rate</button></div></div>
+          <div><Label>{language === "ar" ? "احسب بواسطة" : "Calculate by"}</Label><div className="mt-2 flex gap-2"><button onClick={()=>setField("vasoMode","rateToDose")} className={`px-3 py-1 rounded-full border ${values.vasoMode==="rateToDose"?"border-primary text-primary":"border-foreground/20"}`}>Rate → Dose</button><button onClick={()=>setField("vasoMode","doseToRate")} className={`px-3 py-1 rounded-full border ${values.vasoMode==="doseToRate"?"border-primary text-primary":"border-foreground/20"}`}>Dose → Rate</button></div></div>
           {values.vasoMode === "rateToDose" ? <Field id="vasoRate" label="Pump Rate (mL/hr)" value={values.vasoRate} onChange={setField} /> : <Field id="vasoDesiredDose" label={isVaso ? "Desired Dose (units/min)" : "Desired Dose (mcg/kg/min)"} value={values.vasoDesiredDose} onChange={setField} />}
           <div className={`rounded-xl p-3 ${badgeClass}`}>
             <p className="font-semibold">{values.vasoMode === "rateToDose" ? `Dose: ${round(dose, 3)} ${drugData.unit}` : `Pump Rate: ${round(pumpRate, 2)} mL/hr`}</p>
@@ -171,14 +171,14 @@ const CalculatorDetail = () => {
         const aptt = n(values.aptt);
         const adj = aptt < 35 ? { text: "Re-bolus + Increase", delta: 4 } : aptt <= 45 ? { text: "Re-bolus + Increase", delta: 2 } : aptt <= 70 ? { text: "Therapeutic", delta: 0 } : aptt <= 90 ? { text: "Decrease", delta: -2 } : { text: "Hold 1hr + Decrease", delta: -3 };
         const newRateUnits = Math.max(0, Math.min((p.rate + adj.delta) * wt, 2500));
-        return <Card className="p-4 space-y-3 bg-card/70 border-white/10 text-white">
+        return <Card className="p-4 space-y-3 bg-card/70 border-foreground/10 text-foreground">
           <Field id="heparinWeight" label="Weight (kg)" value={values.heparinWeight} onChange={setField} />
           <Field id="heparinConcentration" label="Concentration (units/mL)" value={values.heparinConcentration} onChange={setField} />
-          <div><Label>Protocol</Label><select value={values.heparinProtocol} onChange={(e)=>setField("heparinProtocol",e.target.value)} className="w-full rounded-md border border-white/10 bg-background/60 p-2"><option value="standard">Standard DVT/PE</option><option value="low">Low Intensity ACS</option><option value="nobolus">No Bolus</option></select></div>
+          <div><Label>Protocol</Label><select value={values.heparinProtocol} onChange={(e)=>setField("heparinProtocol",e.target.value)} className="w-full rounded-md border border-foreground/10 bg-background/60 p-2"><option value="standard">Standard DVT/PE</option><option value="low">Low Intensity ACS</option><option value="nobolus">No Bolus</option></select></div>
           <ResultBlock label="Initial Orders" value={`Bolus ${round(bolus)} units (${round(bolus/conc,1)} mL) | Initial ${round(rateUnits)} units/hr | Pump ${round(pump,2)} mL/hr`} />
           <Field id="aptt" label="Enter aPTT Result (sec)" value={values.aptt} onChange={setField} />
           <ResultBlock label="aPTT Titration" value={`${adj.text} | New Rate ${round(newRateUnits/conc,2)} mL/hr | Recheck aPTT in 6 hours`} />
-          {(wt * p.bolus > 10000 || wt * p.rate > 2500) && <p className="text-red-300 text-xs">Warning: safety caps applied (max bolus 10,000 units / max rate 2,500 units/hr).</p>}
+          {(wt * p.bolus > 10000 || wt * p.rate > 2500) && <p className="text-red-800 dark:text-red-300 text-xs">Warning: safety caps applied (max bolus 10,000 units / max rate 2,500 units/hr).</p>}
         </Card>;
       }
     },
@@ -194,18 +194,18 @@ const CalculatorDetail = () => {
           high: [[150,0],[200,3],[250,6],[300,9],[350,12],[400,15]]
         } as const;
         const scale = sensitivityMap[values.insulinSensitivity as keyof typeof sensitivityMap] ?? sensitivityMap.medium;
-        return <Card className="p-4 space-y-3 bg-card/70 border-white/10 text-white">
-          <div className="flex gap-2"><button className={`px-3 py-1 rounded-full border ${values.insulinTab==="drip"?"border-primary text-primary":"border-white/20"}`} onClick={()=>setField("insulinTab","drip")}>Insulin Drip</button><button className={`px-3 py-1 rounded-full border ${values.insulinTab==="scale"?"border-primary text-primary":"border-white/20"}`} onClick={()=>setField("insulinTab","scale")}>Sliding Scale</button></div>
+        return <Card className="p-4 space-y-3 bg-card/70 border-foreground/10 text-foreground">
+          <div className="flex gap-2"><button className={`px-3 py-1 rounded-full border ${values.insulinTab==="drip"?"border-primary text-primary":"border-foreground/20"}`} onClick={()=>setField("insulinTab","drip")}>Insulin Drip</button><button className={`px-3 py-1 rounded-full border ${values.insulinTab==="scale"?"border-primary text-primary":"border-foreground/20"}`} onClick={()=>setField("insulinTab","scale")}>Sliding Scale</button></div>
           {values.insulinTab === "drip" ? <>
             <Field id="insulinWeight" label="Weight (kg)" value={values.insulinWeight} onChange={setField} />
             <Field id="insulinBG" label="Blood Glucose (mg/dL)" value={values.insulinBG} onChange={setField} />
             <Field id="insulinConcentration" label="Concentration (units/mL)" value={values.insulinConcentration} onChange={setField} />
             <ResultBlock label="Initial Drip" value={`Bolus ${round(bolus,1)} units (if BG > 300) | Option A ${round(rate1,2)} units/hr (${round(rate1/conc,2)} mL/hr) | Option B ${round(rate2,2)} units/hr (${round(rate2/conc,2)} mL/hr)`} />
             <ResultBlock label="Titration" value={table} />
-            <p className="text-xs text-amber-300">⚠️ Check K+ before insulin; do NOT start if K+ &lt; 3.3.</p>
+            <p className="text-xs text-amber-800 dark:text-amber-300">⚠️ Check K+ before insulin; do NOT start if K+ &lt; 3.3.</p>
           </> : <>
-            <div><Label>Sliding Scale</Label><select value={values.insulinSensitivity} onChange={(e)=>setField("insulinSensitivity",e.target.value)} className="w-full rounded-md border border-white/10 bg-background/60 p-2"><option value="low">Low Sensitivity</option><option value="medium">Medium Sensitivity</option><option value="high">High Sensitivity</option></select></div>
-            <div className="rounded-xl border border-white/10 p-3 text-sm space-y-1">{scale.map(([cut,dose],i)=><p key={cut}>{i===0?"< 150":`${cut-1}-${cut+49}`} mg/dL → {dose} units</p>)}<p>≥ 400 mg/dL → Notify MD</p></div>
+            <div><Label>Sliding Scale</Label><select value={values.insulinSensitivity} onChange={(e)=>setField("insulinSensitivity",e.target.value)} className="w-full rounded-md border border-foreground/10 bg-background/60 p-2"><option value="low">Low Sensitivity</option><option value="medium">Medium Sensitivity</option><option value="high">High Sensitivity</option></select></div>
+            <div className="rounded-xl border border-foreground/10 p-3 text-sm space-y-1">{scale.map(([cut,dose],i)=><p key={cut}>{i===0?"< 150":`${cut-1}-${cut+49}`} mg/dL → {dose} units</p>)}<p>≥ 400 mg/dL → Notify MD</p></div>
           </>}
         </Card>;
       }
@@ -220,9 +220,9 @@ const CalculatorDetail = () => {
         const actual = n(values.ibwActual);
         const abw = ibw + 0.4 * (actual - ibw);
         const pct = ibw > 0 ? ((actual - ibw) / ibw) * 100 : 0;
-        const status = actual <= ibw ? "text-emerald-300" : actual <= ibw * 1.3 ? "text-yellow-300" : actual <= ibw * 2 ? "text-orange-300" : "text-red-300";
-        return <Card className="p-4 space-y-3 bg-card/70 border-white/10 text-white">
-          <div><Label>Gender</Label><select className="w-full rounded-md border border-white/10 bg-background/60 p-2" value={values.ibwGender} onChange={(e)=>setField("ibwGender",e.target.value)}><option value="male">Male</option><option value="female">Female</option></select></div>
+        const status = actual <= ibw ? "text-emerald-800 dark:text-emerald-300" : actual <= ibw * 1.3 ? "text-yellow-800 dark:text-yellow-300" : actual <= ibw * 2 ? "text-orange-800 dark:text-orange-300" : "text-red-800 dark:text-red-300";
+        return <Card className="p-4 space-y-3 bg-card/70 border-foreground/10 text-foreground">
+          <div><Label>Gender</Label><select className="w-full rounded-md border border-foreground/10 bg-background/60 p-2" value={values.ibwGender} onChange={(e)=>setField("ibwGender",e.target.value)}><option value="male">Male</option><option value="female">Female</option></select></div>
           <Field id="ibwHeightCm" label="Height (cm)" value={values.ibwHeightCm} onChange={setField} />
           <Field id="ibwActual" label="Actual Weight (kg)" value={values.ibwActual} onChange={setField} />
           <ResultBlock label="IBW / ABW" value={`IBW ${round(ibw,2)} kg | ABW ${round(abw,2)} kg | % over ${round(pct,1)}% | TV 6 mL/kg ${round(ibw*6,0)} mL | TV 8 mL/kg ${round(ibw*8,0)} mL`} />
@@ -237,12 +237,12 @@ const CalculatorDetail = () => {
         const bsa = values.bsaFormula === "dubois" ? 0.007184 * h ** 0.725 * w ** 0.425 : Math.sqrt((h * w) / 3600);
         const burn = n(values.burnPct);
         const total = 4 * w * burn;
-        return <Card className="p-4 space-y-3 bg-card/70 border-white/10 text-white">
+        return <Card className="p-4 space-y-3 bg-card/70 border-foreground/10 text-foreground">
           <Field id="bsaWeight" label="Weight (kg)" value={values.bsaWeight} onChange={setField} />
           <Field id="bsaHeight" label="Height (cm)" value={values.bsaHeight} onChange={setField} />
-          <div><Label>Formula</Label><select className="w-full rounded-md border border-white/10 bg-background/60 p-2" value={values.bsaFormula} onChange={(e)=>setField("bsaFormula",e.target.value)}><option value="mosteller">Mosteller</option><option value="dubois">Du Bois</option></select></div>
+          <div><Label>Formula</Label><select className="w-full rounded-md border border-foreground/10 bg-background/60 p-2" value={values.bsaFormula} onChange={(e)=>setField("bsaFormula",e.target.value)}><option value="mosteller">Mosteller</option><option value="dubois">Du Bois</option></select></div>
           <ResultBlock label="BSA" value={`${round(bsa,2)} m² (normal adult 1.7-2.0)`} />
-          <div className="rounded-xl border border-white/10 p-3 text-xs space-y-1"><p>Rule of 9s (Adult): Head 9, each arm 9, front torso 18, back torso 18, each leg 18, perineum 1.</p><p>Pediatric: Head 18, each arm 9, front 18, back 18, each leg 14.</p></div>
+          <div className="rounded-xl border border-foreground/10 p-3 text-xs space-y-1"><p>Rule of 9s (Adult): Head 9, each arm 9, front torso 18, back torso 18, each leg 18, perineum 1.</p><p>Pediatric: Head 18, each arm 9, front 18, back 18, each leg 14.</p></div>
           <Field id="burnPct" label="Enter Burn % TBSA" value={values.burnPct} onChange={setField} />
           <ResultBlock label="Parkland Output" value={`24hr ${round(total,0)} mL | First 8hr ${round(total/2/8,0)} mL/hr | Next 16hr ${round(total/2/16,0)} mL/hr`} />
         </Card>;
@@ -266,11 +266,11 @@ const CalculatorDetail = () => {
         const trimester = weeks < 14 ? "1st" : weeks < 28 ? "2nd" : weeks <= 42 ? "3rd" : "Post-term";
         const progress = Math.min(100, round((currentGaDays / 280) * 100, 1));
         const color = trimester === "1st" ? "bg-purple-500" : trimester === "2nd" ? "bg-blue-500" : trimester === "3rd" ? "bg-green-500" : "bg-red-500";
-        return <Card className="p-4 space-y-3 bg-card/70 border-white/10 text-white">
-          <div className="flex gap-2"><button className={`px-3 py-1 rounded-full border ${values.eddTab==="lmp"?"border-primary text-primary":"border-white/20"}`} onClick={()=>setField("eddTab","lmp")}>By LMP</button><button className={`px-3 py-1 rounded-full border ${values.eddTab==="us"?"border-primary text-primary":"border-white/20"}`} onClick={()=>setField("eddTab","us")}>By Ultrasound</button></div>
+        return <Card className="p-4 space-y-3 bg-card/70 border-foreground/10 text-foreground">
+          <div className="flex gap-2"><button className={`px-3 py-1 rounded-full border ${values.eddTab==="lmp"?"border-primary text-primary":"border-foreground/20"}`} onClick={()=>setField("eddTab","lmp")}>By LMP</button><button className={`px-3 py-1 rounded-full border ${values.eddTab==="us"?"border-primary text-primary":"border-foreground/20"}`} onClick={()=>setField("eddTab","us")}>By Ultrasound</button></div>
           {values.eddTab === "lmp" ? <><div><Label>LMP Date</Label><Input type="date" value={values.lmpDate || ""} onChange={(e)=>setField("lmpDate",e.target.value)} /></div><Field id="cycleLength" label="Cycle Length" value={values.cycleLength} onChange={setField} /></> : <><div><Label>US Date</Label><Input type="date" value={values.usDate || ""} onChange={(e)=>setField("usDate",e.target.value)} /></div><div className="grid grid-cols-2 gap-3"><Field id="usWeeks" label="Weeks" value={values.usWeeks} onChange={setField} /><Field id="usDays" label="Days" value={values.usDays} onChange={setField} /></div></>}
           <ResultBlock label="Pregnancy Output" value={edd ? `EDD ${edd.toLocaleDateString()} | GA ${weeks} weeks + ${days} days | ${trimester} trimester | ${Math.max(0, Math.floor((edd.getTime()-today.getTime())/86400000))} days remaining` : cx.labels.requiredField} />
-          <div className="h-2 rounded-full bg-white/10"><div className={`h-full rounded-full ${color}`} style={{ width: `${progress}%` }} /></div>
+          <div className="h-2 rounded-full bg-foreground/10"><div className={`h-full rounded-full ${color}`} style={{ width: `${progress}%` }} /></div>
           <p className="text-xs text-muted-foreground">12 NT scan • 20 anatomy scan • 28 GDM • 36 GBS • 37 full term • 40 EDD • 42 induce</p>
         </Card>;
       }

@@ -1,15 +1,18 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 import { translations, type SupportedLanguage } from "@/lib/i18n";
+import { THEME_COLOR, parseStoredTheme, resolveTheme, type ResolvedTheme, type ThemeMode } from "@/lib/theme";
 
 type Translation = (typeof translations)[SupportedLanguage];
 
-type Theme = "light" | "dark";
 type Direction = "ltr" | "rtl";
 
 interface PreferencesContextValue {
-  theme: Theme;
-  setTheme: (theme: Theme) => void;
+  themeMode: ThemeMode;
+  setThemeMode: (mode: ThemeMode) => void;
+  theme: ResolvedTheme;
   toggleTheme: () => void;
+  preferencesOpen: boolean;
+  setPreferencesOpen: (open: boolean) => void;
   language: SupportedLanguage;
   setLanguage: (language: SupportedLanguage) => void;
   direction: Direction;
@@ -19,15 +22,17 @@ interface PreferencesContextValue {
 
 const PreferencesContext = createContext<PreferencesContextValue | undefined>(undefined);
 
-const getInitialTheme = (): Theme => {
+const AUTO_THEME_TICK_MS = 60_000;
+
+const getInitialThemeMode = (): ThemeMode => {
   if (typeof window === "undefined") {
-    return "light";
+    return "auto";
   }
-  const stored = window.localStorage.getItem("theme");
-  if (stored === "light" || stored === "dark") {
-    return stored;
+  try {
+    return parseStoredTheme(window.localStorage.getItem("theme"));
+  } catch {
+    return "auto";
   }
-  return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
 };
 
 const getInitialLanguage = (): SupportedLanguage => {
@@ -42,10 +47,28 @@ const getInitialLanguage = (): SupportedLanguage => {
 };
 
 export const PreferencesProvider = ({ children }: { children: ReactNode }) => {
-  const [theme, setTheme] = useState<Theme>(getInitialTheme);
+  const [themeMode, setThemeMode] = useState<ThemeMode>(getInitialThemeMode);
+  const [now, setNow] = useState(() => new Date());
+  const [preferencesOpen, setPreferencesOpen] = useState(false);
+  const theme = resolveTheme(themeMode, now);
   const [language, setLanguage] = useState<SupportedLanguage>(getInitialLanguage);
   const direction: Direction = language === "ar" ? "rtl" : "ltr";
   const isRTL = direction === "rtl";
+
+  useEffect(() => {
+    if (themeMode !== "auto" || typeof window === "undefined") return;
+    const tick = () => setNow(new Date());
+    const onVisible = () => {
+      if (document.visibilityState === "visible") tick();
+    };
+    tick();
+    const interval = window.setInterval(tick, AUTO_THEME_TICK_MS);
+    document.addEventListener("visibilitychange", onVisible);
+    return () => {
+      window.clearInterval(interval);
+      document.removeEventListener("visibilitychange", onVisible);
+    };
+  }, [themeMode]);
 
   useEffect(() => {
     if (typeof document === "undefined") return;
@@ -58,8 +81,16 @@ export const PreferencesProvider = ({ children }: { children: ReactNode }) => {
     root.dataset.theme = theme;
     body.dataset.theme = theme;
     root.style.colorScheme = theme;
-    window.localStorage.setItem("theme", theme);
+    document.querySelector('meta[name="theme-color"]')?.setAttribute("content", THEME_COLOR[theme]);
   }, [theme]);
+
+  useEffect(() => {
+    try {
+      window.localStorage.setItem("theme", themeMode);
+    } catch {
+      // Storage can be unavailable (private mode); the in-memory choice still applies.
+    }
+  }, [themeMode]);
 
   useEffect(() => {
     if (typeof document === "undefined") return;
@@ -76,16 +107,19 @@ export const PreferencesProvider = ({ children }: { children: ReactNode }) => {
 
   const value = useMemo(
     () => ({
+      themeMode,
+      setThemeMode,
       theme,
-      setTheme,
-      toggleTheme: () => setTheme((prev) => (prev === "light" ? "dark" : "light")),
+      toggleTheme: () => setThemeMode(theme === "light" ? "dark" : "light"),
+      preferencesOpen,
+      setPreferencesOpen,
       language,
       setLanguage,
       direction,
       isRTL,
       t: translations[language],
     }),
-    [theme, language, direction, isRTL],
+    [themeMode, theme, preferencesOpen, language, direction, isRTL],
   );
 
   return <PreferencesContext.Provider value={value}>{children}</PreferencesContext.Provider>;

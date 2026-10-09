@@ -43,7 +43,7 @@ const Flashcards = () => {
   };
 
   return (
-    <AppLayout title={t.flashcardsTitle} subtitle={t.flashcardsSubtitle}>
+    <AppLayout illustration="library" title={t.flashcardsTitle} subtitle={t.flashcardsSubtitle}>
       <section className="space-y-3">
         <div className="grid gap-3 md:grid-cols-[1fr_auto_auto]">
           <Input

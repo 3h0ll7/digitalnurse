@@ -1,26 +1,23 @@
-import { useState } from "react";
-import { Settings, Moon, Sun } from "lucide-react";
-import { Drawer, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle, DrawerTrigger } from "@/components/ui/drawer";
+import { Moon, Sun, SunMoon } from "lucide-react";
+import { Drawer, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle } from "@/components/ui/drawer";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
 import { usePreferences } from "@/contexts/PreferencesContext";
 import { languages, type SupportedLanguage } from "@/lib/i18n";
+import type { ThemeMode } from "@/lib/theme";
+import { cn } from "@/lib/utils";
 
 const PreferencesDrawer = () => {
-  const [open, setOpen] = useState(false);
-  const { language, setLanguage, theme, setTheme, t } = usePreferences();
+  const { language, setLanguage, themeMode, setThemeMode, preferencesOpen, setPreferencesOpen, t } = usePreferences();
+
+  const themeOptions: { mode: ThemeMode; label: string; icon: typeof Sun }[] = [
+    { mode: "auto", label: t.autoTheme, icon: SunMoon },
+    { mode: "light", label: t.lightTheme, icon: Sun },
+    { mode: "dark", label: t.darkTheme, icon: Moon },
+  ];
 
   return (
-    <Drawer open={open} onOpenChange={setOpen}>
-      <DrawerTrigger asChild>
-        <button
-          aria-label={t.settingsTitle}
-          className="fixed bottom-24 right-4 z-50 rounded-full bg-primary text-primary-foreground p-3 shadow-card hover:shadow-card-hover transition"
-        >
-          <Settings size={20} />
-        </button>
-      </DrawerTrigger>
+    <Drawer open={preferencesOpen} onOpenChange={setPreferencesOpen}>
       <DrawerContent className="p-0">
         <DrawerHeader className="text-start">
           <DrawerTitle>{t.settingsTitle}</DrawerTitle>
@@ -43,22 +40,29 @@ const PreferencesDrawer = () => {
             </Select>
           </div>
 
-          <div className="flex items-center justify-between rounded-xl border p-3">
-            <div>
-              <p className="text-sm font-medium text-card-foreground">{t.themeLabel}</p>
-              <p className="text-xs text-muted-foreground">
-                {theme === "light" ? t.lightTheme : t.darkTheme}
-              </p>
-            </div>
-            <div className="flex items-center gap-2">
-              <Sun size={18} className={theme === "light" ? "text-primary" : "text-muted-foreground"} />
-              <Switch checked={theme === "dark"} onCheckedChange={(checked) => setTheme(checked ? "dark" : "light")} />
-              <Moon size={18} className={theme === "dark" ? "text-primary" : "text-muted-foreground"} />
+          <div className="space-y-2">
+            <p className="text-sm font-medium text-card-foreground">{t.themeLabel}</p>
+            <div role="group" aria-label={t.themeLabel} className="grid grid-cols-3 gap-1 rounded-2xl border bg-muted/40 p-1">
+              {themeOptions.map(({ mode, label, icon: Icon }) => (
+                <button
+                  key={mode}
+                  type="button"
+                  aria-pressed={themeMode === mode}
+                  onClick={() => setThemeMode(mode)}
+                  className={cn(
+                    "flex items-center justify-center gap-2 rounded-xl px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                    themeMode === mode ? "bg-primary text-primary-foreground shadow-sm" : "text-muted-foreground hover:text-foreground",
+                  )}
+                >
+                  <Icon size={16} aria-hidden="true" />
+                  {label}
+                </button>
+              ))}
             </div>
           </div>
         </div>
         <DrawerFooter>
-          <Button variant="outline" onClick={() => setOpen(false)}>
+          <Button variant="outline" onClick={() => setPreferencesOpen(false)}>
             {t.close}
           </Button>
         </DrawerFooter>

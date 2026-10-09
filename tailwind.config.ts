@@ -55,6 +55,14 @@ export default {
           yellow: "hsl(var(--medical-yellow))",
           red: "hsl(var(--medical-red))",
         },
+        viz: {
+          1: "var(--viz-1)",
+          2: "var(--viz-2)",
+          3: "var(--viz-3)",
+          4: "var(--viz-4)",
+          5: "var(--viz-5)",
+          6: "var(--viz-6)",
+        },
         pastel: {
           peach: "hsl(var(--pastel-peach))",
           sand: "hsl(var(--pastel-sand))",

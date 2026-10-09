@@ -111,6 +111,14 @@ All colors MUST be HSL.
     --iso-shadow: rgba(30,35,64,.14);
     --iso-glow: transparent;
 
+
+    /* Categorical chart hues, fixed order (dataviz reference palette, validated on #FFFFFF). */
+    --viz-1: #2a78d6;
+    --viz-2: #eb6834;
+    --viz-3: #1baf7a;
+    --viz-4: #eda100;
+    --viz-5: #e87ba4;
+    --viz-6: #008300;
     --radius: 1.25rem;
     --shadow-card: 0 1px 2px rgba(30, 35, 64, 0.06), 0 8px 24px rgba(30, 35, 64, 0.06);
     --shadow-card-hover: 0 2px 4px rgba(30, 35, 64, 0.08), 0 14px 32px rgba(30, 35, 64, 0.1);
@@ -204,6 +212,14 @@ All colors MUST be HSL.
     --iso-shadow: rgba(0,0,0,.28);
     --iso-glow: rgba(255,231,168,.35);
 
+
+    /* Same hues stepped for the night card surface (validated on #1A1E3D). */
+    --viz-1: #3987e5;
+    --viz-2: #d95926;
+    --viz-3: #199e70;
+    --viz-4: #c98500;
+    --viz-5: #d55181;
+    --viz-6: #008300;
     --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.25);
     --shadow-card-hover: 0 2px 4px rgba(0, 0, 0, 0.35), 0 14px 32px rgba(0, 0, 0, 0.35);
   }

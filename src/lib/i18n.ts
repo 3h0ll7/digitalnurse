@@ -227,6 +227,18 @@ interface Translation {
   notFoundTitle: string;
   notFoundDesc: string;
   returnHome: string;
+
+  // Redesign
+  autoTheme: string;
+  moreLabel: string;
+  greetingMorning: string;
+  greetingEvening: string;
+  greetingNight: string;
+  greetingPrompt: string;
+  openSettings: string;
+  noResults: string;
+  offlineTitle: string;
+  hospitalHint: string;
 }
 
 export const translations: Record<SupportedLanguage, Translation> = {
@@ -267,8 +279,8 @@ export const translations: Record<SupportedLanguage, Translation> = {
     settingsDescription: "Choose a language and color theme that matches your environment.",
     languageLabel: "Language",
     themeLabel: "Theme",
-    lightTheme: "Light",
-    darkTheme: "Dark",
+    lightTheme: "Day",
+    darkTheme: "Night",
 
     // Home
     homeTitle: "Digital Nurse",
@@ -448,6 +460,16 @@ export const translations: Record<SupportedLanguage, Translation> = {
     notFoundTitle: "Page not found",
     notFoundDesc: "The page you are looking for does not exist.",
     returnHome: "Return to Home",
+    autoTheme: "Auto",
+    moreLabel: "More",
+    greetingMorning: "Good morning",
+    greetingEvening: "Good evening",
+    greetingNight: "Have a calm night shift 🌙",
+    greetingPrompt: "What do you need today?",
+    openSettings: "Open settings",
+    noResults: "No matching results",
+    offlineTitle: "You're offline",
+    hospitalHint: "Tap a room to open its section",
   },
 
   ar: {
@@ -487,8 +509,8 @@ export const translations: Record<SupportedLanguage, Translation> = {
     settingsDescription: "اختر اللغة والوضع اللوني المناسب لبيئة عملك.",
     languageLabel: "اللغة",
     themeLabel: "الوضع",
-    lightTheme: "فاتح",
-    darkTheme: "داكن",
+    lightTheme: "نهار",
+    darkTheme: "ليل",
 
     // Home
     homeTitle: "الممرض الرقمي",
@@ -668,6 +690,16 @@ export const translations: Record<SupportedLanguage, Translation> = {
     notFoundTitle: "الصفحة غير موجودة",
     notFoundDesc: "الصفحة التي تبحث عنها غير موجودة.",
     returnHome: "العودة إلى الرئيسية",
+    autoTheme: "تلقائي",
+    moreLabel: "المزيد",
+    greetingMorning: "صباح الخير",
+    greetingEvening: "مساء الخير",
+    greetingNight: "شفت سعيد 🌙",
+    greetingPrompt: "شنو تحتاج اليوم؟",
+    openSettings: "فتح الإعدادات",
+    noResults: "ما لكينا نتائج مطابقة",
+    offlineTitle: "أنت غير متصل",
+    hospitalHint: "اضغط على أي غرفة حتى تفتح قسمها",
   },
 };
 

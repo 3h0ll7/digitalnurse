@@ -5,8 +5,8 @@
   "start_url": "/home",
   "scope": "/",
   "display": "standalone",
-  "background_color": "#04070f",
-  "theme_color": "#04070f",
+  "background_color": "#FBF7F2",
+  "theme_color": "#FBF7F2",
   "orientation": "portrait-primary",
   "categories": ["medical", "health", "education"],
   "icons": [

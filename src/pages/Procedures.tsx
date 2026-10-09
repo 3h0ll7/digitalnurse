@@ -44,7 +44,7 @@ const Procedures = () => {
         </Button>
       }
     >
-      <section className="rounded-3xl border border-white/10 bg-card/80 p-5 shadow-[0_20px_60px_rgba(0,0,0,0.45)]">
+      <section className="rounded-3xl border border-foreground/10 bg-card/80 p-5 shadow-card">
         <div className="flex flex-col gap-4 md:flex-row md:items-center">
           <div className="relative flex-1">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground rtl:left-auto rtl:right-4" size={18} />
@@ -53,7 +53,7 @@ const Procedures = () => {
               placeholder={t.searchProcedures}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="h-12 rounded-2xl border-white/10 bg-white/5 pl-12 rtl:pl-4 rtl:pr-12 text-base text-white placeholder:text-muted-foreground"
+              className="h-12 rounded-2xl border-foreground/10 bg-foreground/5 pl-12 rtl:pl-4 rtl:pr-12 text-base text-foreground placeholder:text-muted-foreground"
             />
           </div>
           <div className="flex flex-col text-xs uppercase tracking-[0.3em] text-muted-foreground">
@@ -70,8 +70,8 @@ const Procedures = () => {
                 onClick={() => setSelectedCategory(category)}
                 className={`rounded-full border px-4 py-2 text-sm uppercase tracking-widest transition-all ${
                   isActive
-                    ? "border-primary/50 bg-primary/30 text-white shadow-[0_10px_25px_rgba(21,154,255,0.35)]"
-                    : "border-white/10 text-muted-foreground hover:border-white/30"
+                    ? "border-primary/50 bg-primary/30 text-foreground shadow-card"
+                    : "border-foreground/10 text-muted-foreground hover:border-foreground/30"
                 }`}
               >
                 {category === "All" ? t.allLabel : category}
@@ -87,14 +87,14 @@ const Procedures = () => {
           return (
             <Card
               key={phase.title}
-              className="relative overflow-hidden rounded-3xl border-white/10 bg-gradient-to-br from-white/10 to-transparent p-5 text-white"
+              className="relative overflow-hidden rounded-3xl border-foreground/10 bg-gradient-to-br from-foreground/10 to-transparent p-5 text-foreground"
             >
-              <div className="flex items-center justify-between text-xs uppercase tracking-[0.4em] text-white/70">
+              <div className="flex items-center justify-between text-xs uppercase tracking-[0.4em] text-foreground/70">
                 <span>{phase.title}</span>
                 <Icon size={18} />
               </div>
-              <p className="mt-3 text-sm text-white/80">{phase.description}</p>
-              <span className="absolute inset-x-5 bottom-3 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" />
+              <p className="mt-3 text-sm text-foreground/80">{phase.description}</p>
+              <span className="absolute inset-x-5 bottom-3 h-px bg-gradient-to-r from-transparent via-foreground/30 to-transparent" />
             </Card>
           );
         })}
@@ -109,14 +109,14 @@ const Procedures = () => {
             <div
               key={procedure.id}
               onClick={() => setActiveProcedure(procedure)}
-              className="group flex cursor-pointer flex-col gap-3 rounded-3xl border border-white/10 bg-card/70 p-5 text-white transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:bg-card/90"
+              className="group flex cursor-pointer flex-col gap-3 rounded-3xl border border-foreground/10 bg-card/70 p-5 text-foreground transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:bg-card/90"
             >
             <div className="flex items-start justify-between">
               <div>
                 <p className="text-xs uppercase tracking-[0.4em] text-primary">{procedure.category}</p>
                 <h3 className="mt-2 text-2xl font-semibold">{procedure.title}</h3>
               </div>
-              <div className="rounded-full border border-white/10 px-3 py-1 text-xs uppercase tracking-[0.4em] text-muted-foreground">
+              <div className="rounded-full border border-foreground/10 px-3 py-1 text-xs uppercase tracking-[0.4em] text-muted-foreground">
                 {t.ready}
               </div>
             </div>
@@ -129,28 +129,28 @@ const Procedures = () => {
         );
       })}
         {displayProcedures.length === 0 && (
-          <div className="rounded-3xl border border-dashed border-white/20 p-10 text-center text-muted-foreground">
+          <div className="rounded-3xl border border-dashed border-foreground/20 p-10 text-center text-muted-foreground">
             <p>{t.noProcedures}</p>
           </div>
         )}
       </section>
 
       <Drawer open={Boolean(activeProcedure)} onOpenChange={(open) => !open && setActiveProcedure(null)}>
-        <DrawerContent className="border-white/10 bg-[#050912]/95 pb-8 text-white">
+        <DrawerContent className="border-foreground/10 bg-background/95 pb-8 text-foreground">
           <DrawerHeader className="text-start">
             <p className="text-xs uppercase tracking-[0.4em] text-muted-foreground">{t.quickViewTitle}</p>
-            <DrawerTitle className="text-2xl text-white">{activeProcedure?.title}</DrawerTitle>
+            <DrawerTitle className="text-2xl text-foreground">{activeProcedure?.title}</DrawerTitle>
             <DrawerDescription className="text-primary">
               {activeProcedure?.category}
             </DrawerDescription>
           </DrawerHeader>
           <div className="space-y-4 px-4">
             <p className="text-sm text-muted-foreground">{t.quickViewDescription}</p>
-            <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+            <div className="rounded-2xl border border-foreground/10 bg-foreground/5 p-4">
               <p className="text-xs uppercase tracking-[0.3em] text-muted-foreground">
                 {activeProcedure?.description}
               </p>
-              <p className="mt-3 text-sm text-white whitespace-pre-line">
+              <p className="mt-3 text-sm text-foreground whitespace-pre-line">
                 {activeProcedure?.definition}
               </p>
             </div>

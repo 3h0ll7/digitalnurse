@@ -38,7 +38,7 @@ const PharmacokineticsVisualizer = () => {
               <Button size="sm" variant={!animated ? "default" : "outline"} onClick={() => setAnimated(false)}>{pharma.labels.static[language]}</Button>
             </div>
           </div>
-          <svg viewBox="0 0 500 260" className="w-full rounded-xl bg-slate-950/40 p-3">
+          <svg viewBox="0 0 500 260" className="w-full rounded-xl bg-card/40 p-3">
             <path d="M40 130 C 140 40, 260 40, 460 130" stroke="#334155" fill="none" strokeWidth="5" />
             <rect x="58" y="95" width="70" height="70" rx="12" fill="#052e16" stroke="#22c55e" onClick={() => setPhase("A")} />
             <rect x="160" y="65" width="90" height="70" rx="12" fill="#172554" stroke="#3b82f6" onClick={() => setPhase("D")} />
@@ -49,12 +49,12 @@ const PharmacokineticsVisualizer = () => {
           </svg>
           <div className="grid gap-2 md:grid-cols-4">
             {pharma.phases.map((p) => (
-              <button key={p.key} onClick={() => setPhase(p.key)} className={`rounded-lg border p-2 text-left ${phase === p.key ? "border-cyan-400" : "border-white/10"}`}>
+              <button key={p.key} onClick={() => setPhase(p.key)} className={`rounded-lg border p-2 text-left ${phase === p.key ? "border-cyan-400" : "border-foreground/10"}`}>
                 <p className="font-semibold">{p.en}</p><p className="text-xs text-muted-foreground">{p.ar}</p>
               </button>
             ))}
           </div>
-          <Card className="p-3 bg-slate-900/40">
+          <Card className="p-3 bg-card/40">
             <p className="font-semibold">{phaseObj.en} / {phaseObj.ar}</p>
             <p className="text-sm text-muted-foreground">{phaseObj.location}</p>
           </Card>
@@ -68,7 +68,7 @@ const PharmacokineticsVisualizer = () => {
           <div>
             <p className="font-semibold mb-1">Related</p>
             <div className="flex gap-2 flex-wrap">{drug.relatedOrgans.map((o) => <Badge key={o}>{o}</Badge>)}</div>
-            <div className="text-cyan-300 mt-2 flex gap-3"><Link to="/atlas" className="underline">Body Atlas</Link><Link to="/pathways" className="underline">Pathways</Link><Link to="/drugs" className="underline">Drug Reference</Link></div>
+            <div className="text-cyan-800 dark:text-cyan-300 mt-2 flex gap-3"><Link to="/atlas" className="underline">Body Atlas</Link><Link to="/pathways" className="underline">Pathways</Link><Link to="/drugs" className="underline">Drug Reference</Link></div>
           </div>
         </Card>
       </div>
@@ -99,7 +99,7 @@ const PharmacokineticsVisualizer = () => {
           <h4 className="font-medium mt-2">CYP450 Interaction Checker</h4>
           <div className="space-y-2 text-xs">
             {pharma.cyp.map((c) => (
-              <div key={c.enzyme} className="rounded-lg border border-white/10 p-2">
+              <div key={c.enzyme} className="rounded-lg border border-foreground/10 p-2">
                 <p className="font-semibold">{c.enzyme} — {c.risk} risk</p>
                 <p>Substrate: {c.substrates}</p><p>Inhibitor: {c.inhibitors}</p><p>Inducer: {c.inducers}</p>
               </div>
@@ -112,7 +112,7 @@ const PharmacokineticsVisualizer = () => {
         <h3 className="font-semibold mb-2">PK Concepts</h3>
         <div className="grid gap-2 md:grid-cols-2 lg:grid-cols-3 text-sm">
           {pharma.concepts.map((c) => (
-            <div key={c.nameEn} className="rounded-lg border border-white/10 p-3">
+            <div key={c.nameEn} className="rounded-lg border border-foreground/10 p-3">
               <p className="font-semibold">{c.nameEn}</p>
               <p className="text-xs text-muted-foreground mb-1">{c.nameAr}</p>
               <p>{c.visual}</p>

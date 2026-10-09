@@ -183,14 +183,14 @@ const Fluids = () => {
 
   return (
     <AppLayout title={copy.title} subtitle={copy.subtitle}>
-      <section className="rounded-3xl border border-white/10 bg-card/80 p-5 shadow-[0_20px_60px_rgba(0,0,0,0.45)]">
+      <section className="rounded-3xl border border-foreground/10 bg-card/80 p-5 shadow-card">
         <div className="relative">
           <Droplets size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-primary rtl:left-auto rtl:right-4" />
-          <Input value={search} onChange={(e) => setSearch(e.target.value)} placeholder={copy.searchPlaceholder} className="h-12 rounded-2xl border-white/10 bg-white/5 pl-12 rtl:pl-4 rtl:pr-12 text-white" />
+          <Input value={search} onChange={(e) => setSearch(e.target.value)} placeholder={copy.searchPlaceholder} className="h-12 rounded-2xl border-foreground/10 bg-foreground/5 pl-12 rtl:pl-4 rtl:pr-12 text-foreground" />
         </div>
         <div className="mt-4 flex flex-wrap gap-2">
           {Object.entries(copy.categories).map(([key, label]) => (
-            <Button key={key} size="sm" variant="outline" onClick={() => setCategory(key as keyof typeof copy.categories)} className={`rounded-full border px-4 py-2 text-[11px] uppercase tracking-widest ${category === key ? "border-primary/50 bg-primary/30 text-white" : "border-white/20 text-muted-foreground"}`}>
+            <Button key={key} size="sm" variant="outline" onClick={() => setCategory(key as keyof typeof copy.categories)} className={`rounded-full border px-4 py-2 text-[11px] uppercase tracking-widest ${category === key ? "border-primary/50 bg-primary/30 text-foreground" : "border-foreground/20 text-muted-foreground"}`}>
               {label}
             </Button>
           ))}
@@ -198,40 +198,40 @@ const Fluids = () => {
       </section>
 
       <section className="space-y-3">
-        <h2 className="text-lg font-semibold text-cyan-100">{copy.sectionFluids}</h2>
+        <h2 className="text-lg font-semibold text-cyan-800 dark:text-cyan-100">{copy.sectionFluids}</h2>
         {filteredFluids.map((item) => (
-          <details key={item.name} className="group rounded-3xl border border-white/10 bg-card/70 p-4">
+          <details key={item.name} className="group rounded-3xl border border-foreground/10 bg-card/70 p-4">
             <summary className="cursor-pointer list-none">
               <div className="flex flex-wrap items-center gap-2">
-                <p className="text-base font-semibold text-white">{item.name}</p>
-                <Badge className="border-cyan-300/40 bg-cyan-500/15 text-cyan-100">{copy.types[item.type === "CRYSTALLOIDS" ? "crystalloid" : item.type === "COLLOIDS" ? "colloid" : "blood"]}</Badge>
-                <Badge className="border-white/20 bg-white/10 text-white">{copy.tonicity[item.tonicity]}</Badge>
+                <p className="text-base font-semibold text-foreground">{item.name}</p>
+                <Badge className="border-cyan-300/40 bg-cyan-500/15 text-cyan-800 dark:text-cyan-100">{copy.types[item.type === "CRYSTALLOIDS" ? "crystalloid" : item.type === "COLLOIDS" ? "colloid" : "blood"]}</Badge>
+                <Badge className="border-foreground/20 bg-foreground/10 text-foreground">{copy.tonicity[item.tonicity]}</Badge>
               </div>
             </summary>
-            <div className="mt-3 grid gap-2 text-sm text-slate-200">
-              <p><span className="text-cyan-200">{copy.fields.composition}:</span> {item.composition}</p>
-              <p><span className="text-cyan-200">{copy.fields.osmolarity}:</span> {item.osmolarity}</p>
-              <p><span className="text-cyan-200">{copy.fields.indications}:</span> {item.indications}</p>
-              <p><span className="text-cyan-200">{copy.fields.contraindications}:</span> {item.contraindications}</p>
-              <p><span className="text-cyan-200">{copy.fields.rateAdministration}:</span> {item.rateAdministration}</p>
-              <p><span className="text-cyan-200">{copy.fields.nursingConsiderations}:</span> {item.nursingConsiderations}</p>
-              <p><span className="text-cyan-200">{copy.fields.complications}:</span> {item.complications}</p>
-              <p><span className="text-cyan-200">{copy.fields.specialPrecautions}:</span> {item.specialPrecautions}</p>
+            <div className="mt-3 grid gap-2 text-sm text-foreground/90">
+              <p><span className="text-cyan-800 dark:text-cyan-200">{copy.fields.composition}:</span> {item.composition}</p>
+              <p><span className="text-cyan-800 dark:text-cyan-200">{copy.fields.osmolarity}:</span> {item.osmolarity}</p>
+              <p><span className="text-cyan-800 dark:text-cyan-200">{copy.fields.indications}:</span> {item.indications}</p>
+              <p><span className="text-cyan-800 dark:text-cyan-200">{copy.fields.contraindications}:</span> {item.contraindications}</p>
+              <p><span className="text-cyan-800 dark:text-cyan-200">{copy.fields.rateAdministration}:</span> {item.rateAdministration}</p>
+              <p><span className="text-cyan-800 dark:text-cyan-200">{copy.fields.nursingConsiderations}:</span> {item.nursingConsiderations}</p>
+              <p><span className="text-cyan-800 dark:text-cyan-200">{copy.fields.complications}:</span> {item.complications}</p>
+              <p><span className="text-cyan-800 dark:text-cyan-200">{copy.fields.specialPrecautions}:</span> {item.specialPrecautions}</p>
             </div>
           </details>
         ))}
       </section>
 
       <section className="space-y-3">
-        <h2 className="text-lg font-semibold text-cyan-100">{copy.sectionElectrolytes}</h2>
+        <h2 className="text-lg font-semibold text-cyan-800 dark:text-cyan-100">{copy.sectionElectrolytes}</h2>
         <div className="grid gap-3 md:grid-cols-2">
           {electrolyteCards.map((card) => (
-            <Card key={card.key} className="rounded-3xl border-white/10 bg-card/70 p-4 text-sm text-slate-100">
-              <p className="text-base font-semibold text-white">{card.titleEn}</p>
-              <p className="text-cyan-200">{copy.electrolytes.normalRange}: {card.normal}</p>
+            <Card key={card.key} className="rounded-3xl border-foreground/10 bg-card/70 p-4 text-sm text-foreground">
+              <p className="text-base font-semibold text-foreground">{card.titleEn}</p>
+              <p className="text-cyan-800 dark:text-cyan-200">{copy.electrolytes.normalRange}: {card.normal}</p>
               <div className="my-2 flex flex-wrap gap-2">
                 {card.labels.map((l) => (
-                  <Badge key={l} className="border-white/20 bg-white/10 text-white">{copy.electrolytes[l as keyof typeof copy.electrolytes]}</Badge>
+                  <Badge key={l} className="border-foreground/20 bg-foreground/10 text-foreground">{copy.electrolytes[l as keyof typeof copy.electrolytes]}</Badge>
                 ))}
               </div>
               <ul className="list-disc space-y-1 ps-5">
@@ -243,44 +243,44 @@ const Fluids = () => {
       </section>
 
       <section className="space-y-3">
-        <h2 className="text-lg font-semibold text-cyan-100">{copy.sectionCalculators}</h2>
+        <h2 className="text-lg font-semibold text-cyan-800 dark:text-cyan-100">{copy.sectionCalculators}</h2>
         <div className="grid gap-3 md:grid-cols-2">
-          <Card className="rounded-3xl border-white/10 bg-card/70 p-4">
+          <Card className="rounded-3xl border-foreground/10 bg-card/70 p-4">
             <p className="font-semibold">{copy.calculator.fluidDeficitTitle}</p>
-            <Input className="mt-2 bg-white/5" placeholder={copy.calculator.weight} value={calc.weight} onChange={(e) => setCalc({ ...calc, weight: e.target.value })} />
-            <Input className="mt-2 bg-white/5" placeholder={copy.calculator.dehydrationPercent} value={calc.dehydration} onChange={(e) => setCalc({ ...calc, dehydration: e.target.value })} />
+            <Input className="mt-2 bg-foreground/5" placeholder={copy.calculator.weight} value={calc.weight} onChange={(e) => setCalc({ ...calc, weight: e.target.value })} />
+            <Input className="mt-2 bg-foreground/5" placeholder={copy.calculator.dehydrationPercent} value={calc.dehydration} onChange={(e) => setCalc({ ...calc, dehydration: e.target.value })} />
             <p className="mt-2 text-sm">{copy.calculator.result}: {fluidDeficit.toFixed(0)} mL</p>
             <p className="text-xs text-muted-foreground">{copy.calculator.replacementPlan}: 50% in first 8h, remaining over next 16h.</p>
           </Card>
-          <Card className="rounded-3xl border-white/10 bg-card/70 p-4">
+          <Card className="rounded-3xl border-foreground/10 bg-card/70 p-4">
             <p className="font-semibold">{copy.calculator.maintenanceTitle}</p>
             <p className="mt-2 text-sm">4-2-1 Rule (Holliday-Segar)</p>
             <p className="mt-2 text-sm">{copy.calculator.maintenanceRate}: {maintenanceRate.toFixed(1)} mL/hr</p>
           </Card>
-          <Card className="rounded-3xl border-white/10 bg-card/70 p-4">
+          <Card className="rounded-3xl border-foreground/10 bg-card/70 p-4">
             <p className="font-semibold">{copy.calculator.freeWaterTitle}</p>
-            <Input className="mt-2 bg-white/5" placeholder={copy.calculator.currentNa} value={calc.currentNa} onChange={(e) => setCalc({ ...calc, currentNa: e.target.value })} />
-            <Input className="mt-2 bg-white/5" placeholder={copy.calculator.targetNa} value={calc.targetNa} onChange={(e) => setCalc({ ...calc, targetNa: e.target.value })} />
-            <select className="mt-2 h-10 w-full rounded-xl border border-white/10 bg-white/5 px-3" value={calc.gender} onChange={(e) => setCalc({ ...calc, gender: e.target.value })}>
+            <Input className="mt-2 bg-foreground/5" placeholder={copy.calculator.currentNa} value={calc.currentNa} onChange={(e) => setCalc({ ...calc, currentNa: e.target.value })} />
+            <Input className="mt-2 bg-foreground/5" placeholder={copy.calculator.targetNa} value={calc.targetNa} onChange={(e) => setCalc({ ...calc, targetNa: e.target.value })} />
+            <select className="mt-2 h-10 w-full rounded-xl border border-foreground/10 bg-foreground/5 px-3" value={calc.gender} onChange={(e) => setCalc({ ...calc, gender: e.target.value })}>
               <option value="male">{copy.calculator.male}</option>
               <option value="female">{copy.calculator.female}</option>
             </select>
             <p className="mt-2 text-sm">{copy.calculator.result}: {freeWaterDeficit.toFixed(2)} L</p>
           </Card>
-          <Card className="rounded-3xl border-white/10 bg-card/70 p-4">
+          <Card className="rounded-3xl border-foreground/10 bg-card/70 p-4">
             <p className="font-semibold">{copy.calculator.sodiumRateTitle}</p>
-            <Input className="mt-2 bg-white/5" placeholder={copy.calculator.initialNa} value={calc.initialNa} onChange={(e) => setCalc({ ...calc, initialNa: e.target.value })} />
-            <Input className="mt-2 bg-white/5" placeholder={copy.calculator.currentNa} value={calc.nowNa} onChange={(e) => setCalc({ ...calc, nowNa: e.target.value })} />
-            <Input className="mt-2 bg-white/5" placeholder={copy.calculator.hoursElapsed} value={calc.hours} onChange={(e) => setCalc({ ...calc, hours: e.target.value })} />
+            <Input className="mt-2 bg-foreground/5" placeholder={copy.calculator.initialNa} value={calc.initialNa} onChange={(e) => setCalc({ ...calc, initialNa: e.target.value })} />
+            <Input className="mt-2 bg-foreground/5" placeholder={copy.calculator.currentNa} value={calc.nowNa} onChange={(e) => setCalc({ ...calc, nowNa: e.target.value })} />
+            <Input className="mt-2 bg-foreground/5" placeholder={copy.calculator.hoursElapsed} value={calc.hours} onChange={(e) => setCalc({ ...calc, hours: e.target.value })} />
             <p className="mt-2 text-sm">{copy.calculator.correctionRate}: {sodiumRate.toFixed(2)} mEq/L/hr</p>
-            <p className={`text-xs ${sodiumRate <= 0.5 ? "text-emerald-300" : "text-red-300"}`}>{sodiumRate <= 0.5 ? copy.calculator.safe : copy.calculator.tooFast}</p>
+            <p className={`text-xs ${sodiumRate <= 0.5 ? "text-emerald-800 dark:text-emerald-300" : "text-red-800 dark:text-red-300"}`}>{sodiumRate <= 0.5 ? copy.calculator.safe : copy.calculator.tooFast}</p>
           </Card>
-          <Card className="rounded-3xl border-white/10 bg-card/70 p-4 md:col-span-2">
+          <Card className="rounded-3xl border-foreground/10 bg-card/70 p-4 md:col-span-2">
             <p className="font-semibold">{copy.calculator.dripRateTitle}</p>
             <div className="grid gap-2 md:grid-cols-3">
-              <Input className="bg-white/5" placeholder={copy.calculator.volume} value={calc.volume} onChange={(e) => setCalc({ ...calc, volume: e.target.value })} />
-              <Input className="bg-white/5" placeholder={copy.calculator.timeHours} value={calc.time} onChange={(e) => setCalc({ ...calc, time: e.target.value })} />
-              <Input className="bg-white/5" placeholder={copy.calculator.dropFactor} value={calc.dropFactor} onChange={(e) => setCalc({ ...calc, dropFactor: e.target.value })} />
+              <Input className="bg-foreground/5" placeholder={copy.calculator.volume} value={calc.volume} onChange={(e) => setCalc({ ...calc, volume: e.target.value })} />
+              <Input className="bg-foreground/5" placeholder={copy.calculator.timeHours} value={calc.time} onChange={(e) => setCalc({ ...calc, time: e.target.value })} />
+              <Input className="bg-foreground/5" placeholder={copy.calculator.dropFactor} value={calc.dropFactor} onChange={(e) => setCalc({ ...calc, dropFactor: e.target.value })} />
             </div>
             <p className="mt-2 text-sm">{copy.calculator.gttsMin}: {dripGtts.toFixed(1)} | {copy.calculator.mlHour}: {dripMlh.toFixed(1)}</p>
           </Card>
@@ -288,23 +288,23 @@ const Fluids = () => {
       </section>
 
       <section className="space-y-3">
-        <h2 className="text-lg font-semibold text-cyan-100">{copy.sectionQuick}</h2>
-        <Card className="rounded-3xl border-white/10 bg-card/70 p-4 overflow-x-auto">
+        <h2 className="text-lg font-semibold text-cyan-800 dark:text-cyan-100">{copy.sectionQuick}</h2>
+        <Card className="rounded-3xl border-foreground/10 bg-card/70 p-4 overflow-x-auto">
           <p className="mb-2 font-semibold">{copy.quick.fluidComparison}</p>
-          <table className="w-full text-sm"><thead><tr className="text-left"><th>Fluid</th><th>Na</th><th>K</th><th>Cl</th><th>Ca</th><th>Lactate</th><th>Osm</th><th>pH</th></tr></thead><tbody>{fluidComparison.map((row) => <tr key={row[0]} className="border-t border-white/10">{row.map((c) => <td key={c} className="py-1 pe-2">{c}</td>)}</tr>)}</tbody></table>
+          <table className="w-full text-sm"><thead><tr className="text-left"><th>Fluid</th><th>Na</th><th>K</th><th>Cl</th><th>Ca</th><th>Lactate</th><th>Osm</th><th>pH</th></tr></thead><tbody>{fluidComparison.map((row) => <tr key={row[0]} className="border-t border-foreground/10">{row.map((c) => <td key={c} className="py-1 pe-2">{c}</td>)}</tr>)}</tbody></table>
         </Card>
-        <Card className="rounded-3xl border-white/10 bg-card/70 p-4 overflow-x-auto">
+        <Card className="rounded-3xl border-foreground/10 bg-card/70 p-4 overflow-x-auto">
           <p className="mb-2 font-semibold">{copy.quick.normalRanges}</p>
-          <table className="w-full text-sm"><thead><tr className="text-left"><th>Electrolyte</th><th>{copy.quick.normalRanges}</th><th className="text-red-300">{copy.quick.criticalPanic}</th></tr></thead><tbody>{normalRanges.map((row) => <tr key={row[0]} className="border-t border-white/10">{row.map((c, i) => <td key={c} className={`py-1 pe-2 ${i === 2 ? "text-red-300" : ""}`}>{c}</td>)}</tr>)}</tbody></table>
+          <table className="w-full text-sm"><thead><tr className="text-left"><th>Electrolyte</th><th>{copy.quick.normalRanges}</th><th className="text-red-800 dark:text-red-300">{copy.quick.criticalPanic}</th></tr></thead><tbody>{normalRanges.map((row) => <tr key={row[0]} className="border-t border-foreground/10">{row.map((c, i) => <td key={c} className={`py-1 pe-2 ${i === 2 ? "text-red-800 dark:text-red-300" : ""}`}>{c}</td>)}</tr>)}</tbody></table>
         </Card>
         <div className="grid gap-3 md:grid-cols-2">
-          <Card className="rounded-3xl border-white/10 bg-card/70 p-4">
+          <Card className="rounded-3xl border-foreground/10 bg-card/70 p-4">
             <p className="mb-2 font-semibold">{copy.quick.transfusionChecklist}</p>
             <ol className="list-decimal space-y-1 ps-5 text-sm">{checklist.map((item) => <li key={item}>{item}</li>)}</ol>
           </Card>
-          <Card className="rounded-3xl border-white/10 bg-card/70 p-4 overflow-x-auto">
+          <Card className="rounded-3xl border-foreground/10 bg-card/70 p-4 overflow-x-auto">
             <p className="mb-2 font-semibold">{copy.quick.transfusionReactions}</p>
-            <table className="w-full text-xs"><thead><tr className="text-left"><th>Type</th><th>Signs</th><th>Action</th></tr></thead><tbody>{reactions.map((r) => <tr key={r[0]} className="border-t border-white/10">{r.map((c) => <td key={c} className="py-1 pe-2">{c}</td>)}</tr>)}</tbody></table>
+            <table className="w-full text-xs"><thead><tr className="text-left"><th>Type</th><th>Signs</th><th>Action</th></tr></thead><tbody>{reactions.map((r) => <tr key={r[0]} className="border-t border-foreground/10">{r.map((c) => <td key={c} className="py-1 pe-2">{c}</td>)}</tr>)}</tbody></table>
           </Card>
         </div>
       </section>

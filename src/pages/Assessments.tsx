@@ -54,7 +54,7 @@ const Assessments = () => {
 
   return (
     <AppLayout title={t.assessmentHubTitle} subtitle={t.assessmentHubSubtitle}>
-      <section className="rounded-3xl border border-white/10 bg-card/80 p-5 shadow-[0_20px_60px_rgba(0,0,0,0.45)]">
+      <section className="rounded-3xl border border-foreground/10 bg-card/80 p-5 shadow-card">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
           <div className="relative flex-1">
             <Sparkles className="absolute left-4 top-1/2 -translate-y-1/2 text-primary rtl:left-auto rtl:right-4" size={18} />
@@ -62,7 +62,7 @@ const Assessments = () => {
               value={query}
               onChange={(event) => setQuery(event.target.value)}
               placeholder={t.searchAssessments}
-              className="h-12 rounded-2xl border-white/10 bg-white/5 pl-12 rtl:pl-4 rtl:pr-12 text-white placeholder:text-muted-foreground"
+              className="h-12 rounded-2xl border-foreground/10 bg-foreground/5 pl-12 rtl:pl-4 rtl:pr-12 text-foreground placeholder:text-muted-foreground"
             />
           </div>
           <div className="text-xs uppercase tracking-[0.4em] text-muted-foreground">
@@ -78,8 +78,8 @@ const Assessments = () => {
               variant="outline"
               className={`rounded-full border px-4 py-2 text-xs uppercase tracking-widest transition-all ${
                 category === cat
-                  ? "border-primary/50 bg-primary/30 text-white shadow-[0_10px_30px_rgba(21,154,255,0.35)]"
-                  : "border-white/20 text-muted-foreground hover:border-white/40"
+                  ? "border-primary/50 bg-primary/30 text-foreground shadow-card"
+                  : "border-foreground/20 text-muted-foreground hover:border-foreground/40"
               }`}
               onClick={() => setCategory(cat)}
             >
@@ -93,7 +93,7 @@ const Assessments = () => {
         {filteredScales.map((scale) => (
           <Card
             key={scale.id}
-            className="cursor-pointer rounded-3xl border border-white/10 bg-card/70 p-5 text-white shadow-[0_15px_50px_rgba(0,0,0,0.4)] transition-all duration-300 hover:-translate-y-1 hover:border-primary/40"
+            className="cursor-pointer rounded-3xl border border-foreground/10 bg-card/70 p-5 text-foreground shadow-card transition-all duration-300 hover:-translate-y-1 hover:border-primary/40"
             onClick={() => navigate(`/scale/${scale.id}`)}
           >
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
@@ -102,14 +102,14 @@ const Assessments = () => {
                 <p className="text-2xl font-semibold">{scale.name}</p>
                 <p className="text-sm text-muted-foreground">{scale.description}</p>
               </div>
-              <span className="self-start rounded-full border border-white/10 px-4 py-1 text-xs uppercase tracking-[0.4em] text-muted-foreground">
+              <span className="self-start rounded-full border border-foreground/10 px-4 py-1 text-xs uppercase tracking-[0.4em] text-muted-foreground">
                 {t.interactive}
               </span>
             </div>
           </Card>
         ))}
         {filteredScales.length === 0 && (
-          <div className="rounded-3xl border border-dashed border-white/30 p-10 text-center text-muted-foreground">
+          <div className="rounded-3xl border border-dashed border-foreground/30 p-10 text-center text-muted-foreground">
             {t.noAssessments}
           </div>
         )}

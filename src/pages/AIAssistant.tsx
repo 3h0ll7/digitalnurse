@@ -354,20 +354,20 @@ const AIAssistant = () => {
 
   return (
     <div dir={direction} className="min-h-screen bg-background pb-20 flex flex-col">
-      <header className="p-4 border-b border-white/10 bg-slate-950/80 backdrop-blur">
+      <header className="p-4 border-b border-foreground/10 bg-card/80 backdrop-blur">
         <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-2">
             <Sheet>
               <SheetTrigger asChild><Button size="icon" variant="ghost"><Menu size={18} /></Button></SheetTrigger>
-              <SheetContent side={isArabic ? "left" : "right"} className="bg-slate-950 text-white border-white/10">
+              <SheetContent side={isArabic ? "left" : "right"} className="bg-card text-foreground border-foreground/10">
                 <SheetHeader><SheetTitle>{isArabic ? "سجل المحادثات" : "Chat History"}</SheetTitle></SheetHeader>
                 <div className="mt-4 space-y-2">
                   <Button className="w-full" onClick={() => { setMessages([]); setChatId(null); }}>{isArabic ? "محادثة جديدة" : "New Chat"}</Button>
                   {history.map((item) => (
-                    <div key={item.id} className="p-2 rounded border border-white/10">
+                    <div key={item.id} className="p-2 rounded border border-foreground/10">
                       <button className="text-start w-full" onClick={() => { setMode(item.mode); setMessages(item.messages); setChatId(item.id); }}>
                         <p className="text-sm truncate">{item.title}</p>
-                        <p className="text-xs text-cyan-300">{new Date(item.updatedAt).toLocaleDateString()}</p>
+                        <p className="text-xs text-cyan-800 dark:text-cyan-300">{new Date(item.updatedAt).toLocaleDateString()}</p>
                       </button>
                       <Button size="sm" variant="ghost" onClick={() => {
                         const updated = history.filter((h) => h.id !== item.id);
@@ -381,15 +381,15 @@ const AIAssistant = () => {
               </SheetContent>
             </Sheet>
             <div>
-              <h1 className="text-xl font-bold text-white">{isArabic ? "المساعد السريري الذكي" : "AI Clinical Assistant"}</h1>
-              <p className="text-[10px] text-cyan-200 uppercase">{isArabic ? "مساعدك التمريضي الذكي" : "YOUR INTELLIGENT NURSING CO-PILOT"}</p>
+              <h1 className="text-xl font-bold text-foreground">{isArabic ? "المساعد السريري الذكي" : "AI Clinical Assistant"}</h1>
+              <p className="text-[10px] text-cyan-800 dark:text-cyan-200 uppercase">{isArabic ? "مساعدك التمريضي الذكي" : "YOUR INTELLIGENT NURSING CO-PILOT"}</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <Badge className="bg-cyan-500/20 text-cyan-200 border border-cyan-400/40">{providerBadge}</Badge>
+            <Badge className="bg-cyan-500/20 text-cyan-800 dark:text-cyan-200 border border-cyan-400/40">{providerBadge}</Badge>
             <Sheet>
               <SheetTrigger asChild><Button size="icon" variant="ghost"><Settings size={18} /></Button></SheetTrigger>
-              <SheetContent className="bg-slate-950 text-white border-white/10">
+              <SheetContent className="bg-card text-foreground border-foreground/10">
                 <SheetHeader><SheetTitle>{isArabic ? "الإعدادات" : "Settings"}</SheetTitle></SheetHeader>
                 <div className="mt-4 space-y-2">
                   <Button variant={provider === "groq" ? "default" : "outline"} className="w-full" onClick={() => setProvider("groq")}>Llama 3.3 via Groq</Button>
@@ -397,18 +397,18 @@ const AIAssistant = () => {
                 </div>
               </SheetContent>
             </Sheet>
-            <div className="text-xs text-cyan-200 flex items-center gap-1"><Wifi size={14} />{isOnline ? "Online" : "Offline"}</div>
+            <div className="text-xs text-cyan-800 dark:text-cyan-200 flex items-center gap-1"><Wifi size={14} />{isOnline ? "Online" : "Offline"}</div>
           </div>
         </div>
       </header>
 
-      <div className="p-3 border-b border-white/10 overflow-x-auto flex gap-2">
+      <div className="p-3 border-b border-foreground/10 overflow-x-auto flex gap-2">
         {Object.entries(modeConfig).map(([key, value]) => {
           const Icon = value.icon;
           const active = mode === key;
           return (
-            <button key={key} onClick={() => setMode(key as ClinicalMode)} className={`min-w-[140px] text-start p-3 rounded-xl border ${active ? "border-cyan-400 bg-cyan-500/20" : "border-white/10 bg-slate-900/70"}`}>
-              <Icon size={16} className="mb-1 text-cyan-300" />
+            <button key={key} onClick={() => setMode(key as ClinicalMode)} className={`min-w-[140px] text-start p-3 rounded-xl border ${active ? "border-cyan-400 bg-cyan-500/20" : "border-foreground/10 bg-card/70"}`}>
+              <Icon size={16} className="mb-1 text-cyan-800 dark:text-cyan-300" />
               <p className="text-xs font-semibold">{isArabic ? value.ar : value.en}</p>
             </button>
           );
@@ -417,7 +417,7 @@ const AIAssistant = () => {
 
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
         {mode === "interaction" && (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-2 p-3 rounded-xl bg-slate-900/70 border border-white/10">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-2 p-3 rounded-xl bg-card/70 border border-foreground/10">
             <Input list="drugs" value={drugA} onChange={(e) => setDrugA(e.target.value)} placeholder={isArabic ? "الدواء الأول" : "Drug A"} />
             <Input list="drugs" value={drugB} onChange={(e) => setDrugB(e.target.value)} placeholder={isArabic ? "الدواء الثاني" : "Drug B"} />
             <Button onClick={() => sendMessage(`Check the interaction between ${drugA} and ${drugB}. Categorize severity as Major/Moderate/Minor. Explain the mechanism, clinical effect, and nursing recommendation.`)}>{isArabic ? "تحقق من التداخل" : "Check Interaction"}</Button>
@@ -426,7 +426,7 @@ const AIAssistant = () => {
         )}
 
         {mode === "shift" && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-2 p-3 rounded-xl bg-slate-900/70 border border-white/10">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2 p-3 rounded-xl bg-card/70 border border-foreground/10">
             <Input placeholder={isArabic ? "المريض/السرير" : "Patient"} value={reportForm.patient} onChange={(e) => setReportForm((p) => ({ ...p, patient: e.target.value }))} />
             <Input placeholder={isArabic ? "العمر/الجنس" : "Age/Sex"} value={reportForm.ageSex} onChange={(e) => setReportForm((p) => ({ ...p, ageSex: e.target.value }))} />
             <Input placeholder={isArabic ? "التشخيص" : "Diagnosis"} value={reportForm.diagnosis} onChange={(e) => setReportForm((p) => ({ ...p, diagnosis: e.target.value }))} />
@@ -436,7 +436,7 @@ const AIAssistant = () => {
         )}
 
         {mode === "scenario" && (
-          <div className="p-3 rounded-xl bg-slate-900/70 border border-white/10 space-y-2">
+          <div className="p-3 rounded-xl bg-card/70 border border-foreground/10 space-y-2">
             <p className="text-sm">{isArabic ? "اختر موضوع" : "Choose a topic"}</p>
             <div className="flex flex-wrap gap-2">
               {["Septic Shock management", "STEMI protocol", "DKA management", "Code Blue (VFib arrest)", "Anaphylaxis"].map((topic) => (
@@ -454,8 +454,8 @@ const AIAssistant = () => {
               {quickActions.map((action) => {
                 const Icon = action.icon;
                 return (
-                  <button key={action.mode} onClick={() => { setMode(action.mode); setInput(action.starter); }} className="rounded-xl border border-cyan-400/20 bg-slate-900/70 p-3 text-center hover:bg-cyan-500/10">
-                    <Icon className="mx-auto text-cyan-300 mb-2" size={18} />
+                  <button key={action.mode} onClick={() => { setMode(action.mode); setInput(action.starter); }} className="rounded-xl border border-cyan-400/20 bg-card/70 p-3 text-center hover:bg-cyan-500/10">
+                    <Icon className="mx-auto text-cyan-800 dark:text-cyan-300 mb-2" size={18} />
                     <p className="text-xs">{isArabic ? action.ar : action.en}</p>
                   </button>
                 );
@@ -474,7 +474,7 @@ const AIAssistant = () => {
             const related = message.role === "assistant" ? relatedSections(message.content) : [];
             return (
               <div key={message.id} className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}>
-                <div className={`max-w-[88%] rounded-2xl p-3 ${message.role === "user" ? "bg-cyan-600 text-white" : "bg-slate-900 border border-white/10"}`}>
+                <div className={`max-w-[88%] rounded-2xl p-3 ${message.role === "user" ? "bg-primary text-primary-foreground" : "bg-card border border-foreground/10"}`}>
                   {message.role === "assistant" ? renderMarkdown(message.content) : <p className="text-sm whitespace-pre-wrap">{message.content}</p>}
                   {message.role === "assistant" && (
                     <div className="mt-2 flex gap-2 flex-wrap">
@@ -491,9 +491,9 @@ const AIAssistant = () => {
                   )}
                   {related.length > 0 && (
                     <div className="mt-2 text-xs">
-                      <p className="text-cyan-300 mb-1">📎 {isArabic ? "أقسام ذات صلة:" : "Related in Digital Nurse:"}</p>
+                      <p className="text-cyan-800 dark:text-cyan-300 mb-1">📎 {isArabic ? "أقسام ذات صلة:" : "Related in Digital Nurse:"}</p>
                       <div className="flex gap-2 flex-wrap">
-                        {related.map((r) => <Link key={r.path} to={r.path} className="px-2 py-1 rounded-full bg-cyan-500/20 text-cyan-200">{isArabic ? r.ar : r.en}</Link>)}
+                        {related.map((r) => <Link key={r.path} to={r.path} className="px-2 py-1 rounded-full bg-cyan-500/20 text-cyan-800 dark:text-cyan-200">{isArabic ? r.ar : r.en}</Link>)}
                       </div>
                     </div>
                   )}
@@ -505,7 +505,7 @@ const AIAssistant = () => {
         )}
 
         {isLoading && !isStreaming && (
-          <div className="bg-slate-900 border border-white/10 rounded-2xl p-3 w-fit">
+          <div className="bg-card border border-foreground/10 rounded-2xl p-3 w-fit">
             <div className="flex items-center gap-2">
               <div className="flex gap-1">
                 <div className="w-2 h-2 bg-cyan-300 rounded-full animate-bounce" />

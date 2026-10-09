@@ -28,16 +28,16 @@ const DocsProfessional = () => {
     <AppLayout title={copy.professionalRouteTitle} subtitle={copy.hubSubtitle} onBack={() => navigate("/docs")}>
       <section dir={direction} className="space-y-4">
         <Accordion type="multiple" className="space-y-3">
-          <AccordionItem value="shift" className="rounded-2xl border border-white/10 bg-card/60 px-4">
+          <AccordionItem value="shift" className="rounded-2xl border border-foreground/10 bg-card/60 px-4">
             <AccordionTrigger>{copy.shiftArchive}</AccordionTrigger>
             <AccordionContent className="space-y-3">
               <Input placeholder={copy.search} />
               <p className="text-sm text-muted-foreground">SBAR pull is available when Shift Planner local records exist.</p>
-              <div className="rounded-lg border border-white/10 p-3 text-sm text-muted-foreground">{copy.noArchived}</div>
+              <div className="rounded-lg border border-foreground/10 p-3 text-sm text-muted-foreground">{copy.noArchived}</div>
             </AccordionContent>
           </AccordionItem>
 
-          <AccordionItem value="procedures" className="rounded-2xl border border-white/10 bg-card/60 px-4">
+          <AccordionItem value="procedures" className="rounded-2xl border border-foreground/10 bg-card/60 px-4">
             <AccordionTrigger>{copy.procedureLog}</AccordionTrigger>
             <AccordionContent className="space-y-3">
               <Input placeholder="Procedure" value={procedure.name} onChange={(e) => setProcedure((p) => ({ ...p, name: e.target.value }))} />
@@ -53,7 +53,7 @@ const DocsProfessional = () => {
               </Select>
               <Textarea placeholder="Notes" value={procedure.notes} onChange={(e) => setProcedure((p) => ({ ...p, notes: e.target.value }))} />
               <Button onClick={() => logStore.setData((p) => ({ ...p, entries: [procedure, ...p.entries] }))}>{copy.addEntry}</Button>
-              <div className="h-52 rounded-lg border border-white/10 p-2">
+              <div className="h-52 rounded-lg border border-foreground/10 p-2">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={chartData}>
                     <XAxis dataKey="name" hide />
@@ -66,7 +66,7 @@ const DocsProfessional = () => {
             </AccordionContent>
           </AccordionItem>
 
-          <AccordionItem value="edu" className="rounded-2xl border border-white/10 bg-card/60 px-4">
+          <AccordionItem value="edu" className="rounded-2xl border border-foreground/10 bg-card/60 px-4">
             <AccordionTrigger>{copy.educationLog}</AccordionTrigger>
             <AccordionContent className="space-y-3">
               <div className="grid gap-2 sm:grid-cols-2">
@@ -79,32 +79,32 @@ const DocsProfessional = () => {
                 if (!title || !hours) return;
                 eduStore.setData((p) => ({ ...p, entries: [{ title, hours, expiry: "" }, ...p.entries] }));
               }}>{copy.addEntry}</Button>
-              <div className="rounded-lg border border-white/10 p-3 text-sm">
+              <div className="rounded-lg border border-foreground/10 p-3 text-sm">
                 {copy.hoursThisYear}: <b>{totalHours}</b> | {copy.requiredHours}: <b>{eduStore.data.required}</b> | {copy.remaining}: <b>{Math.max(eduStore.data.required - totalHours, 0)}</b>
               </div>
             </AccordionContent>
           </AccordionItem>
 
-          <AccordionItem value="skills" className="rounded-2xl border border-white/10 bg-card/60 px-4">
+          <AccordionItem value="skills" className="rounded-2xl border border-foreground/10 bg-card/60 px-4">
             <AccordionTrigger>{copy.skillsChecklist}</AccordionTrigger>
             <AccordionContent>
               <div className="grid gap-2 sm:grid-cols-2">
                 {[
                   "Airway Management (8)","Vascular Access (6)","Monitoring & Assessment (8)","Medication Administration (6)","Wound & Skin Care (5)","Emergency Response (6)","Equipment Operation (8)"
                 ].map((item) => (
-                  <div key={item} className="rounded-lg border border-white/10 p-3 text-sm">{item}</div>
+                  <div key={item} className="rounded-lg border border-foreground/10 p-3 text-sm">{item}</div>
                 ))}
               </div>
             </AccordionContent>
           </AccordionItem>
 
-          <AccordionItem value="code" className="rounded-2xl border border-white/10 bg-card/60 px-4">
+          <AccordionItem value="code" className="rounded-2xl border border-foreground/10 bg-card/60 px-4">
             <AccordionTrigger>{copy.codeDocumentation}</AccordionTrigger>
             <AccordionContent className="space-y-2">
               <Input placeholder={language === "ar" ? "تم إعلان الكود" : "Code Called"} />
               <Input placeholder={language === "ar" ? "وقت البدء" : "Time Started"} />
               <Textarea placeholder={language === "ar" ? "أضف الأحداث مع طابع زمني تلقائي" : "Add timeline events with auto-timestamp"} />
-              <div className="rounded-lg border border-white/10 p-3 text-xs text-muted-foreground">Auto-calculations: epinephrine interval q3-5 min, CPR fraction, total duration.</div>
+              <div className="rounded-lg border border-foreground/10 p-3 text-xs text-muted-foreground">Auto-calculations: epinephrine interval q3-5 min, CPR fraction, total duration.</div>
               <Button variant="secondary" onClick={() => copyText("Printable code summary generated")}>{copy.generate}</Button>
             </AccordionContent>
           </AccordionItem>

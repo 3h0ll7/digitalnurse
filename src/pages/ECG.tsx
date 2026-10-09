@@ -35,23 +35,23 @@ interface Rhythm {
 }
 
 const severityStyles: Record<Severity, string> = {
-  BENIGN: "border-emerald-400/40 bg-emerald-500/20 text-emerald-100",
-  MONITOR: "border-yellow-400/40 bg-yellow-500/20 text-yellow-100",
-  URGENT: "border-orange-400/40 bg-orange-500/20 text-orange-100",
-  LIFE_THREATENING: "border-red-400/50 bg-red-500/25 text-red-100 animate-pulse",
+  BENIGN: "border-emerald-400/40 bg-emerald-500/20 text-emerald-800 dark:text-emerald-100",
+  MONITOR: "border-yellow-400/40 bg-yellow-500/20 text-yellow-800 dark:text-yellow-100",
+  URGENT: "border-orange-400/40 bg-orange-500/20 text-orange-800 dark:text-orange-100",
+  LIFE_THREATENING: "border-red-400/50 bg-red-500/25 text-red-800 dark:text-red-100 animate-pulse",
 };
 
 const categoryStyles: Record<string, string> = {
-  NORMAL_BASICS: "border-cyan-400/40 bg-cyan-500/15 text-cyan-100",
-  ATRIAL: "border-indigo-400/40 bg-indigo-500/20 text-indigo-100",
-  JUNCTIONAL: "border-violet-400/40 bg-violet-500/20 text-violet-100",
-  VENTRICULAR: "border-rose-400/40 bg-rose-500/20 text-rose-100",
-  BLOCKS: "border-amber-400/40 bg-amber-500/20 text-amber-100",
-  ST: "border-fuchsia-400/40 bg-fuchsia-500/20 text-fuchsia-100",
-  LIFE: "border-red-400/50 bg-red-500/20 text-red-100",
-  PACEMAKER: "border-pink-400/40 bg-pink-500/20 text-pink-100",
-  ELECTROLYTE: "border-teal-400/40 bg-teal-500/20 text-teal-100",
-  PEDIATRIC: "border-sky-400/40 bg-sky-500/20 text-sky-100",
+  NORMAL_BASICS: "border-cyan-400/40 bg-cyan-500/15 text-cyan-800 dark:text-cyan-100",
+  ATRIAL: "border-indigo-400/40 bg-indigo-500/20 text-indigo-800 dark:text-indigo-100",
+  JUNCTIONAL: "border-violet-400/40 bg-violet-500/20 text-violet-800 dark:text-violet-100",
+  VENTRICULAR: "border-rose-400/40 bg-rose-500/20 text-rose-800 dark:text-rose-100",
+  BLOCKS: "border-amber-400/40 bg-amber-500/20 text-amber-800 dark:text-amber-100",
+  ST: "border-fuchsia-400/40 bg-fuchsia-500/20 text-fuchsia-800 dark:text-fuchsia-100",
+  LIFE: "border-red-400/50 bg-red-500/20 text-red-800 dark:text-red-100",
+  PACEMAKER: "border-pink-400/40 bg-pink-500/20 text-pink-800 dark:text-pink-100",
+  ELECTROLYTE: "border-teal-400/40 bg-teal-500/20 text-teal-800 dark:text-teal-100",
+  PEDIATRIC: "border-sky-400/40 bg-sky-500/20 text-sky-800 dark:text-sky-100",
 };
 
 const EcgWave = ({ type }: { type: string }) => {
@@ -75,7 +75,7 @@ const EcgWave = ({ type }: { type: string }) => {
       : "M2 32 L16 32 L20 10 L24 52 L28 18 L36 32 L48 32 L52 10 L56 52 L60 18 L68 32 L80 32 L84 10 L88 52 L92 18 L98 32";
 
   return (
-    <svg viewBox="0 0 100 64" className="h-14 w-full rounded-xl border border-white/10 bg-[#061427]/60 p-1">
+    <svg viewBox="0 0 100 64" className="h-14 w-full rounded-xl border border-foreground/10 bg-background/60 p-1">
       <polyline points="0,32 100,32" stroke="#0b3856" strokeWidth="0.8" fill="none" />
       <path d={path} stroke="#ffffff" strokeWidth="2" fill="none" strokeLinecap="round" />
       <circle cx="15" cy="32" r="1.5" fill="#22d3ee" />
@@ -109,14 +109,14 @@ const ECG = () => {
 
   return (
     <AppLayout title={copy.title} subtitle={copy.subtitle}>
-      <section dir={direction} className="rounded-3xl border border-white/10 bg-card/80 p-5 shadow-[0_20px_60px_rgba(0,0,0,0.45)]">
+      <section dir={direction} className="rounded-3xl border border-foreground/10 bg-card/80 p-5 shadow-card">
         <div className="relative">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-cyan-300 rtl:left-auto rtl:right-4" size={18} />
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-cyan-800 dark:text-cyan-300 rtl:left-auto rtl:right-4" size={18} />
           <Input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder={copy.searchPlaceholder}
-            className="h-12 rounded-2xl border-white/10 bg-white/5 pl-12 text-white rtl:pl-4 rtl:pr-12"
+            className="h-12 rounded-2xl border-foreground/10 bg-foreground/5 pl-12 text-foreground rtl:pl-4 rtl:pr-12"
           />
         </div>
         <div className="mt-4 flex flex-wrap gap-2">
@@ -127,7 +127,7 @@ const ECG = () => {
               size="sm"
               variant="outline"
               className={`rounded-full border px-4 py-2 text-[10px] tracking-widest ${
-                category === key ? "border-primary/50 bg-primary/30 text-white" : "border-white/20 text-muted-foreground"
+                category === key ? "border-primary/50 bg-primary/30 text-foreground" : "border-foreground/20 text-muted-foreground"
               }`}
             >
               {label}
@@ -137,7 +137,7 @@ const ECG = () => {
       </section>
 
       <Tabs defaultValue="rhythms" className="space-y-4">
-        <TabsList className="grid h-auto grid-cols-2 gap-2 rounded-2xl border border-white/10 bg-card/70 p-2 md:grid-cols-4">
+        <TabsList className="grid h-auto grid-cols-2 gap-2 rounded-2xl border border-foreground/10 bg-card/70 p-2 md:grid-cols-4">
           <TabsTrigger value="rhythms">{copy.tabs.rhythms}</TabsTrigger>
           <TabsTrigger value="read">{copy.tabs.howToRead}</TabsTrigger>
           <TabsTrigger value="acls">{copy.tabs.acls}</TabsTrigger>
@@ -150,34 +150,34 @@ const ECG = () => {
             {filtered.map((rhythm) => (
               <Dialog key={rhythm.id}>
                 <DialogTrigger asChild>
-                  <Card className="cursor-pointer rounded-3xl border border-white/10 bg-card/70 p-4 transition-all hover:-translate-y-0.5 hover:border-primary/40">
+                  <Card className="cursor-pointer rounded-3xl border border-foreground/10 bg-card/70 p-4 transition-all hover:-translate-y-0.5 hover:border-primary/40">
                     <div className="mb-3 flex items-start justify-between gap-2">
                       <div>
-                        <p className="font-semibold text-white">{rhythm.nameEn}</p>
-                        <p className="text-sm text-cyan-100">{rhythm.nameAr}</p>
+                        <p className="font-semibold text-foreground">{rhythm.nameEn}</p>
+                        <p className="text-sm text-cyan-800 dark:text-cyan-100">{rhythm.nameAr}</p>
                       </div>
                       <Badge className={`border ${severityStyles[rhythm.severity]}`}>{copy.severity[rhythm.severity]}</Badge>
                     </div>
                     <div className="mb-3 flex flex-wrap gap-2">
-                      <Badge className={`border ${categoryStyles[rhythm.category] ?? "border-white/20 bg-white/10 text-white"}`}>
+                      <Badge className={`border ${categoryStyles[rhythm.category] ?? "border-foreground/20 bg-foreground/10 text-foreground"}`}>
                         {copy.categories[rhythm.category as keyof typeof copy.categories]}
                       </Badge>
-                      <Badge className="border-white/20 bg-white/10 text-white">{copy.labels.rate}: {rhythm.rate}</Badge>
+                      <Badge className="border-foreground/20 bg-foreground/10 text-foreground">{copy.labels.rate}: {rhythm.rate}</Badge>
                     </div>
                     <EcgWave type={rhythm.wave} />
                   </Card>
                 </DialogTrigger>
-                <DialogContent className="max-h-[90vh] overflow-y-auto border-white/10 bg-slate-950 text-white sm:max-w-2xl">
+                <DialogContent className="max-h-[90vh] overflow-y-auto border-foreground/10 bg-card text-foreground sm:max-w-2xl">
                   <DialogHeader>
                     <DialogTitle>{rhythm.nameEn}</DialogTitle>
-                    <DialogDescription className="text-cyan-100">{rhythm.nameAr}</DialogDescription>
+                    <DialogDescription className="text-cyan-800 dark:text-cyan-100">{rhythm.nameAr}</DialogDescription>
                   </DialogHeader>
                   <div className="space-y-3 text-sm">
-                    <p><span className="text-cyan-200">{copy.labels.category}:</span> {copy.categories[rhythm.category as keyof typeof copy.categories]}</p>
-                    <p><span className="text-cyan-200">{copy.labels.rate}:</span> {rhythm.rate}</p>
-                    <p><span className="text-cyan-200">{copy.labels.characteristics}:</span> {rhythm.characteristics}</p>
+                    <p><span className="text-cyan-800 dark:text-cyan-200">{copy.labels.category}:</span> {copy.categories[rhythm.category as keyof typeof copy.categories]}</p>
+                    <p><span className="text-cyan-800 dark:text-cyan-200">{copy.labels.rate}:</span> {rhythm.rate}</p>
+                    <p><span className="text-cyan-800 dark:text-cyan-200">{copy.labels.characteristics}:</span> {rhythm.characteristics}</p>
                     <div>
-                      <p className="mb-1 text-cyan-200">{copy.labels.interventions}:</p>
+                      <p className="mb-1 text-cyan-800 dark:text-cyan-200">{copy.labels.interventions}:</p>
                       <ul className="list-disc space-y-1 ps-5">
                         {rhythm.interventions.map((item) => (
                           <li key={item}>{item}</li>
@@ -185,7 +185,7 @@ const ECG = () => {
                       </ul>
                     </div>
                     <p>
-                      <span className="text-cyan-200">{copy.labels.tips}:</span>{" "}
+                      <span className="text-cyan-800 dark:text-cyan-200">{copy.labels.tips}:</span>{" "}
                       {language === "ar" ? rhythm.tipsAr : rhythm.tipsEn}
                     </p>
                   </div>
@@ -197,14 +197,14 @@ const ECG = () => {
 
         <TabsContent value="read" className="space-y-3">
           {copy.howToReadSteps.map((step) => (
-            <details key={step.step} className="rounded-2xl border border-white/10 bg-card/70 p-4">
-              <summary className="cursor-pointer list-none font-semibold text-white">
+            <details key={step.step} className="rounded-2xl border border-foreground/10 bg-card/70 p-4">
+              <summary className="cursor-pointer list-none font-semibold text-foreground">
                 {step.step}. {step.title}
               </summary>
-              <div className="mt-2 text-sm text-slate-200">
+              <div className="mt-2 text-sm text-foreground/90">
                 <p>{step.check}</p>
-                <p className="mt-2 text-cyan-100">{language === "ar" ? "الطبيعي: قارن مع القيم المرجعية وخذ السياق السريري." : "Normal: Compare against reference values and clinical context."}</p>
-                <Activity className="mt-3 text-cyan-300" size={16} />
+                <p className="mt-2 text-cyan-800 dark:text-cyan-100">{language === "ar" ? "الطبيعي: قارن مع القيم المرجعية وخذ السياق السريري." : "Normal: Compare against reference values and clinical context."}</p>
+                <Activity className="mt-3 text-cyan-800 dark:text-cyan-300" size={16} />
               </div>
             </details>
           ))}
@@ -213,10 +213,10 @@ const ECG = () => {
         <TabsContent value="acls" className="space-y-3">
           <div className="grid gap-3 md:grid-cols-2">
             {copy.acls.map((algo) => (
-              <Card key={algo.title} className="rounded-3xl border-white/10 bg-card/70 p-4">
-                <p className="font-semibold text-white">{algo.title}</p>
-                <p className="text-xs text-cyan-100">{algo.subtitle}</p>
-                <ol className="mt-3 list-decimal space-y-1 ps-5 text-sm text-slate-100">
+              <Card key={algo.title} className="rounded-3xl border-foreground/10 bg-card/70 p-4">
+                <p className="font-semibold text-foreground">{algo.title}</p>
+                <p className="text-xs text-cyan-800 dark:text-cyan-100">{algo.subtitle}</p>
+                <ol className="mt-3 list-decimal space-y-1 ps-5 text-sm text-foreground">
                   {algo.steps.map((step) => (
                     <li key={step}>{step}</li>
                   ))}
@@ -225,8 +225,8 @@ const ECG = () => {
             ))}
           </div>
           <Card className="rounded-3xl border-red-400/20 bg-red-500/10 p-4">
-            <p className="font-semibold text-red-100">{copy.labels.hAndTs}</p>
-            <div className="mt-2 grid gap-2 text-sm text-red-50 md:grid-cols-2">
+            <p className="font-semibold text-red-800 dark:text-red-100">{copy.labels.hAndTs}</p>
+            <div className="mt-2 grid gap-2 text-sm text-red-800 dark:text-red-50 md:grid-cols-2">
               {copy.hsTs.map((item) => (
                 <p key={item}>• {item}</p>
               ))}
@@ -237,9 +237,9 @@ const ECG = () => {
         <TabsContent value="tips" className="space-y-3">
           <div className="grid gap-3 md:grid-cols-2">
             {copy.clinicalTips.map((tip) => (
-              <Card key={tip.title} className="rounded-3xl border-white/10 bg-card/70 p-4">
-                <p className="font-semibold text-white">{tip.title}</p>
-                <p className="mt-2 text-sm text-slate-200">{tip.content}</p>
+              <Card key={tip.title} className="rounded-3xl border-foreground/10 bg-card/70 p-4">
+                <p className="font-semibold text-foreground">{tip.title}</p>
+                <p className="mt-2 text-sm text-foreground/90">{tip.content}</p>
               </Card>
             ))}
           </div>

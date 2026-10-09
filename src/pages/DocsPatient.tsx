@@ -87,7 +87,7 @@ const DocsPatient = () => {
     <AppLayout title={copy.patientRouteTitle} subtitle={copy.hubSubtitle} onBack={() => navigate("/docs")}>
       <section dir={direction} className="space-y-4">
         <Accordion type="multiple" className="space-y-3">
-          <AccordionItem value="notes" className="rounded-2xl border border-white/10 bg-card/60 px-4">
+          <AccordionItem value="notes" className="rounded-2xl border border-foreground/10 bg-card/60 px-4">
             <AccordionTrigger>{copy.nursingNotes}</AccordionTrigger>
             <AccordionContent className="space-y-3">
               <Select value={noteFormat} onValueChange={setNoteFormat}>
@@ -121,11 +121,11 @@ const DocsPatient = () => {
             </AccordionContent>
           </AccordionItem>
 
-          <AccordionItem value="admission" className="rounded-2xl border border-white/10 bg-card/60 px-4">
+          <AccordionItem value="admission" className="rounded-2xl border border-foreground/10 bg-card/60 px-4">
             <AccordionTrigger>{copy.admissionAssessment}</AccordionTrigger>
             <AccordionContent className="space-y-3">
               {systems.map(([key, en, ar, fieldsText]) => (
-                <div key={key} className="rounded-xl border border-white/10 p-3">
+                <div key={key} className="rounded-xl border border-foreground/10 p-3">
                   <div className="flex items-center justify-between gap-3">
                     <p className="font-semibold">{language === "ar" ? ar : en}</p>
                     <div className="flex gap-2">
@@ -141,7 +141,7 @@ const DocsPatient = () => {
             </AccordionContent>
           </AccordionItem>
 
-          <AccordionItem value="discharge" className="rounded-2xl border border-white/10 bg-card/60 px-4">
+          <AccordionItem value="discharge" className="rounded-2xl border border-foreground/10 bg-card/60 px-4">
             <AccordionTrigger>{copy.dischargeSummary}</AccordionTrigger>
             <AccordionContent className="space-y-3">
               <Input placeholder={copy.dischargeDate} value={dischargeStore.data.dischargeDate} onChange={(e) => dischargeStore.setData((p) => ({ ...p, dischargeDate: e.target.value }))} />
@@ -156,7 +156,7 @@ const DocsPatient = () => {
             </AccordionContent>
           </AccordionItem>
 
-          <AccordionItem value="incident" className="rounded-2xl border border-white/10 bg-card/60 px-4">
+          <AccordionItem value="incident" className="rounded-2xl border border-foreground/10 bg-card/60 px-4">
             <AccordionTrigger>{copy.incidentReport}</AccordionTrigger>
             <AccordionContent className="space-y-3">
               <Input placeholder={copy.dateTime} value={incidentStore.data.datetime} onChange={(e) => incidentStore.setData((p) => ({ ...p, datetime: e.target.value }))} />
@@ -173,17 +173,17 @@ const DocsPatient = () => {
             </AccordionContent>
           </AccordionItem>
 
-          <AccordionItem value="restraint" className="rounded-2xl border border-white/10 bg-card/60 px-4">
+          <AccordionItem value="restraint" className="rounded-2xl border border-foreground/10 bg-card/60 px-4">
             <AccordionTrigger>{copy.restraintRecord}</AccordionTrigger>
             <AccordionContent className="space-y-2 text-sm text-muted-foreground">
               {["Circulation check (CMS)","Skin integrity under restraint","ROM performed","Nutrition/hydration offered","Toileting offered","Need for continued restraint","Restraint released for","MD order renewed"].map((item) => (
-                <div key={item} className="rounded-lg border border-white/10 p-2">{item}</div>
+                <div key={item} className="rounded-lg border border-foreground/10 p-2">{item}</div>
               ))}
               <p>2-hour reminders run from timestamped checks and are stored in localStorage.</p>
             </AccordionContent>
           </AccordionItem>
 
-          <AccordionItem value="transfusion" className="rounded-2xl border border-white/10 bg-card/60 px-4">
+          <AccordionItem value="transfusion" className="rounded-2xl border border-foreground/10 bg-card/60 px-4">
             <AccordionTrigger>{copy.transfusionRecord}</AccordionTrigger>
             <AccordionContent className="space-y-3">
               <div className="grid gap-2 sm:grid-cols-2">
@@ -193,13 +193,13 @@ const DocsPatient = () => {
               </div>
               <div className="grid grid-cols-2 gap-2 text-xs sm:grid-cols-3">
                 {["Baseline", "15 Minutes", "30 Minutes", "1 Hour", "Completion", "Post-Transfusion"].map((t) => (
-                  <div key={t} className="rounded-lg border border-white/10 p-2">{t}</div>
+                  <div key={t} className="rounded-lg border border-foreground/10 p-2">{t}</div>
                 ))}
               </div>
             </AccordionContent>
           </AccordionItem>
 
-          <AccordionItem value="wound" className="rounded-2xl border border-white/10 bg-card/60 px-4">
+          <AccordionItem value="wound" className="rounded-2xl border border-foreground/10 bg-card/60 px-4">
             <AccordionTrigger>{copy.woundDocumentation}</AccordionTrigger>
             <AccordionContent className="space-y-2">
               <div className="grid gap-2 sm:grid-cols-2">
@@ -215,7 +215,7 @@ const DocsPatient = () => {
           </AccordionItem>
         </Accordion>
 
-        <div className="rounded-xl border border-white/10 bg-card/50 p-3 text-xs text-muted-foreground">
+        <div className="rounded-xl border border-foreground/10 bg-card/50 p-3 text-xs text-muted-foreground">
           {copy.autoSaved}: {dischargeStore.lastSavedAt ?? "--"}
         </div>
       </section>

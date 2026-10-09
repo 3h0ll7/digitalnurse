@@ -5,19 +5,19 @@ import { Input } from "@/components/ui/input";
 import { usePreferences } from "@/contexts/PreferencesContext";
 
 const tone = {
-  green: "text-emerald-300 border-emerald-400/40 bg-emerald-500/10",
-  yellow: "text-yellow-200 border-yellow-400/40 bg-yellow-500/10",
-  orange: "text-orange-200 border-orange-400/40 bg-orange-500/10",
-  red: "text-red-200 border-red-400/40 bg-red-500/10",
-  gray: "text-slate-300 border-slate-400/40 bg-slate-500/10",
-  blue: "text-cyan-200 border-cyan-400/40 bg-cyan-500/10",
+  green: "text-emerald-800 dark:text-emerald-300 border-emerald-400/40 bg-emerald-500/10",
+  yellow: "text-yellow-800 dark:text-yellow-200 border-yellow-400/40 bg-yellow-500/10",
+  orange: "text-orange-800 dark:text-orange-200 border-orange-400/40 bg-orange-500/10",
+  red: "text-red-800 dark:text-red-200 border-red-400/40 bg-red-500/10",
+  gray: "text-muted-foreground border-slate-400/40 bg-slate-500/10",
+  blue: "text-cyan-800 dark:text-cyan-200 border-cyan-400/40 bg-cyan-500/10",
 };
 
 const B = ({ en, ar }: { en: string; ar: string }, isArabic: boolean) => (isArabic ? ar : en);
 
 const Panel = ({ title, children }: { title: string; children: ReactNode }) => (
-  <Card className="rounded-2xl border-white/10 bg-white/5 p-4 space-y-3">
-    <h3 className="text-base font-semibold text-white">{title}</h3>
+  <Card className="rounded-2xl border-foreground/10 bg-foreground/5 p-4 space-y-3">
+    <h3 className="text-base font-semibold text-foreground">{title}</h3>
     {children}
   </Card>
 );
@@ -41,15 +41,15 @@ const OptionRow = ({
     className={`w-full rounded-xl border p-3 text-left transition ${
       selected
         ? "border-primary/60 bg-primary/25"
-        : "border-white/15 bg-white/5 hover:border-white/35"
+        : "border-foreground/15 bg-foreground/5 hover:border-foreground/35"
     }`}
   >
     <div className="flex items-center justify-between gap-3">
       <div>
-        <p className="text-sm text-white">{label}</p>
+        <p className="text-sm text-foreground">{label}</p>
         {subtitle && <p className="text-xs text-muted-foreground">{subtitle}</p>}
       </div>
-      <span className="rounded-full border border-white/20 px-2 py-1 text-xs text-cyan-100">{score}</span>
+      <span className="rounded-full border border-foreground/20 px-2 py-1 text-xs text-cyan-800 dark:text-cyan-100">{score}</span>
     </div>
   </button>
 );
@@ -165,7 +165,7 @@ const SOFAAssessment = () => {
       <Panel title="Sepsis-3">
         <p className="text-sm text-muted-foreground">{B({ en: "Sepsis = Suspected infection + SOFA ≥ 2", ar: "الإنتان = اشتباه إنتان + SOFA ≥ 2" }, isArabic)}</p>
         <p className="text-sm text-muted-foreground">{B({ en: "Septic Shock = Sepsis + Vasopressors for MAP ≥65 + Lactate >2 despite fluids", ar: "صدمة إنتانية = إنتان + رافعات ضغط لـ MAP ≥65 + لاكتيت >2 رغم السوائل" }, isArabic)}</p>
-        <p className="text-sm text-yellow-200">{B({ en: "⚠️ Acute change ≥ 2 from baseline is clinically significant", ar: "⚠️ تغير حاد ≥2 من الأساس مهم سريرياً" }, isArabic)}</p>
+        <p className="text-sm text-yellow-800 dark:text-yellow-200">{B({ en: "⚠️ Acute change ≥ 2 from baseline is clinically significant", ar: "⚠️ تغير حاد ≥2 من الأساس مهم سريرياً" }, isArabic)}</p>
       </Panel>
       <Panel title="qSOFA">
         <div className="grid gap-2 sm:grid-cols-3">
@@ -174,12 +174,12 @@ const SOFAAssessment = () => {
             ["ams", "AMS (GCS < 15)", "تغير الوعي"],
             ["sbp", "SBP ≤ 100", "الضغط الانقباضي ≤ 100"],
           ].map(([k, en, ar]) => (
-            <button key={k} className={`rounded-xl border p-3 text-sm ${q[k as keyof typeof q] ? "border-primary/60 bg-primary/25" : "border-white/15"}`} onClick={() => setQ((p) => ({ ...p, [k]: !p[k as keyof typeof p] }))}>
+            <button key={k} className={`rounded-xl border p-3 text-sm ${q[k as keyof typeof q] ? "border-primary/60 bg-primary/25" : "border-foreground/15"}`} onClick={() => setQ((p) => ({ ...p, [k]: !p[k as keyof typeof p] }))}>
               {isArabic ? ar : en}
             </button>
           ))}
         </div>
-        <p className="text-sm text-white">qSOFA: {qTotal} / 3 {qTotal >= 2 ? `— ${B({ en: "Screen for sepsis", ar: "افحص للإنتان" }, isArabic)}` : ""}</p>
+        <p className="text-sm text-foreground">qSOFA: {qTotal} / 3 {qTotal >= 2 ? `— ${B({ en: "Screen for sepsis", ar: "افحص للإنتان" }, isArabic)}` : ""}</p>
       </Panel>
     </div>
   );
@@ -356,7 +356,7 @@ const PHQ9Assessment = () => {
   const [scores, setScores] = useState<number[]>(new Array(9).fill(0));
   const total = scores.reduce((a, b) => a + b, 0);
   const sev = total >= 20 ? ["red", B({ en: "Severe", ar: "شديد" }, isArabic)] : total >= 15 ? ["orange", B({ en: "Moderately severe", ar: "متوسط الشدة" }, isArabic)] : total >= 10 ? ["orange", B({ en: "Moderate", ar: "متوسط" }, isArabic)] : total >= 5 ? ["yellow", B({ en: "Mild", ar: "خفيف" }, isArabic)] : ["green", B({ en: "Minimal", ar: "بسيط" }, isArabic)];
-  return <div className="space-y-4"><Panel title="PHQ-9">{qs.map((q, i) => <div key={i} className="space-y-2"><p className="text-sm text-white">{i + 1}. {isArabic ? q[1] : q[0]}</p><div className="grid grid-cols-4 gap-2">{[0, 1, 2, 3].map((n) => <Button key={n} size="sm" variant={scores[i] === n ? "default" : "outline"} onClick={() => setScores((p) => p.map((v, idx) => idx === i ? n : v))}>{n}</Button>)}</div></div>)}</Panel><Card className={`rounded-2xl border p-4 ${tone[sev[0] as keyof typeof tone]}`}><p>PHQ-9: {total}</p><p>{sev[1]}</p>{scores[8] >= 1 && <p className="text-red-100">{B({ en: "⚠️ Immediate safety assessment required", ar: "⚠️ يلزم تقييم سلامة فوري" }, isArabic)}</p>}</Card></div>;
+  return <div className="space-y-4"><Panel title="PHQ-9">{qs.map((q, i) => <div key={i} className="space-y-2"><p className="text-sm text-foreground">{i + 1}. {isArabic ? q[1] : q[0]}</p><div className="grid grid-cols-4 gap-2">{[0, 1, 2, 3].map((n) => <Button key={n} size="sm" variant={scores[i] === n ? "default" : "outline"} onClick={() => setScores((p) => p.map((v, idx) => idx === i ? n : v))}>{n}</Button>)}</div></div>)}</Panel><Card className={`rounded-2xl border p-4 ${tone[sev[0] as keyof typeof tone]}`}><p>PHQ-9: {total}</p><p>{sev[1]}</p>{scores[8] >= 1 && <p className="text-red-800 dark:text-red-100">{B({ en: "⚠️ Immediate safety assessment required", ar: "⚠️ يلزم تقييم سلامة فوري" }, isArabic)}</p>}</Card></div>;
 };
 
 const WaterlowAssessment = () => {

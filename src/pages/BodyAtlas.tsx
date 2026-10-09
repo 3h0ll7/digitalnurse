@@ -71,7 +71,7 @@ const BodyAtlas = () => {
           </div>
           <div className="grid gap-4 lg:grid-cols-[320px,1fr]">
             <Card className="p-4">
-              <svg viewBox="0 0 200 320" className="w-full rounded-xl bg-slate-950/50 p-2">
+              <svg viewBox="0 0 200 320" className="w-full rounded-xl bg-card/50 p-2">
                 <rect x="70" y="20" width="60" height="70" rx="30" fill="#0f172a" stroke="#06b6d4" />
                 <rect x="65" y="90" width="70" height="120" rx="30" fill="#0f172a" stroke="#06b6d4" />
                 <rect x="50" y="90" width="15" height="90" rx="8" fill="#0f172a" stroke="#06b6d4" />
@@ -99,7 +99,7 @@ const BodyAtlas = () => {
             </Card>
             <Card className="p-4 space-y-3">
               <h3 className="text-xl font-semibold">{selectedOrganCard.en}</h3>
-              <p className="text-sm text-slate-300">{selectedOrganCard.ar}</p>
+              <p className="text-sm text-muted-foreground">{selectedOrganCard.ar}</p>
               <div className="grid gap-2 md:grid-cols-2 text-sm">
                 <p><strong>Body System:</strong> {selectedOrganCard.system} — {atlas.systems[selectedOrganCard.system as keyof typeof atlas.systems].ar}</p>
                 <p><strong>Location:</strong> {selectedOrganCard.location}</p>
@@ -115,7 +115,7 @@ const BodyAtlas = () => {
               </div>
               <div className="space-y-1">
                 <p className="font-semibold">{atlas.common.related[language]}</p>
-                <div className="flex flex-wrap gap-3 text-sm text-cyan-300">
+                <div className="flex flex-wrap gap-3 text-sm text-cyan-800 dark:text-cyan-300">
                   {selectedOrganCard.conditions.map((c) => <Link key={c} to="/pathways" className="underline">{c}</Link>)}
                   <Link to="/pharma" className="underline">PK Visualizer</Link>
                   <Link to="/drugs" className="underline">Drug Reference</Link>
@@ -127,7 +127,7 @@ const BodyAtlas = () => {
             <p className="mb-2 text-sm text-muted-foreground">{organs.length} / {atlas.organs.length}</p>
             <div className="grid gap-2 md:grid-cols-2 lg:grid-cols-3">
               {organs.map((o) => (
-                <button key={o.id} className="rounded-lg border border-white/10 p-3 text-left hover:bg-white/5" onClick={() => setSelectedOrgan(o.id)}>
+                <button key={o.id} className="rounded-lg border border-foreground/10 p-3 text-left hover:bg-foreground/5" onClick={() => setSelectedOrgan(o.id)}>
                   <p className="font-medium">{o.en}</p><p className="text-xs text-muted-foreground">{o.ar}</p>
                 </button>
               ))}
@@ -138,7 +138,7 @@ const BodyAtlas = () => {
         <TabsContent value="receptors">
           <div className="grid gap-4 lg:grid-cols-[1fr,1fr]">
             <Card className="p-4">
-              <svg viewBox="0 0 320 220" className="w-full rounded-xl bg-slate-950/40 p-2">
+              <svg viewBox="0 0 320 220" className="w-full rounded-xl bg-card/40 p-2">
                 <ellipse cx="160" cy="110" rx="130" ry="80" fill="#0f172a" stroke="#06b6d4" />
                 {atlas.receptors.slice(0, 10).map((r, i) => (
                   <g key={r.name} onClick={() => setSelectedReceptor(i)} className="cursor-pointer">
@@ -154,7 +154,7 @@ const BodyAtlas = () => {
                 <p><strong>Stimulation:</strong> {r.stimulation}</p><p><strong>Blockade:</strong> {r.blockade}</p>
                 <p><strong>Agonists:</strong> {r.agonists}</p><p><strong>Antagonists:</strong> {r.antagonists}</p>
                 <p><strong>Clinical:</strong> {r.clinical}</p>
-                <div className="text-cyan-300 text-sm"><Link to="/pharma" className="underline">Related PK drugs</Link></div>
+                <div className="text-cyan-800 dark:text-cyan-300 text-sm"><Link to="/pharma" className="underline">Related PK drugs</Link></div>
               </>; })()}
             </Card>
           </div>
@@ -162,10 +162,10 @@ const BodyAtlas = () => {
 
         <TabsContent value="hormones">
           <div className="grid gap-4 lg:grid-cols-[1fr,1fr]">
-            <Card className="p-4"><svg viewBox="0 0 380 220" className="w-full rounded-xl bg-slate-950/40 p-3"><path d="M40 40 L180 40 L180 100 L320 100" stroke="#ef4444" fill="none"/><path d="M180 40 L180 170 L320 170" stroke="#3b82f6" fill="none"/><circle cx="40" cy="40" r="16" fill="#334155"/><circle cx="180" cy="40" r="16" fill="#334155"/><circle cx="180" cy="100" r="16" fill="#334155"/><circle cx="320" cy="100" r="16" fill="#334155"/><circle cx="320" cy="170" r="16" fill="#334155"/><text x="20" y="70" className="fill-white text-[11px]">Hypothalamus</text></svg></Card>
+            <Card className="p-4"><svg viewBox="0 0 380 220" className="w-full rounded-xl bg-card/40 p-3"><path d="M40 40 L180 40 L180 100 L320 100" stroke="#ef4444" fill="none"/><path d="M180 40 L180 170 L320 170" stroke="#3b82f6" fill="none"/><circle cx="40" cy="40" r="16" fill="#334155"/><circle cx="180" cy="40" r="16" fill="#334155"/><circle cx="180" cy="100" r="16" fill="#334155"/><circle cx="320" cy="100" r="16" fill="#334155"/><circle cx="320" cy="170" r="16" fill="#334155"/><text x="20" y="70" className="fill-white text-[11px]">Hypothalamus</text></svg></Card>
             <Card className="p-4 space-y-2 max-h-[420px] overflow-auto">
               {atlas.hormones.map((hormone, idx) => (
-                <button key={hormone.name} onClick={() => setSelectedHormone(idx)} className={`w-full rounded-lg border p-3 text-left ${selectedHormone === idx ? "border-cyan-400 bg-cyan-500/10" : "border-white/10"}`}>
+                <button key={hormone.name} onClick={() => setSelectedHormone(idx)} className={`w-full rounded-lg border p-3 text-left ${selectedHormone === idx ? "border-cyan-400 bg-cyan-500/10" : "border-foreground/10"}`}>
                   <p className="font-medium">{hormone.name}</p><p className="text-xs text-muted-foreground">{hormone.ar}</p>
                 </button>
               ))}

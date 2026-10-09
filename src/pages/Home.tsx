@@ -142,7 +142,7 @@ const Home = () => {
       {/* AI Assistant - Featured */}
       <button
         onClick={() => navigate("/ai-assistant")}
-        className="group w-full rounded-2xl border border-primary/30 bg-gradient-to-r from-primary/15 via-primary/10 to-accent/10 p-5 text-start transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/50 hover:shadow-[0_10px_40px_rgba(21,154,255,0.2)]"
+        className="group w-full rounded-2xl border border-primary/30 bg-gradient-to-r from-primary/15 via-primary/10 to-accent/10 p-5 text-start transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/50 hover:shadow-card-hover"
       >
         <div className="flex items-center gap-4">
           <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-primary/40 bg-primary/20">

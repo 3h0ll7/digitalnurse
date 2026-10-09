@@ -43,7 +43,7 @@ const Calculators = () => {
 
   return (
     <AppLayout title={t.calculatorsTitle} subtitle={t.calculatorsSubtitle}>
-      <section className="rounded-3xl border border-white/10 bg-card/80 p-5 text-white shadow-[0_20px_60px_rgba(0,0,0,0.45)]">
+      <section className="rounded-3xl border border-foreground/10 bg-card/80 p-5 text-foreground shadow-card">
         <p className="text-xs uppercase tracking-[0.4em] text-muted-foreground">{cx.countLabel}</p>
         <h2 className="mt-3 text-3xl font-semibold">{t.calculatorsHeroHeading}</h2>
         <p className="mt-2 text-sm text-muted-foreground">{t.calculatorsHeroDesc}</p>
@@ -55,7 +55,7 @@ const Calculators = () => {
               className={`rounded-full border px-3 py-1 text-xs font-semibold tracking-wide transition-colors ${
                 activeCategory === filter.key
                   ? "border-primary bg-primary/20 text-primary"
-                  : "border-white/15 bg-white/5 text-muted-foreground hover:border-primary/40"
+                  : "border-foreground/15 bg-foreground/5 text-muted-foreground hover:border-primary/40"
               }`}
             >
               {filter.label}
@@ -71,10 +71,10 @@ const Calculators = () => {
             <Card
               key={calc.id}
               onClick={() => navigate(`/calculator/${calc.id}`)}
-              className="group cursor-pointer rounded-3xl border border-white/10 bg-card/70 p-5 text-white shadow-[0_15px_50px_rgba(0,0,0,0.4)] transition-all duration-300 hover:-translate-y-1 hover:border-primary/40"
+              className="group cursor-pointer rounded-3xl border border-foreground/10 bg-card/70 p-5 text-foreground shadow-card transition-all duration-300 hover:-translate-y-1 hover:border-primary/40"
             >
               <div className="flex items-center gap-4">
-                <div className="rounded-2xl border border-white/10 bg-white/5 p-3 text-primary">
+                <div className="rounded-2xl border border-foreground/10 bg-foreground/5 p-3 text-primary">
                   <Icon size={24} />
                 </div>
                 <div className="flex-1">

@@ -9,6 +9,7 @@ export const SOURCES = {
   "who-bmi": { label: "WHO Technical Report Series 894 — Obesity", year: "2000" },
   "aha-acls": { label: "AHA Guidelines for CPR & ECC — Adult Advanced Life Support", year: "2020", url: "https://cpr.heart.org/en/resuscitation-science/cpr-and-ecc-guidelines" },
   "berlin-ards": { label: "ARDS Definition Task Force (Berlin definition), JAMA", year: "2012" },
+  "byrne-vbg": { label: "Byrne et al. — peripheral venous vs arterial blood gas, Respirology", year: "2014" },
   winters: { label: "Albert, Dell & Winters — expected PaCO₂ in metabolic acidosis, Ann Intern Med", year: "1967" },
   "cap-critical": { label: "CAP accreditation checklist GEN.41320 — critical results are defined by each laboratory" },
   "nice-cg174": { label: "NICE CG174 — Intravenous fluid therapy in adults in hospital", year: "2017", url: "https://www.nice.org.uk/guidance/cg174" },

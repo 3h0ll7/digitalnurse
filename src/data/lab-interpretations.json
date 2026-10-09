@@ -10,24 +10,6 @@
         "high": 145,
         "unit": "mEq/L",
         "unit_si": "mmol/L"
-      },
-      "pediatric": {
-        "low": 121.5,
-        "high": 159.5,
-        "unit": "mEq/L",
-        "unit_si": "mmol/L"
-      },
-      "neonatal": {
-        "low": 108,
-        "high": 174,
-        "unit": "mEq/L",
-        "unit_si": "mmol/L"
-      },
-      "pregnant": {
-        "low": 128.25,
-        "high": 152.25,
-        "unit": "mEq/L",
-        "unit_si": "mmol/L"
       }
     },
     "critical": {
@@ -239,24 +221,6 @@
       "adult": {
         "low": 3.5,
         "high": 5,
-        "unit": "mEq/L",
-        "unit_si": "mmol/L"
-      },
-      "pediatric": {
-        "low": 3.15,
-        "high": 5.5,
-        "unit": "mEq/L",
-        "unit_si": "mmol/L"
-      },
-      "neonatal": {
-        "low": 2.8000000000000003,
-        "high": 6,
-        "unit": "mEq/L",
-        "unit_si": "mmol/L"
-      },
-      "pregnant": {
-        "low": 3.3249999999999997,
-        "high": 5.25,
         "unit": "mEq/L",
         "unit_si": "mmol/L"
       }
@@ -472,24 +436,6 @@
         "high": 106,
         "unit": "mEq/L",
         "unit_si": "mmol/L"
-      },
-      "pediatric": {
-        "low": 88.2,
-        "high": 116.60000000000001,
-        "unit": "mEq/L",
-        "unit_si": "mmol/L"
-      },
-      "neonatal": {
-        "low": 78.4,
-        "high": 127.19999999999999,
-        "unit": "mEq/L",
-        "unit_si": "mmol/L"
-      },
-      "pregnant": {
-        "low": 93.1,
-        "high": 111.30000000000001,
-        "unit": "mEq/L",
-        "unit_si": "mmol/L"
       }
     },
     "critical": {
@@ -701,24 +647,6 @@
       "adult": {
         "low": 22,
         "high": 28,
-        "unit": "mEq/L",
-        "unit_si": "mmol/L"
-      },
-      "pediatric": {
-        "low": 19.8,
-        "high": 30.800000000000004,
-        "unit": "mEq/L",
-        "unit_si": "mmol/L"
-      },
-      "neonatal": {
-        "low": 17.6,
-        "high": 33.6,
-        "unit": "mEq/L",
-        "unit_si": "mmol/L"
-      },
-      "pregnant": {
-        "low": 20.9,
-        "high": 29.400000000000002,
         "unit": "mEq/L",
         "unit_si": "mmol/L"
       }
@@ -934,24 +862,6 @@
         "high": 10.5,
         "unit": "mg/dL",
         "unit_si": "mmol/L"
-      },
-      "pediatric": {
-        "low": 7.65,
-        "high": 11.55,
-        "unit": "mg/dL",
-        "unit_si": "mmol/L"
-      },
-      "neonatal": {
-        "low": 6.800000000000001,
-        "high": 12.6,
-        "unit": "mg/dL",
-        "unit_si": "mmol/L"
-      },
-      "pregnant": {
-        "low": 8.075,
-        "high": 11.025,
-        "unit": "mg/dL",
-        "unit_si": "mmol/L"
       }
     },
     "critical": {
@@ -1163,24 +1073,6 @@
       "adult": {
         "low": 1.12,
         "high": 1.32,
-        "unit": "mmol/L",
-        "unit_si": "mmol/L"
-      },
-      "pediatric": {
-        "low": 1.0080000000000002,
-        "high": 1.4520000000000002,
-        "unit": "mmol/L",
-        "unit_si": "mmol/L"
-      },
-      "neonatal": {
-        "low": 0.8960000000000001,
-        "high": 1.584,
-        "unit": "mmol/L",
-        "unit_si": "mmol/L"
-      },
-      "pregnant": {
-        "low": 1.064,
-        "high": 1.3860000000000001,
         "unit": "mmol/L",
         "unit_si": "mmol/L"
       }
@@ -1396,24 +1288,6 @@
         "high": 2.2,
         "unit": "mg/dL",
         "unit_si": "mmol/L"
-      },
-      "pediatric": {
-        "low": 1.53,
-        "high": 2.4200000000000004,
-        "unit": "mg/dL",
-        "unit_si": "mmol/L"
-      },
-      "neonatal": {
-        "low": 1.36,
-        "high": 2.64,
-        "unit": "mg/dL",
-        "unit_si": "mmol/L"
-      },
-      "pregnant": {
-        "low": 1.615,
-        "high": 2.3100000000000005,
-        "unit": "mg/dL",
-        "unit_si": "mmol/L"
       }
     },
     "critical": {
@@ -1625,24 +1499,6 @@
       "adult": {
         "low": 2.5,
         "high": 4.5,
-        "unit": "mg/dL",
-        "unit_si": "mmol/L"
-      },
-      "pediatric": {
-        "low": 2.25,
-        "high": 4.95,
-        "unit": "mg/dL",
-        "unit_si": "mmol/L"
-      },
-      "neonatal": {
-        "low": 2,
-        "high": 5.3999999999999995,
-        "unit": "mg/dL",
-        "unit_si": "mmol/L"
-      },
-      "pregnant": {
-        "low": 2.375,
-        "high": 4.7250000000000005,
         "unit": "mg/dL",
         "unit_si": "mmol/L"
       }
@@ -1858,24 +1714,6 @@
         "high": 20,
         "unit": "mg/dL",
         "unit_si": "mmol/L"
-      },
-      "pediatric": {
-        "low": 6.3,
-        "high": 22,
-        "unit": "mg/dL",
-        "unit_si": "mmol/L"
-      },
-      "neonatal": {
-        "low": 5.6000000000000005,
-        "high": 24,
-        "unit": "mg/dL",
-        "unit_si": "mmol/L"
-      },
-      "pregnant": {
-        "low": 6.6499999999999995,
-        "high": 21,
-        "unit": "mg/dL",
-        "unit_si": "mmol/L"
       }
     },
     "critical": {
@@ -2087,24 +1925,6 @@
       "adult": {
         "low": 0.6,
         "high": 1.3,
-        "unit": "mg/dL",
-        "unit_si": "µmol/L"
-      },
-      "pediatric": {
-        "low": 0.54,
-        "high": 1.4300000000000002,
-        "unit": "mg/dL",
-        "unit_si": "µmol/L"
-      },
-      "neonatal": {
-        "low": 0.48,
-        "high": 1.56,
-        "unit": "mg/dL",
-        "unit_si": "µmol/L"
-      },
-      "pregnant": {
-        "low": 0.57,
-        "high": 1.3650000000000002,
         "unit": "mg/dL",
         "unit_si": "µmol/L"
       }
@@ -2320,24 +2140,6 @@
         "high": 120,
         "unit": "mL/min/1.73m²",
         "unit_si": "mL/min/1.73m²"
-      },
-      "pediatric": {
-        "low": 81,
-        "high": 132,
-        "unit": "mL/min/1.73m²",
-        "unit_si": "mL/min/1.73m²"
-      },
-      "neonatal": {
-        "low": 72,
-        "high": 144,
-        "unit": "mL/min/1.73m²",
-        "unit_si": "mL/min/1.73m²"
-      },
-      "pregnant": {
-        "low": 85.5,
-        "high": 126,
-        "unit": "mL/min/1.73m²",
-        "unit_si": "mL/min/1.73m²"
       }
     },
     "critical": {
@@ -2549,24 +2351,6 @@
       "adult": {
         "low": 3.5,
         "high": 7.2,
-        "unit": "mg/dL",
-        "unit_si": "µmol/L"
-      },
-      "pediatric": {
-        "low": 3.15,
-        "high": 7.920000000000001,
-        "unit": "mg/dL",
-        "unit_si": "µmol/L"
-      },
-      "neonatal": {
-        "low": 2.8000000000000003,
-        "high": 8.64,
-        "unit": "mg/dL",
-        "unit_si": "µmol/L"
-      },
-      "pregnant": {
-        "low": 3.3249999999999997,
-        "high": 7.5600000000000005,
         "unit": "mg/dL",
         "unit_si": "µmol/L"
       }
@@ -2782,24 +2566,6 @@
         "high": 12,
         "unit": "mEq/L",
         "unit_si": "mmol/L"
-      },
-      "pediatric": {
-        "low": 7.2,
-        "high": 13.200000000000001,
-        "unit": "mEq/L",
-        "unit_si": "mmol/L"
-      },
-      "neonatal": {
-        "low": 6.4,
-        "high": 14.399999999999999,
-        "unit": "mEq/L",
-        "unit_si": "mmol/L"
-      },
-      "pregnant": {
-        "low": 7.6,
-        "high": 12.600000000000001,
-        "unit": "mEq/L",
-        "unit_si": "mmol/L"
       }
     },
     "critical": {
@@ -3011,24 +2777,6 @@
       "adult": {
         "low": 7,
         "high": 56,
-        "unit": "U/L",
-        "unit_si": "U/L"
-      },
-      "pediatric": {
-        "low": 6.3,
-        "high": 61.60000000000001,
-        "unit": "U/L",
-        "unit_si": "U/L"
-      },
-      "neonatal": {
-        "low": 5.6000000000000005,
-        "high": 67.2,
-        "unit": "U/L",
-        "unit_si": "U/L"
-      },
-      "pregnant": {
-        "low": 6.6499999999999995,
-        "high": 58.800000000000004,
         "unit": "U/L",
         "unit_si": "U/L"
       }
@@ -3244,24 +2992,6 @@
         "high": 40,
         "unit": "U/L",
         "unit_si": "U/L"
-      },
-      "pediatric": {
-        "low": 9,
-        "high": 44,
-        "unit": "U/L",
-        "unit_si": "U/L"
-      },
-      "neonatal": {
-        "low": 8,
-        "high": 48,
-        "unit": "U/L",
-        "unit_si": "U/L"
-      },
-      "pregnant": {
-        "low": 9.5,
-        "high": 42,
-        "unit": "U/L",
-        "unit_si": "U/L"
       }
     },
     "critical": {
@@ -3473,24 +3203,6 @@
       "adult": {
         "low": 30,
         "high": 120,
-        "unit": "U/L",
-        "unit_si": "U/L"
-      },
-      "pediatric": {
-        "low": 27,
-        "high": 132,
-        "unit": "U/L",
-        "unit_si": "U/L"
-      },
-      "neonatal": {
-        "low": 24,
-        "high": 144,
-        "unit": "U/L",
-        "unit_si": "U/L"
-      },
-      "pregnant": {
-        "low": 28.5,
-        "high": 126,
         "unit": "U/L",
         "unit_si": "U/L"
       }
@@ -3706,24 +3418,6 @@
         "high": 1.2,
         "unit": "mg/dL",
         "unit_si": "µmol/L"
-      },
-      "pediatric": {
-        "low": 0.18000000000000002,
-        "high": 1.32,
-        "unit": "mg/dL",
-        "unit_si": "µmol/L"
-      },
-      "neonatal": {
-        "low": 0.16000000000000003,
-        "high": 1.44,
-        "unit": "mg/dL",
-        "unit_si": "µmol/L"
-      },
-      "pregnant": {
-        "low": 0.19,
-        "high": 1.26,
-        "unit": "mg/dL",
-        "unit_si": "µmol/L"
       }
     },
     "critical": {
@@ -3935,24 +3629,6 @@
       "adult": {
         "low": 0,
         "high": 0.3,
-        "unit": "mg/dL",
-        "unit_si": "µmol/L"
-      },
-      "pediatric": {
-        "low": 0,
-        "high": 0.33,
-        "unit": "mg/dL",
-        "unit_si": "µmol/L"
-      },
-      "neonatal": {
-        "low": 0,
-        "high": 0.36,
-        "unit": "mg/dL",
-        "unit_si": "µmol/L"
-      },
-      "pregnant": {
-        "low": 0,
-        "high": 0.315,
         "unit": "mg/dL",
         "unit_si": "µmol/L"
       }
@@ -4168,24 +3844,6 @@
         "high": 5,
         "unit": "g/dL",
         "unit_si": "g/L"
-      },
-      "pediatric": {
-        "low": 3.15,
-        "high": 5.5,
-        "unit": "g/dL",
-        "unit_si": "g/L"
-      },
-      "neonatal": {
-        "low": 2.8000000000000003,
-        "high": 6,
-        "unit": "g/dL",
-        "unit_si": "g/L"
-      },
-      "pregnant": {
-        "low": 3.3249999999999997,
-        "high": 5.25,
-        "unit": "g/dL",
-        "unit_si": "g/L"
       }
     },
     "critical": {
@@ -4397,24 +4055,6 @@
       "adult": {
         "low": 6,
         "high": 8.3,
-        "unit": "g/dL",
-        "unit_si": "g/L"
-      },
-      "pediatric": {
-        "low": 5.4,
-        "high": 9.13,
-        "unit": "g/dL",
-        "unit_si": "g/L"
-      },
-      "neonatal": {
-        "low": 4.800000000000001,
-        "high": 9.96,
-        "unit": "g/dL",
-        "unit_si": "g/L"
-      },
-      "pregnant": {
-        "low": 5.699999999999999,
-        "high": 8.715000000000002,
         "unit": "g/dL",
         "unit_si": "g/L"
       }
@@ -4630,24 +4270,6 @@
         "high": 0.04,
         "unit": "ng/mL",
         "unit_si": "µg/L"
-      },
-      "pediatric": {
-        "low": 0,
-        "high": 0.044000000000000004,
-        "unit": "ng/mL",
-        "unit_si": "µg/L"
-      },
-      "neonatal": {
-        "low": 0,
-        "high": 0.048,
-        "unit": "ng/mL",
-        "unit_si": "µg/L"
-      },
-      "pregnant": {
-        "low": 0,
-        "high": 0.042,
-        "unit": "ng/mL",
-        "unit_si": "µg/L"
       }
     },
     "critical": {
@@ -4859,24 +4481,6 @@
       "adult": {
         "low": 0,
         "high": 0.01,
-        "unit": "ng/mL",
-        "unit_si": "µg/L"
-      },
-      "pediatric": {
-        "low": 0,
-        "high": 0.011000000000000001,
-        "unit": "ng/mL",
-        "unit_si": "µg/L"
-      },
-      "neonatal": {
-        "low": 0,
-        "high": 0.012,
-        "unit": "ng/mL",
-        "unit_si": "µg/L"
-      },
-      "pregnant": {
-        "low": 0,
-        "high": 0.0105,
         "unit": "ng/mL",
         "unit_si": "µg/L"
       }
@@ -5092,24 +4696,6 @@
         "high": 5,
         "unit": "ng/mL",
         "unit_si": "µg/L"
-      },
-      "pediatric": {
-        "low": 0,
-        "high": 5.5,
-        "unit": "ng/mL",
-        "unit_si": "µg/L"
-      },
-      "neonatal": {
-        "low": 0,
-        "high": 6,
-        "unit": "ng/mL",
-        "unit_si": "µg/L"
-      },
-      "pregnant": {
-        "low": 0,
-        "high": 5.25,
-        "unit": "ng/mL",
-        "unit_si": "µg/L"
       }
     },
     "critical": {
@@ -5321,24 +4907,6 @@
       "adult": {
         "low": 0,
         "high": 100,
-        "unit": "pg/mL",
-        "unit_si": "ng/L"
-      },
-      "pediatric": {
-        "low": 0,
-        "high": 110.00000000000001,
-        "unit": "pg/mL",
-        "unit_si": "ng/L"
-      },
-      "neonatal": {
-        "low": 0,
-        "high": 120,
-        "unit": "pg/mL",
-        "unit_si": "ng/L"
-      },
-      "pregnant": {
-        "low": 0,
-        "high": 105,
         "unit": "pg/mL",
         "unit_si": "ng/L"
       }
@@ -5554,24 +5122,6 @@
         "high": 125,
         "unit": "pg/mL",
         "unit_si": "ng/L"
-      },
-      "pediatric": {
-        "low": 0,
-        "high": 137.5,
-        "unit": "pg/mL",
-        "unit_si": "ng/L"
-      },
-      "neonatal": {
-        "low": 0,
-        "high": 150,
-        "unit": "pg/mL",
-        "unit_si": "ng/L"
-      },
-      "pregnant": {
-        "low": 0,
-        "high": 131.25,
-        "unit": "pg/mL",
-        "unit_si": "ng/L"
       }
     },
     "critical": {
@@ -5783,24 +5333,6 @@
       "adult": {
         "low": 12,
         "high": 16,
-        "unit": "g/dL",
-        "unit_si": "g/L"
-      },
-      "pediatric": {
-        "low": 10.8,
-        "high": 17.6,
-        "unit": "g/dL",
-        "unit_si": "g/L"
-      },
-      "neonatal": {
-        "low": 9.600000000000001,
-        "high": 19.2,
-        "unit": "g/dL",
-        "unit_si": "g/L"
-      },
-      "pregnant": {
-        "low": 11.399999999999999,
-        "high": 16.8,
         "unit": "g/dL",
         "unit_si": "g/L"
       }
@@ -6016,24 +5548,6 @@
         "high": 46,
         "unit": "%",
         "unit_si": "%"
-      },
-      "pediatric": {
-        "low": 32.4,
-        "high": 50.6,
-        "unit": "%",
-        "unit_si": "%"
-      },
-      "neonatal": {
-        "low": 28.8,
-        "high": 55.199999999999996,
-        "unit": "%",
-        "unit_si": "%"
-      },
-      "pregnant": {
-        "low": 34.199999999999996,
-        "high": 48.300000000000004,
-        "unit": "%",
-        "unit_si": "%"
       }
     },
     "critical": {
@@ -6245,24 +5759,6 @@
       "adult": {
         "low": 4.2,
         "high": 5.8,
-        "unit": "x10^6/µL",
-        "unit_si": "x10^12/L"
-      },
-      "pediatric": {
-        "low": 3.7800000000000002,
-        "high": 6.38,
-        "unit": "x10^6/µL",
-        "unit_si": "x10^12/L"
-      },
-      "neonatal": {
-        "low": 3.3600000000000003,
-        "high": 6.96,
-        "unit": "x10^6/µL",
-        "unit_si": "x10^12/L"
-      },
-      "pregnant": {
-        "low": 3.9899999999999998,
-        "high": 6.09,
         "unit": "x10^6/µL",
         "unit_si": "x10^12/L"
       }
@@ -6478,24 +5974,6 @@
         "high": 11,
         "unit": "x10^3/µL",
         "unit_si": "x10^9/L"
-      },
-      "pediatric": {
-        "low": 3.6,
-        "high": 12.100000000000001,
-        "unit": "x10^3/µL",
-        "unit_si": "x10^9/L"
-      },
-      "neonatal": {
-        "low": 3.2,
-        "high": 13.2,
-        "unit": "x10^3/µL",
-        "unit_si": "x10^9/L"
-      },
-      "pregnant": {
-        "low": 3.8,
-        "high": 11.55,
-        "unit": "x10^3/µL",
-        "unit_si": "x10^9/L"
       }
     },
     "critical": {
@@ -6707,24 +6185,6 @@
       "adult": {
         "low": 150,
         "high": 400,
-        "unit": "x10^3/µL",
-        "unit_si": "x10^9/L"
-      },
-      "pediatric": {
-        "low": 135,
-        "high": 440.00000000000006,
-        "unit": "x10^3/µL",
-        "unit_si": "x10^9/L"
-      },
-      "neonatal": {
-        "low": 120,
-        "high": 480,
-        "unit": "x10^3/µL",
-        "unit_si": "x10^9/L"
-      },
-      "pregnant": {
-        "low": 142.5,
-        "high": 420,
         "unit": "x10^3/µL",
         "unit_si": "x10^9/L"
       }
@@ -6940,24 +6400,6 @@
         "high": 100,
         "unit": "fL",
         "unit_si": "fL"
-      },
-      "pediatric": {
-        "low": 72,
-        "high": 110.00000000000001,
-        "unit": "fL",
-        "unit_si": "fL"
-      },
-      "neonatal": {
-        "low": 64,
-        "high": 120,
-        "unit": "fL",
-        "unit_si": "fL"
-      },
-      "pregnant": {
-        "low": 76,
-        "high": 105,
-        "unit": "fL",
-        "unit_si": "fL"
       }
     },
     "critical": {
@@ -7169,24 +6611,6 @@
       "adult": {
         "low": 27,
         "high": 33,
-        "unit": "pg",
-        "unit_si": "pg"
-      },
-      "pediatric": {
-        "low": 24.3,
-        "high": 36.300000000000004,
-        "unit": "pg",
-        "unit_si": "pg"
-      },
-      "neonatal": {
-        "low": 21.6,
-        "high": 39.6,
-        "unit": "pg",
-        "unit_si": "pg"
-      },
-      "pregnant": {
-        "low": 25.65,
-        "high": 34.65,
         "unit": "pg",
         "unit_si": "pg"
       }
@@ -7402,24 +6826,6 @@
         "high": 14.5,
         "unit": "%",
         "unit_si": "%"
-      },
-      "pediatric": {
-        "low": 10.35,
-        "high": 15.950000000000001,
-        "unit": "%",
-        "unit_si": "%"
-      },
-      "neonatal": {
-        "low": 9.200000000000001,
-        "high": 17.4,
-        "unit": "%",
-        "unit_si": "%"
-      },
-      "pregnant": {
-        "low": 10.924999999999999,
-        "high": 15.225000000000001,
-        "unit": "%",
-        "unit_si": "%"
       }
     },
     "critical": {
@@ -7631,24 +7037,6 @@
       "adult": {
         "low": 40,
         "high": 70,
-        "unit": "%",
-        "unit_si": "%"
-      },
-      "pediatric": {
-        "low": 36,
-        "high": 77,
-        "unit": "%",
-        "unit_si": "%"
-      },
-      "neonatal": {
-        "low": 32,
-        "high": 84,
-        "unit": "%",
-        "unit_si": "%"
-      },
-      "pregnant": {
-        "low": 38,
-        "high": 73.5,
         "unit": "%",
         "unit_si": "%"
       }
@@ -7864,24 +7252,6 @@
         "high": 40,
         "unit": "%",
         "unit_si": "%"
-      },
-      "pediatric": {
-        "low": 18,
-        "high": 44,
-        "unit": "%",
-        "unit_si": "%"
-      },
-      "neonatal": {
-        "low": 16,
-        "high": 48,
-        "unit": "%",
-        "unit_si": "%"
-      },
-      "pregnant": {
-        "low": 19,
-        "high": 42,
-        "unit": "%",
-        "unit_si": "%"
       }
     },
     "critical": {
@@ -8093,24 +7463,6 @@
       "adult": {
         "low": 2,
         "high": 8,
-        "unit": "%",
-        "unit_si": "%"
-      },
-      "pediatric": {
-        "low": 1.8,
-        "high": 8.8,
-        "unit": "%",
-        "unit_si": "%"
-      },
-      "neonatal": {
-        "low": 1.6,
-        "high": 9.6,
-        "unit": "%",
-        "unit_si": "%"
-      },
-      "pregnant": {
-        "low": 1.9,
-        "high": 8.4,
         "unit": "%",
         "unit_si": "%"
       }
@@ -8326,24 +7678,6 @@
         "high": 4,
         "unit": "%",
         "unit_si": "%"
-      },
-      "pediatric": {
-        "low": 0.9,
-        "high": 4.4,
-        "unit": "%",
-        "unit_si": "%"
-      },
-      "neonatal": {
-        "low": 0.8,
-        "high": 4.8,
-        "unit": "%",
-        "unit_si": "%"
-      },
-      "pregnant": {
-        "low": 0.95,
-        "high": 4.2,
-        "unit": "%",
-        "unit_si": "%"
       }
     },
     "critical": {
@@ -8555,24 +7889,6 @@
       "adult": {
         "low": 0,
         "high": 1,
-        "unit": "%",
-        "unit_si": "%"
-      },
-      "pediatric": {
-        "low": 0,
-        "high": 1.1,
-        "unit": "%",
-        "unit_si": "%"
-      },
-      "neonatal": {
-        "low": 0,
-        "high": 1.2,
-        "unit": "%",
-        "unit_si": "%"
-      },
-      "pregnant": {
-        "low": 0,
-        "high": 1.05,
         "unit": "%",
         "unit_si": "%"
       }
@@ -8788,24 +8104,6 @@
         "high": 13.5,
         "unit": "sec",
         "unit_si": "sec"
-      },
-      "pediatric": {
-        "low": 9.9,
-        "high": 14.850000000000001,
-        "unit": "sec",
-        "unit_si": "sec"
-      },
-      "neonatal": {
-        "low": 8.8,
-        "high": 16.2,
-        "unit": "sec",
-        "unit_si": "sec"
-      },
-      "pregnant": {
-        "low": 10.45,
-        "high": 14.175,
-        "unit": "sec",
-        "unit_si": "sec"
       }
     },
     "critical": {
@@ -9017,24 +8315,6 @@
       "adult": {
         "low": 25,
         "high": 35,
-        "unit": "sec",
-        "unit_si": "sec"
-      },
-      "pediatric": {
-        "low": 22.5,
-        "high": 38.5,
-        "unit": "sec",
-        "unit_si": "sec"
-      },
-      "neonatal": {
-        "low": 20,
-        "high": 42,
-        "unit": "sec",
-        "unit_si": "sec"
-      },
-      "pregnant": {
-        "low": 23.75,
-        "high": 36.75,
         "unit": "sec",
         "unit_si": "sec"
       }
@@ -9250,24 +8530,6 @@
         "high": 1.2,
         "unit": "ratio",
         "unit_si": "ratio"
-      },
-      "pediatric": {
-        "low": 0.7200000000000001,
-        "high": 1.32,
-        "unit": "ratio",
-        "unit_si": "ratio"
-      },
-      "neonatal": {
-        "low": 0.6400000000000001,
-        "high": 1.44,
-        "unit": "ratio",
-        "unit_si": "ratio"
-      },
-      "pregnant": {
-        "low": 0.76,
-        "high": 1.26,
-        "unit": "ratio",
-        "unit_si": "ratio"
       }
     },
     "critical": {
@@ -9479,24 +8741,6 @@
       "adult": {
         "low": 0,
         "high": 0.5,
-        "unit": "µg/mL FEU",
-        "unit_si": "mg/L FEU"
-      },
-      "pediatric": {
-        "low": 0,
-        "high": 0.55,
-        "unit": "µg/mL FEU",
-        "unit_si": "mg/L FEU"
-      },
-      "neonatal": {
-        "low": 0,
-        "high": 0.6,
-        "unit": "µg/mL FEU",
-        "unit_si": "mg/L FEU"
-      },
-      "pregnant": {
-        "low": 0,
-        "high": 0.525,
         "unit": "µg/mL FEU",
         "unit_si": "mg/L FEU"
       }
@@ -9712,24 +8956,6 @@
         "high": 400,
         "unit": "mg/dL",
         "unit_si": "g/L"
-      },
-      "pediatric": {
-        "low": 180,
-        "high": 440.00000000000006,
-        "unit": "mg/dL",
-        "unit_si": "g/L"
-      },
-      "neonatal": {
-        "low": 160,
-        "high": 480,
-        "unit": "mg/dL",
-        "unit_si": "g/L"
-      },
-      "pregnant": {
-        "low": 190,
-        "high": 420,
-        "unit": "mg/dL",
-        "unit_si": "g/L"
       }
     },
     "critical": {
@@ -9941,24 +9167,6 @@
       "adult": {
         "low": 70,
         "high": 100,
-        "unit": "mg/dL",
-        "unit_si": "mmol/L"
-      },
-      "pediatric": {
-        "low": 63,
-        "high": 110.00000000000001,
-        "unit": "mg/dL",
-        "unit_si": "mmol/L"
-      },
-      "neonatal": {
-        "low": 56,
-        "high": 120,
-        "unit": "mg/dL",
-        "unit_si": "mmol/L"
-      },
-      "pregnant": {
-        "low": 66.5,
-        "high": 105,
         "unit": "mg/dL",
         "unit_si": "mmol/L"
       }
@@ -10174,24 +9382,6 @@
         "high": 5.6,
         "unit": "%",
         "unit_si": "%"
-      },
-      "pediatric": {
-        "low": 3.6,
-        "high": 6.16,
-        "unit": "%",
-        "unit_si": "%"
-      },
-      "neonatal": {
-        "low": 3.2,
-        "high": 6.72,
-        "unit": "%",
-        "unit_si": "%"
-      },
-      "pregnant": {
-        "low": 3.8,
-        "high": 5.88,
-        "unit": "%",
-        "unit_si": "%"
       }
     },
     "critical": {
@@ -10403,24 +9593,6 @@
       "adult": {
         "low": 0.5,
         "high": 2,
-        "unit": "mmol/L",
-        "unit_si": "mmol/L"
-      },
-      "pediatric": {
-        "low": 0.45,
-        "high": 2.2,
-        "unit": "mmol/L",
-        "unit_si": "mmol/L"
-      },
-      "neonatal": {
-        "low": 0.4,
-        "high": 2.4,
-        "unit": "mmol/L",
-        "unit_si": "mmol/L"
-      },
-      "pregnant": {
-        "low": 0.475,
-        "high": 2.1,
         "unit": "mmol/L",
         "unit_si": "mmol/L"
       }
@@ -10636,24 +9808,6 @@
         "high": 45,
         "unit": "µg/dL",
         "unit_si": "µmol/L"
-      },
-      "pediatric": {
-        "low": 13.5,
-        "high": 49.50000000000001,
-        "unit": "µg/dL",
-        "unit_si": "µmol/L"
-      },
-      "neonatal": {
-        "low": 12,
-        "high": 54,
-        "unit": "µg/dL",
-        "unit_si": "µmol/L"
-      },
-      "pregnant": {
-        "low": 14.25,
-        "high": 47.25,
-        "unit": "µg/dL",
-        "unit_si": "µmol/L"
       }
     },
     "critical": {
@@ -10865,24 +10019,6 @@
       "adult": {
         "low": 0,
         "high": 0.6,
-        "unit": "mmol/L",
-        "unit_si": "mmol/L"
-      },
-      "pediatric": {
-        "low": 0,
-        "high": 0.66,
-        "unit": "mmol/L",
-        "unit_si": "mmol/L"
-      },
-      "neonatal": {
-        "low": 0,
-        "high": 0.72,
-        "unit": "mmol/L",
-        "unit_si": "mmol/L"
-      },
-      "pregnant": {
-        "low": 0,
-        "high": 0.63,
         "unit": "mmol/L",
         "unit_si": "mmol/L"
       }
@@ -11098,24 +10234,6 @@
         "high": 4,
         "unit": "mIU/L",
         "unit_si": "mIU/L"
-      },
-      "pediatric": {
-        "low": 0.36000000000000004,
-        "high": 4.4,
-        "unit": "mIU/L",
-        "unit_si": "mIU/L"
-      },
-      "neonatal": {
-        "low": 0.32000000000000006,
-        "high": 4.8,
-        "unit": "mIU/L",
-        "unit_si": "mIU/L"
-      },
-      "pregnant": {
-        "low": 0.38,
-        "high": 4.2,
-        "unit": "mIU/L",
-        "unit_si": "mIU/L"
       }
     },
     "critical": {
@@ -11327,24 +10445,6 @@
       "adult": {
         "low": 2.3,
         "high": 4.2,
-        "unit": "pg/mL",
-        "unit_si": "pmol/L"
-      },
-      "pediatric": {
-        "low": 2.07,
-        "high": 4.620000000000001,
-        "unit": "pg/mL",
-        "unit_si": "pmol/L"
-      },
-      "neonatal": {
-        "low": 1.8399999999999999,
-        "high": 5.04,
-        "unit": "pg/mL",
-        "unit_si": "pmol/L"
-      },
-      "pregnant": {
-        "low": 2.1849999999999996,
-        "high": 4.41,
         "unit": "pg/mL",
         "unit_si": "pmol/L"
       }
@@ -11560,24 +10660,6 @@
         "high": 1.8,
         "unit": "ng/dL",
         "unit_si": "pmol/L"
-      },
-      "pediatric": {
-        "low": 0.7200000000000001,
-        "high": 1.9800000000000002,
-        "unit": "ng/dL",
-        "unit_si": "pmol/L"
-      },
-      "neonatal": {
-        "low": 0.6400000000000001,
-        "high": 2.16,
-        "unit": "ng/dL",
-        "unit_si": "pmol/L"
-      },
-      "pregnant": {
-        "low": 0.76,
-        "high": 1.8900000000000001,
-        "unit": "ng/dL",
-        "unit_si": "pmol/L"
       }
     },
     "critical": {
@@ -11789,24 +10871,6 @@
       "adult": {
         "low": 5.1,
         "high": 14.1,
-        "unit": "µg/dL",
-        "unit_si": "nmol/L"
-      },
-      "pediatric": {
-        "low": 4.59,
-        "high": 15.510000000000002,
-        "unit": "µg/dL",
-        "unit_si": "nmol/L"
-      },
-      "neonatal": {
-        "low": 4.08,
-        "high": 16.919999999999998,
-        "unit": "µg/dL",
-        "unit_si": "nmol/L"
-      },
-      "pregnant": {
-        "low": 4.845,
-        "high": 14.805,
         "unit": "µg/dL",
         "unit_si": "nmol/L"
       }
@@ -12022,24 +11086,6 @@
         "high": 5,
         "unit": "mg/L",
         "unit_si": "mg/L"
-      },
-      "pediatric": {
-        "low": 0,
-        "high": 5.5,
-        "unit": "mg/L",
-        "unit_si": "mg/L"
-      },
-      "neonatal": {
-        "low": 0,
-        "high": 6,
-        "unit": "mg/L",
-        "unit_si": "mg/L"
-      },
-      "pregnant": {
-        "low": 0,
-        "high": 5.25,
-        "unit": "mg/L",
-        "unit_si": "mg/L"
       }
     },
     "critical": {
@@ -12253,24 +11299,6 @@
         "high": 0.1,
         "unit": "ng/mL",
         "unit_si": "µg/L"
-      },
-      "pediatric": {
-        "low": 0,
-        "high": 0.11000000000000001,
-        "unit": "ng/mL",
-        "unit_si": "µg/L"
-      },
-      "neonatal": {
-        "low": 0,
-        "high": 0.12,
-        "unit": "ng/mL",
-        "unit_si": "µg/L"
-      },
-      "pregnant": {
-        "low": 0,
-        "high": 0.10500000000000001,
-        "unit": "ng/mL",
-        "unit_si": "µg/L"
       }
     },
     "critical": {
@@ -12482,24 +11510,6 @@
       "adult": {
         "low": 0,
         "high": 20,
-        "unit": "mm/hr",
-        "unit_si": "mm/hr"
-      },
-      "pediatric": {
-        "low": 0,
-        "high": 22,
-        "unit": "mm/hr",
-        "unit_si": "mm/hr"
-      },
-      "neonatal": {
-        "low": 0,
-        "high": 24,
-        "unit": "mm/hr",
-        "unit_si": "mm/hr"
-      },
-      "pregnant": {
-        "low": 0,
-        "high": 21,
         "unit": "mm/hr",
         "unit_si": "mm/hr"
       }

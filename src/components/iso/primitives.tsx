@@ -42,6 +42,8 @@ interface RoomShellProps {
   wallX?: IsoColor;
   wallY?: IsoColor;
   floor?: IsoColor;
+  /** Height of the left wall (x = 0). Lower it for partitions between neighbouring rooms. */
+  leftWallHeight?: number;
   /** Draw the slab under the floor (only for stand-alone rooms). */
   slab?: boolean;
 }
@@ -55,9 +57,12 @@ export const RoomShell = ({
   wallX = "--iso-wall-x",
   wallY = "--iso-wall-y",
   floor = "--iso-floor",
+  leftWallHeight = h,
   slab = true,
 }: RoomShellProps) => {
   const P = (x: number, y: number, z = 0) => project(x, y, z, origin);
+  const lh = leftWallHeight;
+  const t = 0.3;
   const lines: ReactNode[] = [];
   for (let i = 1; i < w; i++) {
     const [a, b] = [P(i, 0), P(i, d)];
@@ -78,15 +83,17 @@ export const RoomShell = ({
       <Poly points={[P(0, 0), P(w, 0), P(w, d), P(0, d)]} color={floor} />
       {lines}
       <Poly points={[P(0, 0), P(w, 0), P(w, 0, h), P(0, 0, h)]} color={wallX} />
-      <Poly points={[P(0, 0), P(0, d), P(0, d, h), P(0, 0, h)]} color={wallY} />
       <Poly points={[P(0, 0), P(w, 0), P(w, 0, 0.4), P(0, 0, 0.4)]} color="--iso-skirting" />
-      <Poly points={[P(0, 0), P(0, d), P(0, d, 0.4), P(0, 0, 0.4)]} color="--iso-skirting" />
-      <Poly
-        points={[P(-0.35, -0.35, h), P(w, -0.35, h), P(w, 0, h), P(0, 0, h), P(0, d, h), P(-0.35, d, h)]}
-        color="--iso-wall-cap"
-      />
-      <Poly points={[P(w, -0.35, h), P(w, 0, h), P(w, 0, 0), P(w, -0.35, 0)]} color="--iso-wall-cap-side" />
-      <Poly points={[P(-0.35, d, h), P(0, d, h), P(0, d, 0), P(-0.35, d, 0)]} color="--iso-wall-cap-side" />
+      <Poly points={[P(0, -t, h), P(w, -t, h), P(w, 0, h), P(0, 0, h)]} color="--iso-wall-cap" />
+      <Poly points={[P(w, -t, h), P(w, 0, h), P(w, 0, 0), P(w, -t, 0)]} color="--iso-wall-cap-side" />
+      {lh > 0 && (
+        <>
+          <Poly points={[P(0, 0), P(0, d), P(0, d, lh), P(0, 0, lh)]} color={wallY} />
+          <Poly points={[P(0, 0), P(0, d), P(0, d, Math.min(0.4, lh)), P(0, 0, Math.min(0.4, lh))]} color="--iso-skirting" />
+          <Poly points={[P(-t, 0, lh), P(0, 0, lh), P(0, d, lh), P(-t, d, lh)]} color="--iso-wall-cap" />
+          <Poly points={[P(-t, d, lh), P(0, d, lh), P(0, d, 0), P(-t, d, 0)]} color="--iso-wall-cap-side" />
+        </>
+      )}
     </g>
   );
 };

@@ -263,4 +263,9 @@ All colors MUST be HSL.
   .dark .iso-person {
     filter: brightness(0.82) saturate(0.85);
   }
+  .iso-hit:focus-visible .iso-hit-shape {
+    stroke: hsl(var(--primary));
+    stroke-width: 3;
+    stroke-linejoin: round;
+  }
 }

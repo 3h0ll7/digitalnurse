@@ -32,6 +32,7 @@ import { toast } from "sonner";
 import { usePreferences } from "@/contexts/PreferencesContext";
 import drugsCatalog from "@/data/drugs-catalog.json";
 import useOnlineStatus from "@/hooks/useOnlineStatus";
+import SectionScene from "@/components/iso/SectionScene";
 
 declare global {
   interface Window {
@@ -449,6 +450,7 @@ const AIAssistant = () => {
 
         {messages.length === 0 ? (
           <div className="space-y-4">
+            <SectionScene scene="ai" className="mx-auto w-40 sm:w-52" />
             <p className="text-sm text-muted-foreground">{isArabic ? "اختر إجراء سريع للبدء" : "Choose a quick action to get started"}</p>
             <div className="grid grid-cols-3 gap-2">
               {quickActions.map((action) => {

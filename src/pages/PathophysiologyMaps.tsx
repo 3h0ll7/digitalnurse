@@ -36,7 +36,7 @@ const PathophysiologyMaps = () => {
   const nodes = selected.cascade.split("→").map((n) => n.trim());
 
   return (
-    <AppLayout title={header.title} subtitle={header.subtitle} actions={<Badge>{filtered.length} maps</Badge>}>
+    <AppLayout illustration="pathways" title={header.title} subtitle={header.subtitle} actions={<Badge>{filtered.length} maps</Badge>}>
       <div className="relative">
         <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground rtl:left-auto rtl:right-3" />
         <Input value={query} onChange={(e) => setQuery(e.target.value)} placeholder={header.search} className="pl-10 rtl:pl-4 rtl:pr-10" />

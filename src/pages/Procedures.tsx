@@ -35,7 +35,7 @@ const Procedures = () => {
   ];
 
   return (
-    <AppLayout
+    <AppLayout illustration="icu"
       title={t.proceduresTitle}
       subtitle={t.evidenceBasedWorkflows}
       actions={

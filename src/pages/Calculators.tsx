@@ -42,7 +42,7 @@ const Calculators = () => {
   const filtered = activeCategory === "all" ? calculators : calculators.filter((calc) => calc.category === activeCategory);
 
   return (
-    <AppLayout title={t.calculatorsTitle} subtitle={t.calculatorsSubtitle}>
+    <AppLayout illustration="station" title={t.calculatorsTitle} subtitle={t.calculatorsSubtitle}>
       <section className="rounded-3xl border border-foreground/10 bg-card/80 p-5 text-foreground shadow-card">
         <p className="text-xs uppercase tracking-[0.4em] text-muted-foreground">{cx.countLabel}</p>
         <h2 className="mt-3 text-3xl font-semibold">{t.calculatorsHeroHeading}</h2>

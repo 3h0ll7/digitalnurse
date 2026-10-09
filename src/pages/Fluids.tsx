@@ -182,7 +182,7 @@ const Fluids = () => {
   const dripGtts = (dripMlh * (Number(calc.dropFactor) || 0)) / 60;
 
   return (
-    <AppLayout title={copy.title} subtitle={copy.subtitle}>
+    <AppLayout illustration="iv" title={copy.title} subtitle={copy.subtitle}>
       <section className="rounded-3xl border border-foreground/10 bg-card/80 p-5 shadow-card">
         <div className="relative">
           <Droplets size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-primary rtl:left-auto rtl:right-4" />

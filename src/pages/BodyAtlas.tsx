@@ -38,7 +38,7 @@ const BodyAtlas = () => {
   const systemKeys = useMemo(() => Object.keys(atlas.systems), []);
 
   return (
-    <AppLayout title={h.title} subtitle={h.subtitle} actions={<Badge>{atlas.organs.length + atlas.receptors.length + atlas.hormones.length}</Badge>}>
+    <AppLayout illustration="atlas" title={h.title} subtitle={h.subtitle} actions={<Badge>{atlas.organs.length + atlas.receptors.length + atlas.hormones.length}</Badge>}>
       <div className="relative">
         <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground rtl:left-auto rtl:right-3" />
         <Input value={query} onChange={(e) => setQuery(e.target.value)} placeholder={h.search} className="pl-10 rtl:pl-4 rtl:pr-10" />

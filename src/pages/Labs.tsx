@@ -260,7 +260,7 @@ const Labs = () => {
   }, [ph, pco2, hco3, na, cl, pao2, fio2, lactate]);
 
   return (
-    <AppLayout title={t.labsTitle} subtitle={t.labsSubtitle}>
+    <AppLayout illustration="lab" title={t.labsTitle} subtitle={t.labsSubtitle}>
       <Tabs defaultValue="reference" className="space-y-4">
         <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="reference">{tx.reference}</TabsTrigger>

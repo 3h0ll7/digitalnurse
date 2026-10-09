@@ -25,7 +25,7 @@ const PharmacokineticsVisualizer = () => {
   const fasterOnset = useMemo(() => (c1.onset.length <= c2.onset.length ? c1.name : c2.name), [c1, c2]);
 
   return (
-    <AppLayout title={h.title} subtitle={h.subtitle} actions={<Badge>ADME</Badge>}>
+    <AppLayout illustration="pharma" title={h.title} subtitle={h.subtitle} actions={<Badge>ADME</Badge>}>
       <div className="grid gap-4 lg:grid-cols-[1.2fr,1fr]">
         <Card className="p-4 space-y-3">
           <div className="flex flex-wrap items-center justify-between gap-2">

@@ -44,7 +44,7 @@ const MindMaps = () => {
   });
 
   return (
-    <AppLayout
+    <AppLayout illustration="mindmaps"
       title={t.mindMapsTitle}
       subtitle={t.mindMapsSubtitle}
       actions={

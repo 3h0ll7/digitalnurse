@@ -93,7 +93,7 @@ const Drugs = () => {
   }, [drugA, drugB]);
 
   return (
-    <AppLayout title="مرجع الأدوية" subtitle="أدوية العناية المركزة والطوارئ">
+    <AppLayout illustration="pharmacy" title="مرجع الأدوية" subtitle="أدوية العناية المركزة والطوارئ">
       <section dir="rtl" className="rounded-3xl border border-foreground/10 bg-card/80 p-5 text-right shadow-card">
         <div className="flex flex-col gap-3 md:flex-row-reverse md:items-center md:justify-between">
           <Dialog>

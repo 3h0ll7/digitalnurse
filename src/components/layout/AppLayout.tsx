@@ -3,6 +3,7 @@ import { ChevronLeft, Settings } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { usePreferences } from "@/contexts/PreferencesContext";
 import type { SceneKey } from "@/lib/sections";
+import SectionScene from "@/components/iso/SectionScene";
 
 interface AppLayoutProps {
   title: string;
@@ -15,7 +16,7 @@ interface AppLayoutProps {
   illustration?: SceneKey;
 }
 
-const AppLayout = ({ title, subtitle, actions, children, onBack, className }: AppLayoutProps) => {
+const AppLayout = ({ title, subtitle, actions, children, onBack, className, illustration }: AppLayoutProps) => {
   const { direction, t, setPreferencesOpen } = usePreferences();
 
   return (
@@ -38,6 +39,7 @@ const AppLayout = ({ title, subtitle, actions, children, onBack, className }: Ap
               {subtitle && <p className="mt-0.5 text-sm text-muted-foreground line-clamp-2">{subtitle}</p>}
             </div>
             {actions && <div className="hidden items-center gap-2 sm:flex">{actions}</div>}
+            {illustration && <SectionScene scene={illustration} className="w-24 shrink-0 sm:w-40" />}
             <button
               type="button"
               onClick={() => setPreferencesOpen(true)}

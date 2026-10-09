@@ -108,7 +108,7 @@ const ECG = () => {
   }, [category, rhythms, search]);
 
   return (
-    <AppLayout title={copy.title} subtitle={copy.subtitle}>
+    <AppLayout illustration="ecg" title={copy.title} subtitle={copy.subtitle}>
       <section dir={direction} className="rounded-3xl border border-foreground/10 bg-card/80 p-5 shadow-card">
         <div className="relative">
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-cyan-800 dark:text-cyan-300 rtl:left-auto rtl:right-4" size={18} />

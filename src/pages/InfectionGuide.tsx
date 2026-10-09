@@ -100,7 +100,7 @@ const InfectionGuide = () => {
   };
 
   return (
-    <AppLayout title={copy.title} subtitle={copy.subtitle}>
+    <AppLayout illustration="infection" title={copy.title} subtitle={copy.subtitle}>
       <Tabs defaultValue="tab1" className="space-y-4">
         <TabsList className="h-auto w-full flex-wrap justify-start gap-2 rounded-3xl border border-foreground/10 bg-card/70 p-2">
           {copy.tabs.map((tab, index) => (

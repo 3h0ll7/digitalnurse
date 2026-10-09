@@ -15,7 +15,7 @@ const DocsHub = () => {
   ];
 
   return (
-    <AppLayout title={copy.hubTitle} subtitle={copy.hubSubtitle}>
+    <AppLayout illustration="docs" title={copy.hubTitle} subtitle={copy.hubSubtitle}>
       <section dir={direction} className="space-y-5">
         <div className="rounded-3xl border border-cyan-400/20 bg-card/70 p-5 backdrop-blur-xl">
           <div className="relative">

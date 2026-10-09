@@ -53,7 +53,7 @@ const Assessments = () => {
   };
 
   return (
-    <AppLayout title={t.assessmentHubTitle} subtitle={t.assessmentHubSubtitle}>
+    <AppLayout illustration="triage" title={t.assessmentHubTitle} subtitle={t.assessmentHubSubtitle}>
       <section className="rounded-3xl border border-foreground/10 bg-card/80 p-5 shadow-card">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
           <div className="relative flex-1">

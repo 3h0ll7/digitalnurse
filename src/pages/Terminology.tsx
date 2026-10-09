@@ -113,7 +113,7 @@ const Terminology = () => {
   };
 
   return (
-    <AppLayout
+    <AppLayout illustration="terms"
       title={isArabic ? "المصطلحات الطبية" : "Medical Terminology"}
       subtitle={isArabic ? "500 مصطلح سريري في 10 تخصصات" : "500 CLINICAL TERMS ACROSS 10 SPECIALTIES"}
     >

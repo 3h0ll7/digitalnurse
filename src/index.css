@@ -248,3 +248,19 @@ All colors MUST be HSL.
     }
   }
 }
+
+@layer components {
+  /* Isometric illustrations */
+  .iso-night-only {
+    display: none;
+  }
+  .dark .iso-night-only {
+    display: inline;
+  }
+  .dark .iso-day-only {
+    display: none;
+  }
+  .dark .iso-person {
+    filter: brightness(0.82) saturate(0.85);
+  }
+}

@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { ChevronLeft, Settings } from "lucide-react";
+import { ChevronLeft, Github, Settings } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { usePreferences } from "@/contexts/PreferencesContext";
 import type { SceneKey } from "@/lib/sections";
@@ -69,6 +69,17 @@ const AppLayout = ({ title, subtitle, actions, children, onBack, className, illu
           >
             hassanaii.lovable.app
           </a>
+          <div className="pt-2">
+            <a
+              href="https://github.com/3h0ll7/digitalnurse"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 rounded-full border bg-card px-3 py-1 text-xs font-medium text-foreground transition-colors hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            >
+              <Github size={14} aria-hidden="true" />
+              {t.sourceOnGithub}
+            </a>
+          </div>
         </footer>
       </div>
     </div>

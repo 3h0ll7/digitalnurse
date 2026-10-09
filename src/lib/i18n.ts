@@ -239,6 +239,7 @@ interface Translation {
   noResults: string;
   offlineTitle: string;
   hospitalHint: string;
+  sourceOnGithub: string;
 }
 
 export const translations: Record<SupportedLanguage, Translation> = {
@@ -470,6 +471,7 @@ export const translations: Record<SupportedLanguage, Translation> = {
     noResults: "No matching results",
     offlineTitle: "You're offline",
     hospitalHint: "Tap a room to open its section",
+    sourceOnGithub: "Project on GitHub",
   },
 
   ar: {
@@ -700,6 +702,7 @@ export const translations: Record<SupportedLanguage, Translation> = {
     noResults: "ما لكينا نتائج مطابقة",
     offlineTitle: "أنت غير متصل",
     hospitalHint: "اضغط على أي غرفة حتى تفتح قسمها",
+    sourceOnGithub: "المشروع على GitHub",
   },
 };
 

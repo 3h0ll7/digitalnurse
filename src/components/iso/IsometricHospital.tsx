@@ -87,85 +87,88 @@ const IsometricHospital = ({ onOpen, className }: IsometricHospitalProps) => {
   const signAt = project(W / 2 - 3.2, -0.35, TOP_Z + ROOM.h, origin);
 
   return (
-    <div className={cn("relative mx-auto w-full max-w-[640px]", className)}>
-      <svg
-        viewBox={`0 0 ${Math.round(width)} ${Math.round(height)}`}
-        style={{ direction: "ltr", display: "block", width: "100%", height: "auto" }}
-        role="group"
-        aria-label={language === "ar" ? "خريطة المستشفى" : "Hospital map"}
-      >
-        <g aria-hidden="true">
-          <Poly
-            points={[project(-1.5, -1, -0.7, origin), project(W + 1.5, -1, -0.7, origin), project(W + 1.5, D + 2.2, -0.7, origin), project(-1.5, D + 2.2, -0.7, origin)]}
-            color="--iso-rug-in"
-          />
-          {floorLevels.map((z) => (
-            <g key={z}>
-              <IsoBox x={0} y={0} z={z - 0.7} w={W} d={D} h={0.7} top="--iso-floor" front="--iso-slab-l" side="--iso-slab-r" origin={origin} />
-              {drawOrder
-                .filter((room) => room.z === z)
-                .map((room) => {
-                  const Room = HOSPITAL_ROOMS[room.section.key];
-                  if (!Room) return null;
-                  return (
-                    <g
-                      key={room.section.key}
-                      className={cn(
-                        "iso-room transition-[transform,filter] duration-200 ease-[cubic-bezier(.2,.8,.2,1)] motion-reduce:transition-none",
-                        active === room.section.key && "-translate-y-1.5 motion-reduce:translate-y-0 [filter:drop-shadow(0_10px_10px_rgba(30,35,64,.22))]",
-                        flash === room.section.key && "brightness-110",
-                      )}
-                    >
-                      <Room origin={room.roomOrigin} slab={false} leftWallHeight={room.col === 0 ? ROOM.h : PARTITION_HEIGHT} />
-                    </g>
-                  );
-                })}
+    <div className={cn("mx-auto w-full max-w-[640px]", className)}>
+      {/* Labels are positioned in percent of this box, so it must hold only the drawing. */}
+      <div className="relative">
+        <svg
+          viewBox={`0 0 ${Math.round(width)} ${Math.round(height)}`}
+          style={{ direction: "ltr", display: "block", width: "100%", height: "auto" }}
+          role="group"
+          aria-label={language === "ar" ? "خريطة المستشفى" : "Hospital map"}
+        >
+          <g aria-hidden="true">
+            <Poly
+              points={[project(-1.5, -1, -0.7, origin), project(W + 1.5, -1, -0.7, origin), project(W + 1.5, D + 2.2, -0.7, origin), project(-1.5, D + 2.2, -0.7, origin)]}
+              color="--iso-rug-in"
+            />
+            {floorLevels.map((z) => (
+              <g key={z}>
+                <IsoBox x={0} y={0} z={z - 0.7} w={W} d={D} h={0.7} top="--iso-floor" front="--iso-slab-l" side="--iso-slab-r" origin={origin} />
+                {drawOrder
+                  .filter((room) => room.z === z)
+                  .map((room) => {
+                    const Room = HOSPITAL_ROOMS[room.section.key];
+                    if (!Room) return null;
+                    return (
+                      <g
+                        key={room.section.key}
+                        className={cn(
+                          "iso-room transition-[transform,filter] duration-200 ease-[cubic-bezier(.2,.8,.2,1)] motion-reduce:transition-none",
+                          active === room.section.key && "-translate-y-1.5 motion-reduce:translate-y-0 [filter:drop-shadow(0_10px_10px_rgba(30,35,64,.22))]",
+                          flash === room.section.key && "brightness-110",
+                        )}
+                      >
+                        <Room origin={room.roomOrigin} slab={false} leftWallHeight={room.col === 0 ? ROOM.h : PARTITION_HEIGHT} />
+                      </g>
+                    );
+                  })}
+              </g>
+            ))}
+            <g transform={`translate(${signAt[0]},${signAt[1]})`}>
+              <rect x={-4} y={-34} width={196} height={30} rx={8} fill="var(--iso-c5)" stroke="var(--iso-c5x)" />
+              <rect x={6} y={-28} width={18} height={18} rx={4} fill="var(--iso-sign)" />
+              <path d="M15 -25 v12 M9 -19 h12" stroke="#fff" strokeWidth={4} strokeLinecap="round" />
+              <text x={110} y={-13} textAnchor="middle" fontSize={13} fontWeight={700} fill="var(--iso-ink)" fontFamily='"IBM Plex Sans Arabic","IBM Plex Sans",sans-serif'>
+                {language === "ar" ? "مستشفى الممرض الرقمي" : "Digital Nurse Hospital"}
+              </text>
+            </g>
+            <Plant at={project(-0.8, D + 1.2, -0.7, origin)} scale={0.8} />
+            <Plant at={project(W + 0.6, D + 1.4, -0.7, origin)} scale={0.9} />
+          </g>
+
+          {placed.map((room) => (
+            <g
+              key={room.section.key}
+              role="link"
+              tabIndex={0}
+              aria-label={room.section.title[language]}
+              className="iso-hit cursor-pointer outline-none"
+              onMouseEnter={() => setActive(room.section.key)}
+              onMouseLeave={() => setActive((k) => (k === room.section.key ? null : k))}
+              onFocus={() => setActive(room.section.key)}
+              onBlur={() => setActive((k) => (k === room.section.key ? null : k))}
+              onClick={() => open(room.section)}
+              onKeyDown={(e) => onKey(e, room.section)}
+            >
+              <polygon points={pts(hitArea(room))} fill="transparent" className="iso-hit-shape" />
             </g>
           ))}
-          <g transform={`translate(${signAt[0]},${signAt[1]})`}>
-            <rect x={-4} y={-34} width={196} height={30} rx={8} fill="var(--iso-c5)" stroke="var(--iso-c5x)" />
-            <rect x={6} y={-28} width={18} height={18} rx={4} fill="var(--iso-sign)" />
-            <path d="M15 -25 v12 M9 -19 h12" stroke="#fff" strokeWidth={4} strokeLinecap="round" />
-            <text x={110} y={-13} textAnchor="middle" fontSize={13} fontWeight={700} fill="var(--iso-ink)" fontFamily='"IBM Plex Sans Arabic","IBM Plex Sans",sans-serif'>
-              {language === "ar" ? "مستشفى الممرض الرقمي" : "Digital Nurse Hospital"}
-            </text>
-          </g>
-          <Plant at={project(-0.8, D + 1.2, -0.7, origin)} scale={0.8} />
-          <Plant at={project(W + 0.6, D + 1.4, -0.7, origin)} scale={0.9} />
-        </g>
+        </svg>
 
         {placed.map((room) => (
-          <g
+          <span
             key={room.section.key}
-            role="link"
-            tabIndex={0}
-            aria-label={room.section.title[language]}
-            className="iso-hit cursor-pointer outline-none"
-            onMouseEnter={() => setActive(room.section.key)}
-            onMouseLeave={() => setActive((k) => (k === room.section.key ? null : k))}
-            onFocus={() => setActive(room.section.key)}
-            onBlur={() => setActive((k) => (k === room.section.key ? null : k))}
-            onClick={() => open(room.section)}
-            onKeyDown={(e) => onKey(e, room.section)}
+            aria-hidden="true"
+            style={labelAnchor(room)}
+            className={cn(
+              "pointer-events-none absolute -translate-x-1/2 -translate-y-[85%] whitespace-nowrap rounded-full border px-2 py-0.5 text-[10px] font-semibold shadow-sm transition-colors sm:text-xs",
+              active === room.section.key ? "border-primary bg-primary text-primary-foreground" : "bg-card/95 text-foreground",
+            )}
           >
-            <polygon points={pts(hitArea(room))} fill="transparent" className="iso-hit-shape" />
-          </g>
+            {room.section.title[language]}
+          </span>
         ))}
-      </svg>
-
-      {placed.map((room) => (
-        <span
-          key={room.section.key}
-          aria-hidden="true"
-          style={labelAnchor(room)}
-          className={cn(
-            "pointer-events-none absolute -translate-x-1/2 -translate-y-[85%] whitespace-nowrap rounded-full border px-2 py-0.5 text-[10px] font-semibold shadow-sm transition-colors sm:text-xs",
-            active === room.section.key ? "border-primary bg-primary text-primary-foreground" : "bg-card/95 text-foreground",
-          )}
-        >
-          {room.section.title[language]}
-        </span>
-      ))}
+      </div>
       <p className="mt-2 text-center text-xs text-muted-foreground">{t.hospitalHint}</p>
     </div>
   );

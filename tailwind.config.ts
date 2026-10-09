@@ -55,6 +55,17 @@ export default {
           yellow: "hsl(var(--medical-yellow))",
           red: "hsl(var(--medical-red))",
         },
+        pastel: {
+          peach: "hsl(var(--pastel-peach))",
+          sand: "hsl(var(--pastel-sand))",
+          pink: "hsl(var(--pastel-pink))",
+          periwinkle: "hsl(var(--pastel-periwinkle))",
+          teal: "hsl(var(--pastel-teal))",
+        },
+      },
+      fontFamily: {
+        sans: ['"IBM Plex Sans"', "system-ui", "sans-serif"],
+        arabic: ['"IBM Plex Sans Arabic"', '"IBM Plex Sans"', "system-ui", "sans-serif"],
       },
       boxShadow: {
         card: "var(--shadow-card)",

@@ -1,10 +1,20 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { PROVIDERS, buildUpstreamRequest, providerOrder, validateChatInput } from "./providers.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version',
+  'Access-Control-Expose-Headers': 'X-AI-Provider, X-AI-Model, X-AI-Fallback, X-RateLimit-Remaining, X-RateLimit-Limit',
 };
+
+const getEnv = (name: string) => Deno.env.get(name);
+
+/** Time allowed for a provider to start answering before we try the next one. */
+const PROVIDER_TIMEOUT_MS = 20_000;
+
+const json = (body: unknown, status: number) =>
+  new Response(JSON.stringify(body), { status, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
 
 const MAX_REQUESTS_PER_DAY = 10;
 
@@ -20,22 +30,14 @@ serve(async (req) => {
   }
 
   try {
-    const { messages, language, modePrompt = '' } = await req.json();
+    const { messages, language, provider, modePrompt = '' } = await req.json();
     const isArabic = language === 'ar';
 
-    if (!Array.isArray(messages) || messages.length === 0 || messages.length > 50) {
-      return new Response(JSON.stringify({ error: 'Invalid messages array' }), {
-        status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      });
-    }
+    const invalid = validateChatInput({ messages, modePrompt });
+    if (invalid) return json({ error: invalid }, 400);
 
-    for (const msg of messages) {
-      if (!msg.role || !msg.content || typeof msg.content !== 'string' || msg.content.length > 10000) {
-        return new Response(JSON.stringify({ error: 'Invalid message format' }), {
-          status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        });
-      }
-    }
+    const order = providerOrder(provider, getEnv);
+    if (order.length === 0) return json({ error: 'AI service is not configured' }, 503);
 
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
     const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
@@ -73,11 +75,6 @@ serve(async (req) => {
         { onConflict: 'user_identifier,request_date' }
       );
 
-    // Call Lovable AI Gateway
-    const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
-    if (!LOVABLE_API_KEY) {
-      throw new Error('AI service is not configured');
-    }
 
     const systemPrompt = `${isArabic
       ? `أنت مساعد تمريض ذكي ذو معرفة عالية. قدّم إرشادات سريرية قائمة على الأدلة باللغة العربية الفصحى حول:
@@ -110,47 +107,50 @@ Always:
 - Remind users to verify with institutional policies and qualified professionals
 - State clearly: "For educational purposes only. Always verify with a qualified healthcare professional."`}\n\n${modePrompt}`;
 
-    const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${LOVABLE_API_KEY}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        model: 'google/gemini-3.1-flash-lite',
-        messages: [{ role: 'system', content: systemPrompt }, ...messages],
-        stream,
-      }),
-    });
+    const upstreamMessages = [{ role: 'system', content: systemPrompt }, ...messages];
+    let lastStatus = 500;
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error('AI gateway error:', response.status, errorText);
-
-      if (response.status === 429) {
-        return new Response(JSON.stringify({ error: 'AI service rate limit exceeded. Please try again later.' }), {
-          status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    // Requested model first; if it fails before streaming starts (down, rate-limited, out of
+    // credits, rejected parameters, slow to respond), try the other one. Once a stream has
+    // started we pass it through as is.
+    for (const [index, id] of order.entries()) {
+      const request = buildUpstreamRequest(id, upstreamMessages, getEnv);
+      let response: Response;
+      try {
+        response = await fetch(request.url, {
+          method: 'POST',
+          headers: request.headers,
+          body: JSON.stringify(request.body),
+          signal: AbortSignal.timeout(PROVIDER_TIMEOUT_MS),
         });
-      }
-      if (response.status === 402) {
-        return new Response(JSON.stringify({ error: 'AI service credits exhausted. Please contact support.' }), {
-          status: 402, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        });
+      } catch (networkError) {
+        console.error(`AI provider ${id} unreachable:`, networkError);
+        continue;
       }
 
-      return new Response(JSON.stringify({ error: 'AI service temporarily unavailable' }), {
-        status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      });
+      if (response.ok && response.body) {
+        return new Response(response.body, {
+          headers: {
+            ...corsHeaders,
+            'Content-Type': 'text/event-stream',
+            'X-AI-Provider': id,
+            'X-AI-Model': PROVIDERS[id].label,
+            'X-AI-Fallback': String(index > 0 || id !== (provider === 'gemini' ? 'gemini' : 'groq')),
+            'X-RateLimit-Remaining': String(MAX_REQUESTS_PER_DAY - currentCount - 1),
+            'X-RateLimit-Limit': String(MAX_REQUESTS_PER_DAY),
+          },
+        });
+      }
+
+      lastStatus = response.status;
+      console.error(`AI provider ${id} error:`, response.status, await response.text());
     }
 
-    return new Response(response.body, {
-      headers: {
-        ...corsHeaders,
-        'Content-Type': 'text/event-stream',
-        'X-RateLimit-Remaining': String(MAX_REQUESTS_PER_DAY - currentCount - 1),
-        'X-RateLimit-Limit': String(MAX_REQUESTS_PER_DAY),
-      },
-    });
+    const message =
+      lastStatus === 429 ? 'AI service rate limit exceeded. Please try again later.'
+      : lastStatus === 402 ? 'AI service credits exhausted. Please contact support.'
+      : 'AI service temporarily unavailable';
+    return json({ error: message, tried: order }, lastStatus === 429 || lastStatus === 402 ? lastStatus : 502);
 
   } catch (error) {
     console.error('Error in ai-chat function:', error);

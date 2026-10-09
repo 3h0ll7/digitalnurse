@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Sparkles, Siren, GitMerge } from "lucide-react";
 import AppLayout from "@/components/layout/AppLayout";
+import EmptyState from "@/components/EmptyState";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -172,6 +173,7 @@ const Drugs = () => {
       </section>
 
       <section dir="rtl" className="grid gap-4">
+        {filteredDrugs.length === 0 && <EmptyState variant="no-results" title="ما لكينا دواء مطابق لبحثك" />}
         {filteredDrugs.map((drug) => (
           <Card
             key={drug.id}

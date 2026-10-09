@@ -7,6 +7,7 @@ import { usePreferences } from "@/contexts/PreferencesContext";
 import { Drawer, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle } from "@/components/ui/drawer";
 import { Button } from "@/components/ui/button";
 import AppLayout from "@/components/layout/AppLayout";
+import EmptyState from "@/components/EmptyState";
 import { Card } from "@/components/ui/card";
 
 const Procedures = () => {
@@ -129,9 +130,7 @@ const Procedures = () => {
         );
       })}
         {displayProcedures.length === 0 && (
-          <div className="rounded-3xl border border-dashed border-foreground/20 p-10 text-center text-muted-foreground">
-            <p>{t.noProcedures}</p>
-          </div>
+          <EmptyState variant="no-results" title={t.noProcedures} />
         )}
       </section>
 

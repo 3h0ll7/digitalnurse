@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Bookmark, BookmarkCheck, Search } from "lucide-react";
 import AppLayout from "@/components/layout/AppLayout";
+import EmptyState from "@/components/EmptyState";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -243,9 +244,7 @@ const Terminology = () => {
           })}
 
           {activeTerms.length === 0 && (
-            <Card className="rounded-2xl border border-dashed border-foreground/20 bg-card/50 p-8 text-center text-muted-foreground">
-              {isArabic ? "لا توجد نتائج مطابقة" : "No matching terms"}
-            </Card>
+            <EmptyState variant="no-results" title={isArabic ? "لا توجد نتائج مطابقة" : "No matching terms"} />
           )}
         </div>
       </section>

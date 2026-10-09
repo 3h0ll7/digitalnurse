@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { Activity, Search } from "lucide-react";
 import AppLayout from "@/components/layout/AppLayout";
+import EmptyState from "@/components/EmptyState";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -145,7 +146,7 @@ const ECG = () => {
         </TabsList>
 
         <TabsContent value="rhythms" className="space-y-3">
-          {filtered.length === 0 && <p className="text-sm text-muted-foreground">{copy.labels.noResults}</p>}
+          {filtered.length === 0 && <EmptyState variant="no-results" title={copy.labels.noResults} />}
           <div className="grid gap-3 md:grid-cols-2">
             {filtered.map((rhythm) => (
               <Dialog key={rhythm.id}>

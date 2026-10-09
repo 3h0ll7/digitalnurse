@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import AppLayout from "@/components/layout/AppLayout";
+import EmptyState from "@/components/EmptyState";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -284,6 +285,7 @@ const Labs = () => {
             </div>
           </section>
           <section className="grid gap-3">
+            {filteredReference.length === 0 && <EmptyState variant="no-results" title={t.noResults} />}
             {filteredReference.map((lab) => (
               <div key={lab.test} className="rounded-3xl border border-foreground/10 bg-card/70 p-5">
                 <p className="text-xs uppercase tracking-[0.4em] text-primary">{lab.category}</p>

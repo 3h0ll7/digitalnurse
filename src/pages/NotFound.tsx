@@ -1,5 +1,6 @@
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useEffect } from "react";
+import EmptyState from "@/components/EmptyState";
 import { usePreferences } from "@/contexts/PreferencesContext";
 
 const NotFound = () => {
@@ -11,14 +12,21 @@ const NotFound = () => {
   }, [location.pathname]);
 
   return (
-    <div dir={direction} className="flex min-h-screen items-center justify-center bg-muted">
-      <div className="text-center">
-        <h1 className="mb-4 text-4xl font-bold">404</h1>
-        <p className="mb-4 text-xl text-muted-foreground">{t.notFoundTitle}</p>
-        <a href="/" className="text-primary underline hover:text-primary/90">
-          {t.returnHome}
-        </a>
-      </div>
+    <div dir={direction} className="flex min-h-screen items-center justify-center bg-background p-4 text-foreground">
+      <EmptyState
+        variant="not-found"
+        title={t.notFoundTitle}
+        description={`404 · ${location.pathname}`}
+        className="w-full max-w-md"
+        action={
+          <Link
+            to="/home"
+            className="rounded-2xl bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          >
+            {t.returnHome}
+          </Link>
+        }
+      />
     </div>
   );
 };

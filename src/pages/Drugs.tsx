@@ -1,221 +1,214 @@
 import { useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { Sparkles, Siren, GitMerge } from "lucide-react";
+import { Link } from "react-router-dom";
+import { AlertTriangle, GitMerge, Pill, Scale, Search, Siren, SlidersHorizontal, TrendingUp } from "lucide-react";
 import AppLayout from "@/components/layout/AppLayout";
 import EmptyState from "@/components/EmptyState";
-import { Card } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import BarList from "@/components/data/BarList";
+import FilterChips from "@/components/data/FilterChips";
+import SourceNote from "@/components/data/SourceNote";
+import StatTile from "@/components/data/StatTile";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { usePreferences } from "@/contexts/PreferencesContext";
 import drugsCatalog from "@/data/drugs-catalog.json";
+import { DRUG_CATEGORY_LABELS, drugsText } from "@/data/drugs-i18n";
+import { categoryCounts, compatibility, drugStats, filterDrugs, routeCounts, type DrugFlag } from "@/lib/clinical/catalog";
+import { cn } from "@/lib/utils";
 
-const categoryStyles: Record<string, string> = {
-  red: "bg-red-500/20 text-red-800 dark:text-red-200 border-red-400/40",
-  pink: "bg-pink-500/20 text-pink-800 dark:text-pink-200 border-pink-400/40",
-  purple: "bg-purple-500/20 text-purple-800 dark:text-purple-200 border-purple-400/40",
-  amber: "bg-amber-500/20 text-amber-800 dark:text-amber-200 border-amber-400/40",
-  orange: "bg-orange-500/20 text-orange-800 dark:text-orange-200 border-orange-400/40",
-  rose: "bg-rose-500/20 text-rose-800 dark:text-rose-200 border-rose-400/40",
-  "red-bright": "bg-red-600/25 text-red-800 dark:text-red-100 border-red-300/60",
-  teal: "bg-teal-500/20 text-teal-800 dark:text-teal-100 border-teal-300/50",
-  blue: "bg-blue-500/20 text-blue-800 dark:text-blue-200 border-blue-400/40",
-  green: "bg-emerald-500/20 text-emerald-800 dark:text-emerald-200 border-emerald-400/40",
-  yellow: "bg-yellow-500/20 text-yellow-800 dark:text-yellow-100 border-yellow-300/50",
-  slate: "bg-slate-500/20 text-foreground/90 border-slate-400/40",
-};
+const drugs = drugsCatalog.drugs;
+const stats = drugStats(drugs);
+const routes = routeCounts(drugs);
+const perCategory = categoryCounts(drugs);
 
-const routeBadgeStyles: Record<string, string> = {
-  IV: "border-cyan-300/40 bg-cyan-400/10 text-cyan-800 dark:text-cyan-100",
-  PO: "border-indigo-300/40 bg-indigo-400/10 text-indigo-800 dark:text-indigo-100",
-  IM: "border-violet-300/40 bg-violet-400/10 text-violet-800 dark:text-violet-100",
-  SubQ: "border-fuchsia-300/40 bg-fuchsia-400/10 text-fuchsia-800 dark:text-fuchsia-100",
-  ET: "border-orange-300/40 bg-orange-400/10 text-orange-800 dark:text-orange-100",
-  IO: "border-emerald-300/40 bg-emerald-400/10 text-emerald-800 dark:text-emerald-100",
-};
-
-const categoryLabels: Record<string, string> = {
-  ALL: "الكل",
-  VASOPRESSORS: "رافعات الضغط",
-  INOTROPES: "مقويات القلب",
-  "SEDATION & ANALGESIA": "التهدئة والتسكين",
-  ANTIARRHYTHMICS: "مضادات اضطراب النظم",
-  ANTICOAGULANTS: "مضادات التخثر",
-  "RSI & AIRWAY": "أدوية التنبيب",
-  "CODE DRUGS": "أدوية الكود",
-  "ELECTROLYTE REPLACEMENT": "تعويض الشوارد",
-  ANTIHYPERTENSIVES: "خافضات الضغط",
-  "ANTIDOTES & REVERSAL AGENTS": "المضادات والترياق",
-  ANTIBIOTICS: "المضادات الحيوية",
-  "OTHER ICU ESSENTIALS": "أساسيات العناية المركزة",
-};
+const COMPAT_TONE = {
+  compatible: "border-medical-green/40 bg-medical-green/10 text-medical-green",
+  incompatible: "border-medical-red/40 bg-medical-red/10 text-medical-red",
+  unknown: "border-border bg-secondary/60 text-muted-foreground",
+  same: "border-border bg-secondary/60 text-muted-foreground",
+} as const;
 
 const Drugs = () => {
-  const navigate = useNavigate();
+  const { language } = usePreferences();
+  const tx = drugsText[language];
+  const catLabel = (value: string) => DRUG_CATEGORY_LABELS[value]?.[language] ?? value;
+
   const [query, setQuery] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("ALL");
+  const [category, setCategory] = useState("ALL");
+  const [flags, setFlags] = useState<DrugFlag[]>([]);
+  const [route, setRoute] = useState("");
   const [drugA, setDrugA] = useState("");
   const [drugB, setDrugB] = useState("");
 
-  const emergencyDrugs = useMemo(() => drugsCatalog.drugs.filter((drug) => drug.emergency), []);
+  const filtered = useMemo(() => filterDrugs(drugs, { query, category, flags, route }), [query, category, flags, route]);
+  const emergencyDrugs = useMemo(() => drugs.filter((d) => d.emergency), []);
+  const compat = compatibility(drugsCatalog.ivCompatibilityMatrix, drugA, drugB);
 
-  const filteredDrugs = useMemo(
-    () =>
-      drugsCatalog.drugs.filter((drug) => {
-        const matchesCategory = selectedCategory === "ALL" || drug.category === selectedCategory;
-        const needle = query.toLowerCase();
-        const matchesQuery =
-          drug.genericName.toLowerCase().includes(needle) ||
-          drug.brandName.toLowerCase().includes(needle) ||
-          drug.category.toLowerCase().includes(needle);
+  const toggleFlag = (flag: string) =>
+    setFlags((prev) => (prev.includes(flag as DrugFlag) ? prev.filter((f) => f !== flag) : [...prev, flag as DrugFlag]));
 
-        return matchesCategory && matchesQuery;
-      }),
-    [query, selectedCategory]
-  );
+  const flagOptions: { value: DrugFlag; label: string; count: number }[] = [
+    { value: "highAlert", label: tx.highAlert, count: stats.highAlert },
+    { value: "emergency", label: tx.emergency, count: stats.emergency },
+    { value: "weightBased", label: tx.weightBased, count: stats.weightBased },
+    { value: "titration", label: tx.titration, count: stats.titration },
+  ];
 
-  const compatibilityResult = useMemo(() => {
-    if (!drugA || !drugB) return null;
-    if (drugA === drugB) return { type: "unknown", message: "اختر دواءين مختلفين لفحص التوافق عبر Y-site." };
-    const match = drugsCatalog.ivCompatibilityMatrix.find(
-      (item) =>
-        (item.drugA === drugA && item.drugB === drugB) ||
-        (item.drugA === drugB && item.drugB === drugA)
-    );
-
-    if (!match) {
-      return { type: "unknown", message: "لا يوجد زوج مباشر في المصفوفة السريعة. يُرجى التحقق عبر قاعدة بيانات الصيدلية." };
-    }
-
-    return match.compatible
-      ? { type: "compatible", message: "متوافق ✅" }
-      : { type: "incompatible", message: "غير متوافق ❌" };
-  }, [drugA, drugB]);
+  const resetFilters = () => {
+    setQuery("");
+    setCategory("ALL");
+    setFlags([]);
+    setRoute("");
+  };
+  const hasFilters = Boolean(query || category !== "ALL" || flags.length || route);
 
   return (
-    <AppLayout illustration="pharmacy" title="مرجع الأدوية" subtitle="أدوية العناية المركزة والطوارئ">
-      <section dir="rtl" className="rounded-3xl border border-foreground/10 bg-card/80 p-5 text-right shadow-card">
-        <div className="flex flex-col gap-3 md:flex-row-reverse md:items-center md:justify-between">
+    <AppLayout illustration="pharmacy" title={tx.title} subtitle={tx.subtitle}>
+      <section className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+        <StatTile icon={Pill} tone="primary" label={tx.total} value={stats.total} />
+        <StatTile icon={AlertTriangle} tone="critical" label={tx.highAlert} value={stats.highAlert} hint="ISMP" />
+        <StatTile icon={Siren} tone="warn" label={tx.emergency} value={stats.emergency} />
+        <StatTile icon={Scale} label={tx.weightBased} value={stats.weightBased} />
+      </section>
+
+      <section className="grid gap-4 lg:grid-cols-2">
+        <div className="space-y-3 rounded-3xl border bg-card p-4 shadow-card sm:p-5">
+          <h2 className="text-sm font-semibold">{tx.byCategory}</h2>
+          <BarList
+            ariaLabel={tx.byCategory}
+            rows={[...perCategory.entries()]
+              .sort((a, b) => b[1] - a[1])
+              .map(([value, count]) => ({ key: value, label: catLabel(value), value: count }))}
+          />
+        </div>
+        <div className="space-y-3 rounded-3xl border bg-card p-4 shadow-card sm:p-5">
+          <h2 className="text-sm font-semibold">{tx.byRoute}</h2>
+          <BarList ariaLabel={tx.byRoute} rows={routes.map((r) => ({ key: r.route, label: r.route, value: r.count, color: "var(--viz-3)" }))} max={stats.total} />
+          <p className="text-[11px] text-muted-foreground">{tx.routeNote}</p>
           <Dialog>
             <DialogTrigger asChild>
-              <Button className="rounded-2xl bg-red-500/20 text-red-800 dark:text-red-100 hover:bg-red-500/30 border border-red-400/40">
-                <Siren className="ml-2" size={16} /> المرجع السريع لعربة الطوارئ
+              <Button variant="outline" className="w-full rounded-2xl border-medical-red/40 text-medical-red hover:bg-medical-red/10">
+                <Siren className="me-2" size={16} aria-hidden="true" /> {tx.crashCart}
               </Button>
             </DialogTrigger>
-            <DialogContent className="max-w-4xl border-foreground/10 bg-card text-foreground">
+            <DialogContent className="max-h-[85vh] max-w-3xl overflow-y-auto">
               <DialogHeader>
-                <DialogTitle className="text-right">المرجع السريع لعربة الطوارئ</DialogTitle>
+                <DialogTitle className="text-start">{tx.crashCart}</DialogTitle>
               </DialogHeader>
-              <div className="grid grid-cols-2 gap-3 md:grid-cols-3">
+              <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
                 {emergencyDrugs.map((drug) => (
-                  <Card key={drug.id} className="rounded-2xl border border-red-400/30 bg-red-500/10 p-3 text-right">
-                    <p className="font-semibold">{drug.genericName}</p>
-                    <p className="text-xs text-muted-foreground">الطريق: {drug.routes.join(" / ")}</p>
-                    <p className="text-xs text-red-800 dark:text-red-100">الجرعة: {drug.emergencyDose ?? "جرعة حسب بروتوكول الطوارئ"}</p>
-                  </Card>
+                  <Link key={drug.id} to={`/drugs/${drug.id}`} className="rounded-2xl border border-medical-red/30 bg-medical-red/5 p-3 hover:bg-medical-red/10">
+                    <p dir="ltr" className="text-start font-semibold">{drug.genericName}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {catLabel(drug.category)} · <span dir="ltr">{drug.routes.join(" / ")}</span>
+                    </p>
+                  </Link>
                 ))}
               </div>
             </DialogContent>
           </Dialog>
-
-          <div className="text-xs uppercase tracking-[0.3em] text-muted-foreground">
-            دواء {filteredDrugs.length}
-          </div>
         </div>
+      </section>
 
-        <div className="relative mt-4">
-          <Sparkles className="absolute right-4 top-1/2 -translate-y-1/2 text-primary" size={18} />
-          <Input
-            value={query}
-            onChange={(event) => setQuery(event.target.value)}
-            placeholder="...ابحث عن أدوية العناية المركزة"
-            className="h-12 rounded-2xl border-foreground/10 bg-foreground/5 pr-12 text-right text-foreground placeholder:text-muted-foreground"
+      <section className="space-y-4 rounded-3xl border bg-card p-4 shadow-card sm:p-5">
+        <div className="relative">
+          <Search size={16} className="absolute start-4 top-1/2 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
+          <Input value={query} onChange={(e) => setQuery(e.target.value)} placeholder={tx.search} aria-label={tx.search} className="h-11 rounded-2xl ps-11" />
+        </div>
+        <FilterChips
+          ariaLabel={tx.byCategory}
+          value={category}
+          onChange={setCategory}
+          options={drugsCatalog.categories.map((c) => ({ value: c.value, label: catLabel(c.value), count: c.value === "ALL" ? stats.total : perCategory.get(c.value) ?? 0 }))}
+          hideEmpty
+        />
+        <div className="flex flex-wrap items-center gap-2">
+          <SlidersHorizontal size={14} className="text-muted-foreground" aria-hidden="true" />
+          <FilterChips ariaLabel={tx.flags} value={flags} onChange={toggleFlag} options={flagOptions} />
+          <FilterChips
+            ariaLabel={tx.byRoute}
+            value={route}
+            onChange={(r) => setRoute((prev) => (prev === r ? "" : r))}
+            options={routes.map((r) => ({ value: r.route, label: r.route, count: r.count }))}
           />
         </div>
-
-        <div className="mt-4 flex flex-wrap justify-end gap-2">
-          {drugsCatalog.categories.map((cat) => (
-            <Button
-              key={cat.value}
-              size="sm"
-              variant="outline"
-              className={`rounded-full border px-4 py-2 text-[11px] uppercase tracking-widest ${
-                selectedCategory === cat.value
-                  ? "border-primary/50 bg-primary/30 text-foreground"
-                  : "border-foreground/20 text-muted-foreground"
-              }`}
-              onClick={() => setSelectedCategory(cat.value)}
-            >
-              {categoryLabels[cat.value] ?? cat.label}
+        <div className="flex items-center justify-between text-xs text-muted-foreground">
+          <span>
+            {tx.showing} <span className="font-semibold tabular-nums text-foreground">{filtered.length}</span> / {stats.total}
+          </span>
+          {hasFilters && (
+            <Button size="sm" variant="ghost" onClick={resetFilters}>
+              {tx.reset}
             </Button>
-          ))}
+          )}
         </div>
       </section>
 
-      <section dir="rtl" className="rounded-3xl border border-foreground/10 bg-card/70 p-4 text-right shadow-card">
-        <div className="mb-3 flex items-center justify-end gap-2 text-sm text-cyan-800 dark:text-cyan-100">
-          <GitMerge size={16} /> فحص توافق الأدوية الوريدية
-        </div>
+      {filtered.length === 0 ? (
+        <EmptyState variant="no-results" title={tx.empty} action={<Button onClick={resetFilters}>{tx.reset}</Button>} />
+      ) : (
+        <section className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+          {filtered.map((drug) => (
+            <Link
+              key={drug.id}
+              to={`/drugs/${drug.id}`}
+              className="group flex flex-col gap-3 rounded-3xl border bg-card p-4 transition-colors hover:border-primary/40 hover:bg-secondary/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            >
+              <div dir="ltr" className="text-start">
+                <p className="font-semibold leading-tight">{drug.genericName}</p>
+                {drug.brandName && <p className="text-xs text-muted-foreground">{drug.brandName}</p>}
+              </div>
+              <p className="text-xs font-medium text-primary">{catLabel(drug.category)}</p>
+              <div className="mt-auto flex flex-wrap items-center gap-1.5">
+                {drug.highAlert && <Badge variant="outline" className="border-medical-red/40 bg-medical-red/10 text-medical-red">{tx.highAlert}</Badge>}
+                {drug.emergency && <Badge variant="outline" className="border-medical-yellow/40 bg-medical-yellow/10 text-medical-yellow">{tx.emergency}</Badge>}
+                {drug.hasTitrationGuide && (
+                  <Badge variant="outline" className="gap-1">
+                    <TrendingUp size={12} aria-hidden="true" />
+                    {tx.titration}
+                  </Badge>
+                )}
+                <span dir="ltr" className="ms-auto text-[11px] text-muted-foreground">{drug.routes.join(" · ")}</span>
+              </div>
+            </Link>
+          ))}
+        </section>
+      )}
+
+      <section className="space-y-4 rounded-3xl border bg-card p-4 shadow-card sm:p-5">
+        <h2 className="flex items-center gap-2 text-sm font-semibold">
+          <GitMerge size={16} className="text-primary" aria-hidden="true" /> {tx.compatTitle}
+        </h2>
         <div className="grid gap-3 md:grid-cols-3">
           <Select value={drugA} onValueChange={setDrugA}>
-            <SelectTrigger className="border-foreground/15 bg-foreground/5 text-right"><SelectValue placeholder="اختر الدواء الأول" /></SelectTrigger>
-            <SelectContent>{drugsCatalog.drugs.map((d) => <SelectItem key={d.id} value={d.genericName}>{d.genericName}</SelectItem>)}</SelectContent>
+            <SelectTrigger aria-label={tx.firstDrug}><SelectValue placeholder={tx.firstDrug} /></SelectTrigger>
+            <SelectContent>{drugs.map((d) => <SelectItem key={d.id} value={d.genericName}>{d.genericName}</SelectItem>)}</SelectContent>
           </Select>
           <Select value={drugB} onValueChange={setDrugB}>
-            <SelectTrigger className="border-foreground/15 bg-foreground/5 text-right"><SelectValue placeholder="اختر الدواء الثاني" /></SelectTrigger>
-            <SelectContent>{drugsCatalog.drugs.map((d) => <SelectItem key={`${d.id}-b`} value={d.genericName}>{d.genericName}</SelectItem>)}</SelectContent>
+            <SelectTrigger aria-label={tx.secondDrug}><SelectValue placeholder={tx.secondDrug} /></SelectTrigger>
+            <SelectContent>{drugs.map((d) => <SelectItem key={`${d.id}-b`} value={d.genericName}>{d.genericName}</SelectItem>)}</SelectContent>
           </Select>
-          <div className={`rounded-2xl border p-3 text-sm ${compatibilityResult?.type === "compatible" ? "border-emerald-400/40 bg-emerald-500/10 text-emerald-800 dark:text-emerald-100" : compatibilityResult?.type === "incompatible" ? "border-red-400/40 bg-red-500/10 text-red-800 dark:text-red-100" : "border-foreground/10 bg-foreground/5 text-muted-foreground"}`}>
-            {compatibilityResult?.message ?? "اختر دوائين لفحص التوافق عبر Y-site"}
+          <div role="status" className={cn("rounded-2xl border p-3 text-sm", COMPAT_TONE[compat ?? "unknown"])}>
+            {compat ? tx.compat[compat] : tx.compatPrompt}
           </div>
         </div>
-      </section>
-
-      <section dir="rtl" className="grid gap-4">
-        {filteredDrugs.length === 0 && <EmptyState variant="no-results" title="ما لكينا دواء مطابق لبحثك" />}
-        {filteredDrugs.map((drug) => (
-          <Card
-            key={drug.id}
-            className="cursor-pointer rounded-3xl border border-foreground/10 bg-card/70 p-5 text-foreground transition-all hover:-translate-y-1 hover:border-primary/40"
-            onClick={() => navigate(`/drugs/${drug.id}`)}
-          >
-            <div className="flex flex-col gap-3 md:flex-row-reverse md:items-start md:justify-between">
-              <div>
-                <p className="text-xl font-semibold">{drug.genericName} <span className="text-sm font-normal text-muted-foreground">{drug.brandName ? `(${drug.brandName})` : ""}</span></p>
-                <div className="mt-2 flex flex-wrap justify-end gap-2">
-                  <Badge className={`border ${categoryStyles[drug.categoryColor]}`}>{categoryLabels[drug.category] ?? drug.category}</Badge>
-                  {drug.highAlert && <Badge className="border-red-400/50 bg-red-500/20 text-red-800 dark:text-red-100">عالي الخطورة</Badge>}
-                  {drug.emergency && <Badge className="border-orange-400/50 bg-orange-500/20 text-orange-800 dark:text-orange-100">طوارئ</Badge>}
-                  {drug.hasTitrationGuide && (
-                    <Dialog>
-                      <DialogTrigger asChild>
-                        <Badge className="border-cyan-400/50 bg-cyan-500/20 text-cyan-800 dark:text-cyan-100">دليل المعايرة</Badge>
-                      </DialogTrigger>
-                      <DialogContent className="border-foreground/10 bg-card text-foreground">
-                        <DialogHeader>
-                          <DialogTitle className="text-right">{drug.genericName} دليل المعايرة</DialogTitle>
-                        </DialogHeader>
-                        <ol className="list-decimal space-y-2 pr-5 text-right text-sm text-foreground">
-                          <li>تحقق من أهداف MAP/HR وخط الأساس لمؤشرات التروية.</li>
-                          <li>ابدأ بالجرعة الابتدائية حسب البروتوكول عبر المضخة الذكية.</li>
-                          <li>قم بالمعايرة كل 2-3 دقائق وفق الاستجابة.</li>
-                          <li>أعد تقييم اللاكتات وإدرار البول والحالة الذهنية وتخطيط ECG.</li>
-                          <li>وثّق المعدل النهائي وخطة التصعيد أو الخطة الاحتياطية.</li>
-                        </ol>
-                      </DialogContent>
-                    </Dialog>
-                  )}
-                </div>
-              </div>
-              <div className="flex flex-wrap justify-end gap-2">
-                {drug.routes.map((route) => (
-                  <Badge key={route} className={`border ${routeBadgeStyles[route]}`}>{route}</Badge>
-                ))}
-              </div>
-            </div>
-          </Card>
-        ))}
+        <div className="space-y-2">
+          <p className="text-xs text-muted-foreground">{tx.knownPairs}</p>
+          <ul className="grid gap-2 sm:grid-cols-2">
+            {drugsCatalog.ivCompatibilityMatrix.map((pair) => (
+              <li key={`${pair.drugA}-${pair.drugB}`} className="flex items-center justify-between gap-2 rounded-2xl border px-3 py-2 text-xs">
+                <span dir="ltr" className="min-w-0 truncate">{pair.drugA} + {pair.drugB}</span>
+                <span className={cn("shrink-0 rounded-full px-2 py-0.5 font-medium", pair.compatible ? "bg-medical-green/10 text-medical-green" : "bg-medical-red/10 text-medical-red")}>
+                  {pair.compatible ? `✓ ${tx.compatShort}` : `✕ ${tx.incompatShort}`}
+                </span>
+              </li>
+            ))}
+          </ul>
+          <p className="text-[11px] text-muted-foreground">{tx.compatNote}</p>
+        </div>
+        <SourceNote ids={["ismp-high-alert", "dailymed"]} />
       </section>
     </AppLayout>
   );

@@ -22,6 +22,8 @@ interface RangeLanesProps {
 /** Floating min–max bars on one shared axis; open ends fade out to the edge of the scale. */
 const RangeLanes = ({ rows, domain, ticks, unit, ariaLabel, reference, className }: RangeLanesProps) => {
   const [lo, hi] = domain;
+  // Drop ticks that would print on top of the previous one.
+  const visibleTicks = [...ticks].sort((a, b) => a - b).filter((t, i, all) => i === 0 || positionPct(t, lo, hi) - positionPct(all[i - 1], lo, hi) >= 8);
   return (
     <figure className={cn("space-y-1.5", className)}>
       <ul className="space-y-1" aria-hidden="true">
@@ -56,7 +58,7 @@ const RangeLanes = ({ rows, domain, ticks, unit, ariaLabel, reference, className
       <div className="grid grid-cols-[minmax(5rem,9rem)_1fr] gap-2" aria-hidden="true">
         <span />
         <span dir="ltr" className="relative h-4 border-t border-border">
-          {ticks.map((t) => (
+          {visibleTicks.map((t) => (
             <span key={t} className="absolute top-0.5 -translate-x-1/2 text-[10px] tabular-nums text-muted-foreground" style={{ left: `${positionPct(t, lo, hi)}%` }}>
               {t}
             </span>

@@ -35,11 +35,14 @@ const AppLayout = ({ title, subtitle, actions, children, onBack, className, illu
               </button>
             )}
             <div className="min-w-0 flex-1">
-              <h1 className="text-xl font-semibold leading-tight text-foreground text-balance">{title}</h1>
+              <h1 className="text-xl font-semibold leading-tight text-foreground text-balance [overflow-wrap:anywhere]">{title}</h1>
               {subtitle && <p className="mt-0.5 text-sm text-muted-foreground line-clamp-2">{subtitle}</p>}
             </div>
             {actions && <div className="hidden items-center gap-2 sm:flex">{actions}</div>}
-            {illustration && <SectionScene scene={illustration} className="w-24 shrink-0 sm:w-40" />}
+            {illustration && (
+              // Sub-pages (with a back button) keep the room for wider screens so long titles fit on phones.
+              <SectionScene scene={illustration} className={cn("w-24 shrink-0 sm:w-40", onBack && "hidden sm:block")} />
+            )}
             <button
               type="button"
               onClick={() => setPreferencesOpen(true)}

@@ -35,7 +35,9 @@ const BandBar = ({ min, max, bands, value = null, unit, valueLabel, ariaLabel, t
   const hasValue = value !== null && Number.isFinite(value);
   const offscale = hasValue && (value < min || value > max);
   const description = hasValue ? `${ariaLabel}: ${format(value)}${unit ? ` ${unit}` : ""}${valueLabel ? ` — ${valueLabel}` : ""}` : ariaLabel;
-  const tickValues = ticks ?? [...new Set(bands.flatMap((b) => [b.from, b.to]))];
+  const tickValues = (ticks ?? [...new Set(bands.flatMap((b) => [b.from, b.to]))])
+    .sort((a, b) => a - b)
+    .filter((t, i, all) => i === 0 || positionPct(t, min, max) - positionPct(all[i - 1], min, max) >= 8);
 
   return (
     <div dir="ltr" role="img" aria-label={description} className={cn("w-full", className)}>

@@ -339,7 +339,7 @@ export const translations: Record<SupportedLanguage, Translation> = {
     appSubBadge: "Public clinical reference · No login required",
 
     // Procedures
-    proceduresTitle: "Nursing Procedures – Top 50 Global Standards",
+    proceduresTitle: "Nursing Procedures",
     searchProcedures: "Search procedures...",
     noProcedures: "No procedures found",
     quickViewTitle: "Procedure overview",
@@ -570,7 +570,7 @@ export const translations: Record<SupportedLanguage, Translation> = {
     appSubBadge: "مرجع سريري عام · لا يتطلب تسجيل دخول",
 
     // Procedures
-    proceduresTitle: "إجراءات التمريض – أفضل 50 معيارًا عالميًا",
+    proceduresTitle: "إجراءات التمريض",
     searchProcedures: "ابحث عن الإجراءات...",
     noProcedures: "لا توجد إجراءات",
     quickViewTitle: "نظرة عامة على الإجراء",

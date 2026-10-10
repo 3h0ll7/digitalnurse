@@ -1,174 +1,134 @@
-import { useState } from "react";
-import { Input } from "@/components/ui/input";
-import { Search, ChevronRight, ShieldCheck, Activity, ClipboardCheck } from "lucide-react";
-import { procedures, additionalProcedures, type Procedure } from "@/data/procedures";
-import { useNavigate } from "react-router-dom";
-import { usePreferences } from "@/contexts/PreferencesContext";
-import { Drawer, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle } from "@/components/ui/drawer";
-import { Button } from "@/components/ui/button";
+import { useMemo, useState } from "react";
+import { Link } from "react-router-dom";
+import { Activity, ChevronRight, ClipboardCheck, LayoutGrid, ListChecks, Search, ShieldAlert, ShieldCheck, Stethoscope } from "lucide-react";
 import AppLayout from "@/components/layout/AppLayout";
 import EmptyState from "@/components/EmptyState";
-import { Card } from "@/components/ui/card";
+import BarList from "@/components/data/BarList";
+import FilterChips from "@/components/data/FilterChips";
+import StatTile from "@/components/data/StatTile";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { usePreferences } from "@/contexts/PreferencesContext";
+import { procedures } from "@/data/procedures";
+import { PROCEDURE_CATEGORY_LABELS, procText } from "@/data/procedures-text";
+
+const perCategory = procedures.reduce((m, p) => m.set(p.category, (m.get(p.category) ?? 0) + 1), new Map<string, number>());
+const categories = [...perCategory.keys()].sort((a, b) => (perCategory.get(b) ?? 0) - (perCategory.get(a) ?? 0) || a.localeCompare(b));
+const totalSteps = procedures.reduce((n, p) => n + p.steps.length, 0);
+const totalAlerts = procedures.reduce((n, p) => n + p.safetyAlerts.length, 0);
+
+const labelFor = (c: string, lang: "en" | "ar") => PROCEDURE_CATEGORY_LABELS[c]?.[lang] ?? c;
 
 const Procedures = () => {
-  const [searchQuery, setSearchQuery] = useState("");
-  const navigate = useNavigate();
-  const { t } = usePreferences();
-  const [activeProcedure, setActiveProcedure] = useState<Procedure | null>(null);
-  const allProcedures = [...procedures, ...additionalProcedures];
+  const { t, language } = usePreferences();
+  const tx = procText[language];
+  const label = (c: string) => labelFor(c, language);
+  const [query, setQuery] = useState("");
+  const [category, setCategory] = useState("all");
 
-  const filteredProcedures = allProcedures.filter(proc =>
-    proc.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    proc.category.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filtered = useMemo(() => {
+    const needle = query.trim().toLowerCase();
+    return procedures.filter(
+      (p) =>
+        (category === "all" || p.category === category) &&
+        (!needle || [p.title, p.description, p.category, labelFor(p.category, language), ...p.indications].some((x) => x.toLowerCase().includes(needle))),
+    );
+  }, [category, query, language]);
 
-  const categories = Array.from(new Set(allProcedures.map(p => p.category)));
-  const [selectedCategory, setSelectedCategory] = useState<string>("All");
-
-  const displayProcedures = selectedCategory === "All" 
-    ? filteredProcedures 
-    : filteredProcedures.filter(p => p.category === selectedCategory);
-
-  const workflowPhases = [
-    { title: t.preProcedure, description: t.preProcedureDesc, icon: ShieldCheck },
-    { title: t.intraProcedure, description: t.intraProcedureDesc, icon: Activity },
-    { title: t.postProcedure, description: t.postProcedureDesc, icon: ClipboardCheck },
+  const reset = () => {
+    setQuery("");
+    setCategory("all");
+  };
+  const phases = [
+    { title: t.preProcedure, body: t.preProcedureDesc, icon: ShieldCheck },
+    { title: t.intraProcedure, body: t.intraProcedureDesc, icon: Activity },
+    { title: t.postProcedure, body: t.postProcedureDesc, icon: ClipboardCheck },
   ];
 
   return (
-    <AppLayout illustration="icu"
-      title={t.proceduresTitle}
-      subtitle={t.evidenceBasedWorkflows}
-      actions={
-        <Button size="sm" variant="secondary" onClick={() => navigate("/calculators")}>
-          {t.clinicalTools}
-        </Button>
-      }
-    >
-      <section className="rounded-3xl border border-foreground/10 bg-card/80 p-5 shadow-card">
-        <div className="flex flex-col gap-4 md:flex-row md:items-center">
-          <div className="relative flex-1">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground rtl:left-auto rtl:right-4" size={18} />
-            <Input
-              type="text"
-              placeholder={t.searchProcedures}
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="h-12 rounded-2xl border-foreground/10 bg-foreground/5 pl-12 rtl:pl-4 rtl:pr-12 text-base text-foreground placeholder:text-muted-foreground"
-            />
-          </div>
-          <div className="flex flex-col text-xs uppercase tracking-[0.3em] text-muted-foreground">
-            <span>{displayProcedures.length} {t.workflows}</span>
-            <span className="text-[10px] text-primary">{t.sourceOnDevice}</span>
-          </div>
+    <AppLayout illustration="icu" title={t.proceduresTitle} subtitle={t.evidenceBasedWorkflows}>
+      <section className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+        <StatTile icon={Stethoscope} tone="primary" label={tx.procedures} value={procedures.length} />
+        <StatTile icon={LayoutGrid} label={tx.categories} value={categories.length} />
+        <StatTile icon={ListChecks} label={tx.steps} value={totalSteps} />
+        <StatTile icon={ShieldAlert} tone="critical" label={tx.alerts} value={totalAlerts} />
+      </section>
+
+      <section className="grid items-start gap-4 lg:grid-cols-[minmax(0,1fr)_20rem]">
+        <div className="space-y-3 rounded-3xl border bg-card p-4 shadow-card sm:p-5">
+          <h2 className="text-sm font-semibold">{tx.workflow}</h2>
+          <ol className="grid gap-2 sm:grid-cols-3">
+            {phases.map(({ title, body, icon: Icon }, i) => (
+              <li key={title} className="flex gap-3 rounded-2xl bg-secondary/50 p-3">
+                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-semibold text-primary-foreground">{i + 1}</span>
+                <span className="min-w-0">
+                  <span className="flex items-center gap-1.5 text-sm font-semibold">
+                    <Icon size={14} className="text-primary" aria-hidden="true" /> {title}
+                  </span>
+                  <span className="block text-xs text-muted-foreground">{body}</span>
+                </span>
+              </li>
+            ))}
+          </ol>
         </div>
-        <div className="mt-4 flex gap-2 overflow-x-auto pb-2">
-          {["All", ...categories].map((category) => {
-            const isActive = selectedCategory === category;
-            return (
-              <button
-                key={category}
-                onClick={() => setSelectedCategory(category)}
-                className={`rounded-full border px-4 py-2 text-sm uppercase tracking-widest transition-all ${
-                  isActive
-                    ? "border-primary/50 bg-primary/30 text-foreground shadow-card"
-                    : "border-foreground/10 text-muted-foreground hover:border-foreground/30"
-                }`}
-              >
-                {category === "All" ? t.allLabel : category}
-              </button>
-            );
-          })}
+        <div className="space-y-3 rounded-3xl border bg-card p-4 shadow-card sm:p-5">
+          <h2 className="text-sm font-semibold">{tx.biggest}</h2>
+          <BarList ariaLabel={tx.biggest} rows={categories.slice(0, 6).map((c) => ({ key: c, label: label(c), value: perCategory.get(c) ?? 0 }))} />
         </div>
       </section>
 
-      <section className="grid gap-4 md:grid-cols-3">
-        {workflowPhases.map((phase) => {
-          const Icon = phase.icon;
-          return (
-            <Card
-              key={phase.title}
-              className="relative overflow-hidden rounded-3xl border-foreground/10 bg-gradient-to-br from-foreground/10 to-transparent p-5 text-foreground"
-            >
-              <div className="flex items-center justify-between text-xs uppercase tracking-[0.4em] text-foreground/70">
-                <span>{phase.title}</span>
-                <Icon size={18} />
-              </div>
-              <p className="mt-3 text-sm text-foreground/80">{phase.description}</p>
-              <span className="absolute inset-x-5 bottom-3 h-px bg-gradient-to-r from-transparent via-foreground/30 to-transparent" />
-            </Card>
-          );
-        })}
-      </section>
-
-      <section className="space-y-3">
-        {displayProcedures.map((procedure) => {
-          const snippet = procedure.definition
-            ? `${procedure.definition.split(".")[0]}.`
-            : procedure.description;
-          return (
-            <div
-              key={procedure.id}
-              onClick={() => setActiveProcedure(procedure)}
-              className="group flex cursor-pointer flex-col gap-3 rounded-3xl border border-foreground/10 bg-card/70 p-5 text-foreground transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:bg-card/90"
-            >
-            <div className="flex items-start justify-between">
-              <div>
-                <p className="text-xs uppercase tracking-[0.4em] text-primary">{procedure.category}</p>
-                <h3 className="mt-2 text-2xl font-semibold">{procedure.title}</h3>
-              </div>
-              <div className="rounded-full border border-foreground/10 px-3 py-1 text-xs uppercase tracking-[0.4em] text-muted-foreground">
-                {t.ready}
-              </div>
-            </div>
-            <p className="text-sm text-muted-foreground">{procedure.description}</p>
-            <div className="flex items-center justify-between text-xs text-muted-foreground">
-              <span>{snippet}</span>
-              <ChevronRight className="text-primary transition-transform duration-300 group-hover:translate-x-1 rtl:rotate-180 rtl:group-hover:-translate-x-1" size={18} />
-            </div>
-          </div>
-        );
-      })}
-        {displayProcedures.length === 0 && (
-          <EmptyState variant="no-results" title={t.noProcedures} />
-        )}
-      </section>
-
-      <Drawer open={Boolean(activeProcedure)} onOpenChange={(open) => !open && setActiveProcedure(null)}>
-        <DrawerContent className="border-foreground/10 bg-background/95 pb-8 text-foreground">
-          <DrawerHeader className="text-start">
-            <p className="text-xs uppercase tracking-[0.4em] text-muted-foreground">{t.quickViewTitle}</p>
-            <DrawerTitle className="text-2xl text-foreground">{activeProcedure?.title}</DrawerTitle>
-            <DrawerDescription className="text-primary">
-              {activeProcedure?.category}
-            </DrawerDescription>
-          </DrawerHeader>
-          <div className="space-y-4 px-4">
-            <p className="text-sm text-muted-foreground">{t.quickViewDescription}</p>
-            <div className="rounded-2xl border border-foreground/10 bg-foreground/5 p-4">
-              <p className="text-xs uppercase tracking-[0.3em] text-muted-foreground">
-                {activeProcedure?.description}
-              </p>
-              <p className="mt-3 text-sm text-foreground whitespace-pre-line">
-                {activeProcedure?.definition}
-              </p>
-            </div>
-          </div>
-          <DrawerFooter>
-            <Button
-              onClick={() => {
-                if (activeProcedure) {
-                  navigate(`/procedure/${activeProcedure.id}`);
-                  setActiveProcedure(null);
-                }
-              }}
-              className="w-full rounded-2xl bg-gradient-to-r from-primary via-[#5F5CFF] to-[#8C79FF] text-white"
-            >
-              {t.viewFullProcedure}
+      <section className="space-y-4 rounded-3xl border bg-card p-4 shadow-card sm:p-5">
+        <div className="relative">
+          <Search size={16} className="absolute start-4 top-1/2 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
+          <Input value={query} onChange={(e) => setQuery(e.target.value)} placeholder={t.searchProcedures} aria-label={t.searchProcedures} className="h-11 rounded-2xl ps-11" />
+        </div>
+        <FilterChips
+          ariaLabel={tx.categories}
+          value={category}
+          onChange={setCategory}
+          options={[{ value: "all", label: tx.all, count: procedures.length }, ...categories.map((c) => ({ value: c, label: label(c), count: perCategory.get(c) ?? 0 }))]}
+          hideEmpty
+        />
+        <div className="flex items-center justify-between text-xs text-muted-foreground">
+          <span>
+            {tx.showing} <span className="font-semibold tabular-nums text-foreground">{filtered.length}</span> / {procedures.length}
+          </span>
+          {(query || category !== "all") && (
+            <Button size="sm" variant="ghost" onClick={reset}>
+              {tx.reset}
             </Button>
-          </DrawerFooter>
-        </DrawerContent>
-      </Drawer>
+          )}
+        </div>
+      </section>
+
+      {filtered.length === 0 ? (
+        <EmptyState variant="no-results" title={t.noProcedures} action={<Button onClick={reset}>{tx.reset}</Button>} />
+      ) : (
+        <section className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+          {filtered.map((p) => (
+            <Link
+              key={p.id}
+              to={`/procedure/${p.id}`}
+              className="group flex flex-col gap-2 rounded-3xl border bg-card p-4 transition-colors hover:border-primary/40 hover:bg-secondary/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            >
+              <span className="flex items-start justify-between gap-2">
+                <span className="text-xs font-medium text-primary">{label(p.category)}</span>
+                <ChevronRight size={16} className="shrink-0 text-muted-foreground rtl:rotate-180" aria-hidden="true" />
+              </span>
+              <span dir="ltr" className="text-start font-semibold leading-tight">{p.title}</span>
+              <span dir="ltr" className="text-start text-xs text-muted-foreground">{p.description}</span>
+              <span className="mt-auto flex flex-wrap gap-3 pt-1 text-[11px] text-muted-foreground">
+                <span className="inline-flex items-center gap-1">
+                  <ListChecks size={12} aria-hidden="true" /> <span className="font-semibold tabular-nums text-foreground">{p.steps.length}</span> {tx.steps}
+                </span>
+                <span className="inline-flex items-center gap-1">
+                  <ShieldAlert size={12} className="text-medical-red" aria-hidden="true" /> <span className="font-semibold tabular-nums text-foreground">{p.safetyAlerts.length}</span> {tx.alerts}
+                </span>
+              </span>
+            </Link>
+          ))}
+        </section>
+      )}
     </AppLayout>
   );
 };

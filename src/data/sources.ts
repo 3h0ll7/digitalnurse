@@ -23,6 +23,10 @@ export const SOURCES = {
   devine: { label: "Devine — ideal body weight formula, Drug Intell Clin Pharm", year: "1974" },
   mosteller: { label: "Mosteller — simplified BSA calculation, N Engl J Med", year: "1987" },
   "cockcroft-gault": { label: "Cockcroft & Gault — creatinine clearance, Nephron", year: "1976" },
+  raschke: { label: "Raschke et al. — weight-based heparin dosing nomogram, Ann Intern Med", year: "1993" },
+  "acc-aha-acs": { label: "AHA/ACC Guideline for non-ST-elevation acute coronary syndromes", year: "2014" },
+  "ada-dka": { label: "ADA/EASD/JBDS/AACE/DTS consensus — Hyperglycemic crises in adults with diabetes, Diabetes Care", year: "2024" },
+  "acog-screening": { label: "ACOG Practice Bulletins 226 (aneuploidy screening) & 190 (GDM), Committee Opinion 797 (GBS)" },
   atls: { label: "ATLS Student Course Manual, 10th edition (burn resuscitation)", year: "2018" },
 } satisfies Record<string, Source>;
 

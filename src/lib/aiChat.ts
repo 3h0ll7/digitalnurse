@@ -1,4 +1,6 @@
 /** Client for the Supabase `ai-chat` edge function (OpenAI-style server-sent events). */
+import { SUPABASE_PUBLISHABLE_KEY, SUPABASE_URL } from "./supabaseEnv";
+
 export type AIProvider = "groq" | "gemini";
 
 export const AI_PROVIDERS: Record<AIProvider, { model: string; en: string; ar: string }> = {
@@ -6,7 +8,7 @@ export const AI_PROVIDERS: Record<AIProvider, { model: string; en: string; ar: s
   gemini: { model: "Gemini", en: "Google Gemini", ar: "Google Gemini" },
 };
 
-export const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-chat`;
+export const CHAT_URL = `${SUPABASE_URL}/functions/v1/ai-chat`;
 
 /** Text carried by one SSE line, or null for markers, comments, reasoning-only or malformed chunks. */
 export const extractSseContent = (line: string): string | null => {
@@ -68,7 +70,7 @@ export const streamChat = async ({ onDelta, signal, ...body }: StreamChatOptions
     headers: {
       "Content-Type": "application/json",
       Accept: "text/event-stream",
-      apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
+      ...(SUPABASE_PUBLISHABLE_KEY ? { apikey: SUPABASE_PUBLISHABLE_KEY } : {}),
     },
     body: JSON.stringify(body),
     signal,

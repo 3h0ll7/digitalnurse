@@ -22,6 +22,7 @@ import Drugs from "./pages/Drugs";
 import DrugDetail from "./pages/DrugDetail";
 import Fluids from "./pages/Fluids";
 import ECG from "./pages/ECG";
+import ErrorBoundary from "./components/ErrorBoundary";
 import DocsHub from "./pages/DocsHub";
 import DocsPatient from "./pages/DocsPatient";
 import DocsProfessional from "./pages/DocsProfessional";
@@ -35,47 +36,49 @@ import Terminology from "./pages/Terminology";
 const queryClient = new QueryClient();
 
 const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <PreferencesProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <Routes>
-            <Route element={<SecureShell />}>
-              <Route path="/" element={<Navigate to="/home" replace />} />
-              <Route path="/home" element={<Home />} />
-              <Route path="/drugs" element={<Drugs />} />
-              <Route path="/drugs/:id" element={<DrugDetail />} />
-              <Route path="/fluids" element={<Fluids />} />
-              <Route path="/procedures" element={<Procedures />} />
-              <Route path="/procedure/:id" element={<ProcedureDetail />} />
-              <Route path="/labs" element={<Labs />} />
-              <Route path="/assessments" element={<Assessments />} />
-              <Route path="/calculators" element={<Calculators />} />
-              <Route path="/calculator/:id" element={<CalculatorDetail />} />
-              <Route path="/ai-assistant" element={<AIAssistant />} />
-              <Route path="/flashcards" element={<Flashcards />} />
-              <Route path="/mind-maps" element={<MindMaps />} />
-              <Route path="/atlas" element={<BodyAtlas />} />
-              <Route path="/pathways" element={<PathophysiologyMaps />} />
-              <Route path="/pharma" element={<PharmacokineticsVisualizer />} />
-              <Route path="/ecg" element={<ECG />} />
-              <Route path="/docs" element={<DocsHub />} />
-              <Route path="/docs/patient" element={<DocsPatient />} />
-              <Route path="/docs/professional" element={<DocsProfessional />} />
-              <Route path="/docs/tools" element={<DocsTools />} />
-              <Route path="/infection" element={<InfectionGuide />} />
-              <Route path="/terminology" element={<Terminology />} />
-              <Route path="/scale/:id" element={<ScaleDetail />} />
-            </Route>
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
-        <PreferencesDrawer />
-      </PreferencesProvider>
-    </TooltipProvider>
-  </QueryClientProvider>
+  <ErrorBoundary>
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <PreferencesProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <Routes>
+              <Route element={<SecureShell />}>
+                <Route path="/" element={<Navigate to="/home" replace />} />
+                <Route path="/home" element={<Home />} />
+                <Route path="/drugs" element={<Drugs />} />
+                <Route path="/drugs/:id" element={<DrugDetail />} />
+                <Route path="/fluids" element={<Fluids />} />
+                <Route path="/procedures" element={<Procedures />} />
+                <Route path="/procedure/:id" element={<ProcedureDetail />} />
+                <Route path="/labs" element={<Labs />} />
+                <Route path="/assessments" element={<Assessments />} />
+                <Route path="/calculators" element={<Calculators />} />
+                <Route path="/calculator/:id" element={<CalculatorDetail />} />
+                <Route path="/ai-assistant" element={<AIAssistant />} />
+                <Route path="/flashcards" element={<Flashcards />} />
+                <Route path="/mind-maps" element={<MindMaps />} />
+                <Route path="/atlas" element={<BodyAtlas />} />
+                <Route path="/pathways" element={<PathophysiologyMaps />} />
+                <Route path="/pharma" element={<PharmacokineticsVisualizer />} />
+                <Route path="/ecg" element={<ECG />} />
+                <Route path="/docs" element={<DocsHub />} />
+                <Route path="/docs/patient" element={<DocsPatient />} />
+                <Route path="/docs/professional" element={<DocsProfessional />} />
+                <Route path="/docs/tools" element={<DocsTools />} />
+                <Route path="/infection" element={<InfectionGuide />} />
+                <Route path="/terminology" element={<Terminology />} />
+                <Route path="/scale/:id" element={<ScaleDetail />} />
+              </Route>
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </BrowserRouter>
+          <PreferencesDrawer />
+        </PreferencesProvider>
+      </TooltipProvider>
+    </QueryClientProvider>
+  </ErrorBoundary>
 );
 
 export default App;

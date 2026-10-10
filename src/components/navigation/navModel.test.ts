@@ -1,22 +1,25 @@
 import { describe, expect, it } from "vitest";
-import { activeNavKey, moreSections } from "./navModel";
+import { SECTIONS } from "@/lib/sections";
+import { GLASS } from "./glass";
+import { activeNavKey, NAV_KEYS, pathFor } from "./navModel";
 
-describe("activeNavKey", () => {
-  it("highlights home on /home", () => expect(activeNavKey("/home")).toBe("home"));
-  it("highlights drugs on a drug detail page", () => expect(activeNavKey("/drugs/5")).toBe("drugs"));
-  it("highlights labs on /labs", () => expect(activeNavKey("/labs")).toBe("labs"));
-  it("highlights calculators on a calculator detail page", () => expect(activeNavKey("/calculator/bmi")).toBe("calculators"));
-  it("highlights more for a library section", () => expect(activeNavKey("/atlas")).toBe("more"));
-  it("highlights more for ECG", () => expect(activeNavKey("/ecg")).toBe("more"));
-});
-
-describe("moreSections", () => {
-  it("lists every section that is not already a bar item", () => {
-    const keys = moreSections().map((s) => s.key);
-    expect(keys).not.toContain("pharmacy");
-    expect(keys).not.toContain("lab");
-    expect(keys).not.toContain("station");
-    expect(keys).toContain("atlas");
-    expect(keys).toHaveLength(13);
+describe("bottom bar model", () => {
+  it("shows home plus every section, each with a glass style", () => {
+    expect(NAV_KEYS).toHaveLength(SECTIONS.length + 1);
+    for (const k of NAV_KEYS) expect(GLASS[k], k).toBeDefined();
+  });
+  it("highlights the section of a detail page", () => {
+    expect(activeNavKey("/drugs/5")).toBe("pharmacy");
+    expect(activeNavKey("/calculator/bmi")).toBe("station");
+    expect(activeNavKey("/scale/gcs")).toBe("triage");
+    expect(activeNavKey("/ecg")).toBe("ecg");
+  });
+  it("falls back to home", () => {
+    expect(activeNavKey("/home")).toBe("home");
+    expect(activeNavKey("/nowhere")).toBe("home");
+  });
+  it("maps keys to paths", () => {
+    expect(pathFor("home")).toBe("/home");
+    expect(pathFor("pharmacy")).toBe("/drugs");
   });
 });

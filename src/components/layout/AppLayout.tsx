@@ -35,7 +35,7 @@ const AppLayout = ({ title, subtitle, actions, children, onBack, className, illu
               </button>
             )}
             <div className="min-w-0 flex-1">
-              <h1 className="text-xl font-semibold leading-tight text-foreground text-balance [overflow-wrap:anywhere]">{title}</h1>
+              <h1 className="text-lg font-semibold leading-tight sm:text-xl text-foreground text-balance break-words hyphens-auto">{title}</h1>
               {subtitle && <p className="mt-0.5 text-sm text-muted-foreground line-clamp-2">{subtitle}</p>}
             </div>
             {actions && <div className="hidden items-center gap-2 sm:flex">{actions}</div>}

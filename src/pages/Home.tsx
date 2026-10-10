@@ -3,6 +3,8 @@ import { ChevronRight } from "lucide-react";
 import AppLayout from "@/components/layout/AppLayout";
 import IsometricHospital from "@/components/iso/IsometricHospital";
 import { Nurse } from "@/components/iso/people";
+import GlassIcon from "@/components/navigation/GlassIcon";
+import { StickerStrip } from "@/components/stickers/Stickers";
 import { usePreferences } from "@/contexts/PreferencesContext";
 import { SECTIONS } from "@/lib/sections";
 import { greetingKey } from "@/lib/theme";
@@ -38,6 +40,8 @@ const Home = () => {
         </button>
       )}
 
+      <StickerStrip className="rounded-3xl border bg-gradient-to-br from-secondary/70 via-card to-medical-blue-light/40 px-3 py-4" />
+
       <section aria-labelledby="hospital-heading" className="rounded-3xl border bg-card p-3 shadow-card sm:p-6">
         <h2 id="hospital-heading" className="sr-only">
           {language === "ar" ? "خريطة المستشفى" : "Hospital map"}
@@ -47,7 +51,6 @@ const Home = () => {
 
       <section aria-label={language === "ar" ? "كل الأقسام" : "All sections"} className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
         {SECTIONS.map((section) => {
-          const Icon = section.icon;
           return (
             <button
               key={section.key}
@@ -56,9 +59,7 @@ const Home = () => {
               onClick={() => navigate(section.path)}
               className="flex items-center gap-3 rounded-2xl border bg-card p-3 text-start transition-colors hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
-              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-secondary text-primary">
-                <Icon size={20} aria-hidden="true" />
-              </span>
+              <GlassIcon name={section.key} size={42} />
               <span className="min-w-0 text-sm font-medium leading-tight text-foreground">{section.title[language]}</span>
             </button>
           );

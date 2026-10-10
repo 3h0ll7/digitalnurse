@@ -58,6 +58,8 @@ export const SOURCES = {
   "usphs-pep": { label: "USPHS — Occupational exposures to HIV and recommendations for PEP (Kuhar et al.)", year: "2013" },
   "cdc-hcv-exposure": { label: "CDC — Testing and clinical management of healthcare personnel exposed to HCV, MMWR", year: "2020" },
   "cdc-disinfection": { label: "CDC/HICPAC — Guideline for disinfection and sterilization in healthcare facilities (Spaulding)", year: "2008" },
+  "rowland-tozer": { label: "Rowland & Tozer — Clinical Pharmacokinetics and Pharmacodynamics, 4th ed.", year: "2011" },
+  "ashp-vanco": { label: "ASHP/IDSA/PIDS/SIDP — Therapeutic monitoring of vancomycin (revised consensus)", year: "2020" },
   atls: { label: "ATLS Student Course Manual, 10th edition (burn resuscitation)", year: "2018" },
 } satisfies Record<string, Source>;
 

@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { ChevronLeft, Settings } from "lucide-react";
+import { ChevronLeft, Github, Settings } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { usePreferences } from "@/contexts/PreferencesContext";
 import type { SceneKey } from "@/lib/sections";
@@ -35,11 +35,14 @@ const AppLayout = ({ title, subtitle, actions, children, onBack, className, illu
               </button>
             )}
             <div className="min-w-0 flex-1">
-              <h1 className="text-xl font-semibold leading-tight text-foreground text-balance">{title}</h1>
+              <h1 className="text-xl font-semibold leading-tight text-foreground text-balance [overflow-wrap:anywhere]">{title}</h1>
               {subtitle && <p className="mt-0.5 text-sm text-muted-foreground line-clamp-2">{subtitle}</p>}
             </div>
             {actions && <div className="hidden items-center gap-2 sm:flex">{actions}</div>}
-            {illustration && <SectionScene scene={illustration} className="w-24 shrink-0 sm:w-40" />}
+            {illustration && (
+              // Sub-pages (with a back button) keep the room for wider screens so long titles fit on phones.
+              <SectionScene scene={illustration} className={cn("w-24 shrink-0 sm:w-40", onBack && "hidden sm:block")} />
+            )}
             <button
               type="button"
               onClick={() => setPreferencesOpen(true)}
@@ -69,6 +72,17 @@ const AppLayout = ({ title, subtitle, actions, children, onBack, className, illu
           >
             hassanaii.lovable.app
           </a>
+          <div className="pt-2">
+            <a
+              href="https://github.com/3h0ll7/digitalnurse"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 rounded-full border bg-card px-3 py-1 text-xs font-medium text-foreground transition-colors hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            >
+              <Github size={14} aria-hidden="true" />
+              {t.sourceOnGithub}
+            </a>
+          </div>
         </footer>
       </div>
     </div>

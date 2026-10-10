@@ -41,7 +41,7 @@
 - **Clinical Cockpit** — Evidence-informed dashboards for procedures, labs, calculators, flashcards, and more.
 - **Offline-Friendly Data** — All master data lives in `src/data/*`, so demos run without APIs or environment variables.
 - **Responsive Shell** — shadcn/ui components, Lucide icons, and Tailwind CSS create a polished experience across mobile and desktop.
-- **AI Helper** — The assistant responds locally with curated clinical guidance, keeping the UI helpful even without a model backend.
+- **AI Assistant** — Streams answers from the open-source **gpt-oss-120b** model (via Groq), with Google Gemini as an automatic fallback.
 - **ECG Module** — Interactive ECG interpretation guide with rhythm identification and clinical pearls.
 - **PWA Support** — Install as a native-like app on any device for instant access on the ward.
 
@@ -56,7 +56,7 @@
 | 💊 **Drug Calculators** | Dosing calculators for critical-care medications |
 | 💓 **ECG Interpreter** | Rhythm identification, axis deviation, and clinical pearls |
 | 🧠 **Flashcards** | Spaced-repetition study cards for NCLEX and clinical review |
-| 🤖 **AI Assistant** | Context-aware clinical Q&A powered by curated knowledge |
+| 🤖 **AI Assistant** | Clinical Q&A powered by open-source gpt-oss-120b, with Gemini fallback |
 | 📊 **Clinical Dashboards** | At-a-glance views for vitals, assessments, and workflows |
 | 📱 **PWA / Offline** | Works without internet — perfect for bedside use |
 
@@ -111,7 +111,26 @@ cp .env.example .env
 | Variable | Description | Required |
 |---|---|---|
 | `VITE_SUPABASE_URL` | Supabase project URL | Optional |
-| `VITE_SUPABASE_ANON_KEY` | Supabase anonymous key | Optional |
+| `VITE_SUPABASE_PUBLISHABLE_KEY` | Supabase publishable (anon) key | Optional |
+| `VITE_SUPABASE_PROJECT_ID` | Supabase project id | Optional |
+
+### 🤖 AI assistant models
+
+The assistant calls the Supabase Edge Function `supabase/functions/ai-chat`, which picks a model on the server:
+
+| Provider | Model | Edge Function secret |
+|---|---|---|
+| Groq (default) | `openai/gpt-oss-120b` — open-weight, Apache-2.0 | `GROQ_API_KEY` |
+| Lovable AI gateway | `google/gemini-3.1-flash-lite` | `LOVABLE_API_KEY` |
+
+- Users choose the model in the assistant's settings; if it fails before answering (down, rate-limited, out of credits, slow), the other one answers automatically and the app says so.
+- Each IP gets 10 messages per day (`ai_rate_limits` table).
+- AI keys are **server-side secrets**, never `VITE_` variables. Add the Groq key with:
+
+```bash
+supabase secrets set GROQ_API_KEY=gsk_your_key --project-ref <project-id>
+supabase functions deploy ai-chat --project-ref <project-id>
+```
 
 ---
 

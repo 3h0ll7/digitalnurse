@@ -1,138 +1,187 @@
-import { useMemo } from "react";
+import { useMemo, type ReactNode } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import AppLayout from "@/components/layout/AppLayout";
-import { Card } from "@/components/ui/card";
+import EmptyState from "@/components/EmptyState";
+import RangeLanes from "@/components/data/RangeLanes";
+import SourceNote from "@/components/data/SourceNote";
+import StepTimeline from "@/components/data/StepTimeline";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { usePreferences } from "@/contexts/PreferencesContext";
 import drugsCatalog from "@/data/drugs-catalog.json";
+import { DRUG_CATEGORY_LABELS, drugDetailText, drugsText } from "@/data/drugs-i18n";
+import { parseRange } from "@/lib/clinical/ranges";
 
-const categoryLabels: Record<string, string> = {
-  ALL: "الكل",
-  VASOPRESSORS: "رافعات الضغط",
-  INOTROPES: "مقويات القلب",
-  "SEDATION & ANALGESIA": "التهدئة والتسكين",
-  ANTIARRHYTHMICS: "مضادات اضطراب النظم",
-  ANTICOAGULANTS: "مضادات التخثر",
-  "RSI & AIRWAY": "أدوية التنبيب",
-  "CODE DRUGS": "أدوية الكود",
-  "ELECTROLYTE REPLACEMENT": "تعويض الشوارد",
-  ANTIHYPERTENSIVES: "خافضات الضغط",
-  "ANTIDOTES & REVERSAL AGENTS": "المضادات والترياق",
-  ANTIBIOTICS: "المضادات الحيوية",
-  "OTHER ICU ESSENTIALS": "أساسيات العناية المركزة",
-};
+/** Label on the reader's side, English clinical text in its own LTR block. */
+const Field = ({ label, children }: { label: string; children: ReactNode }) => (
+  <div className="space-y-0.5">
+    <dt className="text-xs font-medium text-muted-foreground">{label}</dt>
+    <dd dir="ltr" className="text-start text-sm">{children}</dd>
+  </div>
+);
+
+const List = ({ title, items, tone }: { title: string; items: string[]; tone?: "critical" | "warn" }) =>
+  items.length ? (
+    <div className={tone === "critical" ? "rounded-2xl border border-medical-red/30 bg-medical-red/5 p-3" : tone === "warn" ? "rounded-2xl border border-medical-yellow/30 bg-medical-yellow/5 p-3" : "rounded-2xl border bg-secondary/40 p-3"}>
+      <p className="mb-1.5 text-sm font-semibold">{title}</p>
+      <ul dir="ltr" className="list-disc space-y-1 ps-4 text-start text-sm text-muted-foreground">
+        {items.map((item) => (
+          <li key={item}>{item}</li>
+        ))}
+      </ul>
+    </div>
+  ) : null;
+
+const Panel = ({ children }: { children: ReactNode }) => <div className="space-y-4 rounded-3xl border bg-card p-4 shadow-card sm:p-5">{children}</div>;
 
 const DrugDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-
+  const { language } = usePreferences();
+  const tx = drugDetailText[language];
+  const flags = drugsText[language];
   const drug = useMemo(() => drugsCatalog.drugs.find((item) => item.id === id), [id]);
 
   if (!drug) {
     return (
-      <AppLayout title="الدواء غير موجود" subtitle="خطأ في المرجع" onBack={() => navigate("/drugs")}>
-        <Card className="rounded-3xl border border-foreground/10 bg-card/70 p-6 text-right" dir="rtl">تعذر العثور على الدواء المحدد.</Card>
+      <AppLayout title={tx.notFound} onBack={() => navigate("/drugs")}>
+        <EmptyState variant="not-found" title={tx.notFoundBody} />
       </AppLayout>
     );
   }
 
-  return (
-    <AppLayout title={drug.genericName} subtitle={`النطق: ${drug.pronunciation}`} onBack={() => navigate("/drugs")}>
-      <Card className="rounded-3xl border border-foreground/10 bg-card/80 p-5 text-right" dir="rtl">
-        <div className="flex flex-wrap justify-end gap-2">
-          <Badge className="border border-foreground/20 bg-foreground/5 text-foreground">{categoryLabels[drug.category] ?? drug.category}</Badge>
-          {drug.highAlert && <Badge className="border-red-400/50 bg-red-500/20 text-red-800 dark:text-red-100">عالي الخطورة</Badge>}
-          {drug.emergency && <Badge className="border-orange-400/50 bg-orange-500/20 text-orange-800 dark:text-orange-100">طوارئ</Badge>}
-          {drug.weightBased && <Badge className="border-cyan-400/50 bg-cyan-500/20 text-cyan-800 dark:text-cyan-100">حاسبة الجرعات حسب الوزن</Badge>}
-          {drug.sedationReference && <Badge className="border-purple-400/50 bg-purple-500/20 text-purple-800 dark:text-purple-100">مرجع RASS</Badge>}
-        </div>
-      </Card>
+  const range = drug.dosing.titrationRange ? parseRange(drug.dosing.titrationRange) : null;
+  const rangeMax = range?.max ?? null;
 
-      <Tabs defaultValue="overview" className="space-y-4" dir="rtl">
-        <TabsList className="grid h-auto w-full grid-cols-2 gap-2 rounded-2xl border border-foreground/10 bg-card/60 p-2 md:grid-cols-6">
-          <TabsTrigger value="overview">نظرة عامة</TabsTrigger>
-          <TabsTrigger value="dosing">الجرعات</TabsTrigger>
-          <TabsTrigger value="administration">طريقة الإعطاء</TabsTrigger>
-          <TabsTrigger value="nursing">التمريض</TabsTrigger>
-          <TabsTrigger value="interactions">التداخلات</TabsTrigger>
-          <TabsTrigger value="effects">الآثار الجانبية</TabsTrigger>
+  return (
+    <AppLayout illustration="pharmacy" title={drug.genericName} subtitle={drug.brandName || undefined} onBack={() => navigate("/drugs")}>
+      <Panel>
+        <div className="flex flex-wrap items-center gap-2">
+          <Badge variant="outline">{DRUG_CATEGORY_LABELS[drug.category]?.[language] ?? drug.category}</Badge>
+          {drug.highAlert && <Badge variant="outline" className="border-medical-red/40 bg-medical-red/10 text-medical-red">{flags.highAlert}</Badge>}
+          {drug.emergency && <Badge variant="outline" className="border-medical-yellow/40 bg-medical-yellow/10 text-medical-yellow">{flags.emergency}</Badge>}
+          {drug.weightBased && <Badge variant="outline">{flags.weightBased}</Badge>}
+          {drug.sedationReference && <Badge variant="outline">{tx.sedationRef}</Badge>}
+          <span dir="ltr" className="ms-auto text-xs text-muted-foreground">{drug.routes.join(" · ")}</span>
+        </div>
+        {drug.pronunciation && (
+          <p className="text-xs text-muted-foreground">
+            {tx.pronunciation}: <span dir="ltr">{drug.pronunciation}</span>
+          </p>
+        )}
+        {range && range.min !== null && rangeMax !== null && (
+          <div className="space-y-1">
+            <p className="text-xs font-medium">{tx.rangeChart}</p>
+            <RangeLanes
+              ariaLabel={tx.rangeChart}
+              domain={[0, rangeMax * 1.25]}
+              ticks={[0, range.min, rangeMax]}
+              unit={range.unit ?? ""}
+              rows={[{ key: drug.id, label: drug.genericName, min: range.min, max: rangeMax }]}
+            />
+            <p dir="ltr" className="text-start text-[11px] text-muted-foreground">{drug.dosing.maxDose}</p>
+          </div>
+        )}
+      </Panel>
+
+      <Tabs defaultValue="overview" className="space-y-4">
+        <TabsList className="grid h-auto w-full grid-cols-3 gap-1 md:grid-cols-6">
+          {(Object.keys(tx.tabs) as (keyof typeof tx.tabs)[]).map((key) => (
+            <TabsTrigger key={key} value={key} className="whitespace-normal text-xs sm:text-sm">
+              {tx.tabs[key]}
+            </TabsTrigger>
+          ))}
         </TabsList>
 
         <TabsContent value="overview">
-          <Card className="space-y-3 rounded-3xl border border-foreground/10 bg-card/70 p-5 text-right">
-            <p><span className="font-semibold">التصنيف:</span> {drug.overview.class}</p>
-            <p><span className="font-semibold">آلية العمل:</span> {drug.overview.mechanism}</p>
-            <p className="font-semibold">دواعي الاستعمال</p>
-            <ul className="list-disc pr-6 text-sm text-foreground/90">{drug.overview.indications.map((item) => <li key={item}>{item}</li>)}</ul>
-            <p className="font-semibold">موانع الاستعمال</p>
-            <ul className="list-disc pr-6 text-sm text-foreground/90">{drug.overview.contraindications.map((item) => <li key={item}>{item}</li>)}</ul>
-          </Card>
+          <Panel>
+            <dl className="grid gap-3 sm:grid-cols-2">
+              <Field label={tx.class}>{drug.overview.class}</Field>
+              <Field label={tx.mechanism}>{drug.overview.mechanism}</Field>
+            </dl>
+            <div className="grid gap-3 sm:grid-cols-2">
+              <List title={tx.indications} items={drug.overview.indications} />
+              <List title={tx.contraindications} items={drug.overview.contraindications} tone="warn" />
+            </div>
+          </Panel>
         </TabsContent>
 
         <TabsContent value="dosing">
-          <Card className="space-y-2 rounded-3xl border border-foreground/10 bg-card/70 p-5 text-right text-sm">
-            <p><span className="font-semibold">جرعة البالغين:</span> {drug.dosing.adultDose}</p>
-            <p><span className="font-semibold">جرعة الأطفال:</span> {drug.dosing.weightBased}</p>
-            <p><span className="font-semibold">جرعة دفعية:</span> {drug.dosing.bolusVsInfusion}</p>
-            <p><span className="font-semibold">المعايرة:</span> {drug.dosing.titration}</p>
-            {drug.dosing.titrationRange && <p><span className="font-semibold">المعايرة:</span> {drug.dosing.titrationRange}</p>}
-            {drug.dosing.mapTarget && <p><span className="font-semibold">MAP Target:</span> {drug.dosing.mapTarget}</p>}
-            {drug.dosing.hrTarget && <p><span className="font-semibold">HR Target:</span> {drug.dosing.hrTarget}</p>}
-            <p><span className="font-semibold">تسريب مستمر:</span> {drug.dosing.target}</p>
-            <p><span className="font-semibold">الجرعة القصوى:</span> {drug.dosing.maxDose}</p>
-          </Card>
+          <Panel>
+            <dl className="grid gap-3 sm:grid-cols-2">
+              <Field label={tx.adultDose}>{drug.dosing.adultDose}</Field>
+              <Field label={tx.weightBasedDose}>{drug.dosing.weightBased}</Field>
+              <Field label={tx.bolusVsInfusion}>{drug.dosing.bolusVsInfusion}</Field>
+              <Field label={tx.titration}>{drug.dosing.titration}</Field>
+              {drug.dosing.titrationRange && <Field label={tx.titrationRange}>{drug.dosing.titrationRange}</Field>}
+              {drug.dosing.mapTarget && <Field label={tx.mapTarget}>{drug.dosing.mapTarget}</Field>}
+              {drug.dosing.hrTarget && <Field label={tx.hrTarget}>{drug.dosing.hrTarget}</Field>}
+              <Field label={tx.target}>{drug.dosing.target}</Field>
+              <Field label={tx.maxDose}>{drug.dosing.maxDose}</Field>
+            </dl>
+            {drug.hasTitrationGuide && (
+              <div className="space-y-2 rounded-2xl border bg-secondary/30 p-3">
+                <p className="text-sm font-semibold">{tx.titrationGuide}</p>
+                <StepTimeline steps={tx.titrationSteps.map((title) => ({ title }))} />
+              </div>
+            )}
+          </Panel>
         </TabsContent>
 
         <TabsContent value="administration">
-          <Card className="space-y-2 rounded-3xl border border-foreground/10 bg-card/70 p-5 text-right text-sm">
-            <p><span className="font-semibold">سرعة التسريب:</span> {drug.administration.ivRate}</p>
-            <p><span className="font-semibold">التركيز:</span> {drug.administration.concentration}</p>
-            <p><span className="font-semibold">التخفيف:</span> {drug.administration.dilution}</p>
-            <p><span className="font-semibold">التوافق:</span> {drug.administration.compatibility}</p>
-            <p><span className="font-semibold">الثبات:</span> {drug.administration.stability}</p>
-            <p><span className="font-semibold">خط مركزي/خط طرفي:</span> {drug.administration.line}</p>
-          </Card>
+          <Panel>
+            <dl className="grid gap-3 sm:grid-cols-2">
+              <Field label={tx.ivRate}>{drug.administration.ivRate}</Field>
+              <Field label={tx.concentration}>{drug.administration.concentration}</Field>
+              <Field label={tx.dilution}>{drug.administration.dilution}</Field>
+              <Field label={tx.compatibility}>{drug.administration.compatibility}</Field>
+              <Field label={tx.stability}>{drug.administration.stability}</Field>
+              <Field label={tx.line}>{drug.administration.line}</Field>
+            </dl>
+          </Panel>
         </TabsContent>
 
         <TabsContent value="nursing">
-          <Card className="space-y-3 rounded-3xl border border-foreground/10 bg-card/70 p-5 text-right text-sm">
-            <p className="font-semibold">التقييم</p>
-            <ul className="list-disc pr-6">{drug.nursing.before.map((item) => <li key={item}>{item}</li>)}</ul>
-            <p className="font-semibold">التقييم</p>
-            <ul className="list-disc pr-6">{drug.nursing.during.map((item) => <li key={item}>{item}</li>)}</ul>
-            <p className="font-semibold">التقييم</p>
-            <ul className="list-disc pr-6">{drug.nursing.after.map((item) => <li key={item}>{item}</li>)}</ul>
-            <p><span className="font-semibold">معايير المراقبة:</span> {drug.nursing.monitoring.join(", ")}</p>
-            <p><span className="font-semibold">متى توقف الدواء / متى تبلغ الطبيب:</span> {drug.nursing.holdNotify}</p>
-            <p><span className="font-semibold">تثقيف المريض:</span> {drug.nursing.titrationTriggers}</p>
-            {drug.sedationReference && <p><span className="font-semibold">RASS / GCS:</span> {drug.sedationReference}</p>}
-          </Card>
+          <Panel>
+            <div className="grid gap-3 md:grid-cols-3">
+              <List title={tx.before} items={drug.nursing.before} />
+              <List title={tx.during} items={drug.nursing.during} />
+              <List title={tx.after} items={drug.nursing.after} />
+            </div>
+            <dl className="grid gap-3 sm:grid-cols-2">
+              <Field label={tx.monitoring}>{drug.nursing.monitoring.join(" · ")}</Field>
+              <Field label={tx.holdNotify}>{drug.nursing.holdNotify}</Field>
+              <Field label={tx.titrationTriggers}>{drug.nursing.titrationTriggers}</Field>
+              {drug.sedationReference && <Field label={tx.sedation}>{drug.sedationReference}</Field>}
+            </dl>
+          </Panel>
         </TabsContent>
 
         <TabsContent value="interactions">
-          <Card className="space-y-3 rounded-3xl border border-foreground/10 bg-card/70 p-5 text-right text-sm">
-            <p className="font-semibold">تداخلات دوائية</p>
-            <ul className="list-disc pr-6">{drug.interactions.drugDrug.map((item) => <li key={item}>{item}</li>)}</ul>
-            <p className="font-semibold">التوافق</p>
-            <ul className="list-disc pr-6">{drug.interactions.ivIncompatibilities.map((item) => <li key={item}>{item}</li>)}</ul>
-            <p className="font-semibold">تداخلات غذائية</p>
-            <ul className="list-disc pr-6">{drug.interactions.food.map((item) => <li key={item}>{item}</li>)}</ul>
-          </Card>
+          <Panel>
+            <div className="grid gap-3 md:grid-cols-3">
+              <List title={tx.drugDrug} items={drug.interactions.drugDrug} />
+              <List title={tx.ivIncompat} items={drug.interactions.ivIncompatibilities} tone="warn" />
+              <List title={tx.food} items={drug.interactions.food} />
+            </div>
+          </Panel>
         </TabsContent>
 
         <TabsContent value="effects">
-          <Card className="space-y-3 rounded-3xl border border-foreground/10 bg-card/70 p-5 text-right text-sm">
-            <p className="font-semibold">شائعة</p>
-            <ul className="list-disc pr-6">{drug.sideEffects.common.map((item) => <li key={item}>{item}</li>)}</ul>
-            <p className="font-semibold">خطيرة</p>
-            <ul className="list-disc pr-6">{drug.sideEffects.serious.map((item) => <li key={item}>{item}</li>)}</ul>
-            <p className="font-semibold">مهددة للحياة</p>
-            <ul className="list-disc pr-6">{drug.sideEffects.lifeThreatening.map((item) => <li key={item}>{item}</li>)}</ul>
-            <p><span className="font-semibold">تحذير الصندوق الأسود:</span> {drug.sideEffects.blackBox}</p>
-            <p><span className="font-semibold">الترياق:</span> {drug.sideEffects.antidote}</p>
-          </Card>
+          <Panel>
+            <div className="grid gap-3 md:grid-cols-3">
+              <List title={tx.common} items={drug.sideEffects.common} />
+              <List title={tx.serious} items={drug.sideEffects.serious} tone="warn" />
+              <List title={tx.lifeThreatening} items={drug.sideEffects.lifeThreatening} tone="critical" />
+            </div>
+            <dl className="grid gap-3 sm:grid-cols-2">
+              <Field label={tx.blackBox}>{drug.sideEffects.blackBox}</Field>
+              <Field label={tx.antidote}>{drug.sideEffects.antidote}</Field>
+            </dl>
+          </Panel>
         </TabsContent>
       </Tabs>
+      <SourceNote ids={["dailymed", "ismp-high-alert"]} />
     </AppLayout>
   );
 };

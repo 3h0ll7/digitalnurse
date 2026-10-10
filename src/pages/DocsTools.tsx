@@ -8,8 +8,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea";
 import { useDocsI18n, copyText } from "./DocsShared";
 import { toast } from "sonner";
+import { streamChat } from "@/lib/aiChat";
 
-const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-chat`;
 
 const DocsTools = () => {
   const navigate = useNavigate();
@@ -56,18 +56,15 @@ const DocsTools = () => {
     if (!input.trim()) return;
     setLoading(true);
     try {
-      const system = `You are a clinical nursing documentation assistant. Convert the nurse's shorthand notes into a professional, accurate ${format} note. Use standard medical terminology. Maintain factual accuracy — do not add information not provided. Output in ${language}. Model claude-sonnet-4-20250514.`;
-      const resp = await fetch(CHAT_URL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
-        },
-        body: JSON.stringify({ messages: [{ role: "system", content: system }, { role: "user", content: input }], language }),
+      const instructions = `You are a clinical nursing documentation assistant. Convert the nurse's shorthand notes into a professional, accurate ${format} note. Use standard medical terminology. Maintain factual accuracy — do not add information not provided. Output in ${language}.`;
+      const result = await streamChat({
+        messages: [{ role: "user", content: input }],
+        language,
+        mode: "note",
+        modePrompt: instructions,
+        onDelta: (text) => setOutput(text),
       });
-      if (!resp.ok) throw new Error("AI request failed");
-      const text = await resp.text();
-      setOutput(text.slice(0, 4000));
+      if (!result.text.trim()) throw new Error("empty");
     } catch {
       toast.error(language === "ar" ? "خطأ في إنشاء الملاحظة" : "Failed to generate note");
     } finally {

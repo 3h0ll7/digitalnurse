@@ -33,6 +33,7 @@ import { usePreferences } from "@/contexts/PreferencesContext";
 import drugsCatalog from "@/data/drugs-catalog.json";
 import useOnlineStatus from "@/hooks/useOnlineStatus";
 import SectionScene from "@/components/iso/SectionScene";
+import { AI_PROVIDERS, streamChat, type AIProvider } from "@/lib/aiChat";
 
 declare global {
   interface Window {
@@ -57,7 +58,6 @@ interface SpeechRecognitionEvent extends Event {
 }
 
 type Role = "user" | "assistant";
-type AIProvider = "groq" | "gemini";
 type ClinicalMode =
   | "general"
   | "drug"
@@ -85,7 +85,6 @@ interface Conversation {
   updatedAt: string;
 }
 
-const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-chat`;
 const HISTORY_KEY = "dn-chat-history";
 
 const modeConfig: Record<ClinicalMode, { icon: typeof MessageCircle; en: string; ar: string; prompt: string; placeholderEn: string; placeholderAr: string }> = {
@@ -150,7 +149,9 @@ const AIAssistant = () => {
   const { language, direction } = usePreferences();
   const isArabic = language === "ar";
   const isOnline = useOnlineStatus();
-  const [provider, setProvider] = useState<AIProvider>(() => (window.localStorage.getItem("dn-ai-provider") as AIProvider) || "groq");
+  const [provider, setProvider] = useState<AIProvider>(() => (window.localStorage.getItem("dn-ai-provider") === "gemini" ? "gemini" : "groq"));
+  const [answeredBy, setAnsweredBy] = useState<string | null>(null);
+  const [remaining, setRemaining] = useState<number | null>(null);
   const [mode, setMode] = useState<ClinicalMode>("general");
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
@@ -204,70 +205,26 @@ const AIAssistant = () => {
   const streamFromEdgeFunction = async (allMessages: Message[]) => {
     const controller = new AbortController();
     abortControllerRef.current = controller;
-    const resp = await fetch(CHAT_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "text/event-stream",
-        apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
-      },
-      body: JSON.stringify({
-        messages: allMessages.map((m) => ({ role: m.role, content: m.content })),
-        language,
-        provider,
-        mode,
-        modePrompt: modeConfig[mode].prompt,
-      }),
-      signal: controller.signal,
-    });
-
-    if (!resp.ok) {
-      const data = await resp.json().catch(() => ({}));
-      throw new Error(data?.error || "AI service error");
-    }
-
-    if (!resp.body) throw new Error("No response body");
-
-    const reader = resp.body.getReader();
-    const decoder = new TextDecoder();
-    let textBuffer = "";
-    let assistantText = "";
     const assistantId = uid();
-
     setMessages((prev) => [...prev, { id: assistantId, role: "assistant", content: "" }]);
 
-    const applyEventLine = (line: string) => {
-      const normalizedLine = line.trim();
-      if (!normalizedLine.startsWith("data:")) return;
-      const jsonStr = normalizedLine.slice(5).trim();
-      if (!jsonStr || jsonStr === "[DONE]") return;
+    const result = await streamChat({
+      messages: allMessages.map((m) => ({ role: m.role, content: m.content })),
+      language,
+      provider,
+      mode,
+      modePrompt: modeConfig[mode].prompt,
+      signal: controller.signal,
+      onDelta: (text) =>
+        setMessages((prev) => prev.map((message) => (message.id === assistantId ? { ...message, content: text } : message))),
+    });
 
-      try {
-        const parsed = JSON.parse(jsonStr);
-        const chunk = parsed.choices?.[0]?.delta?.content;
-        if (typeof chunk !== "string" || chunk.length === 0) return;
-
-        assistantText += chunk;
-        setMessages((prev) => prev.map((message) => (
-          message.id === assistantId ? { ...message, content: assistantText } : message
-        )));
-      } catch {
-        // A complete SSE line can still be a provider metadata event; ignore it safely.
-      }
-    };
-
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
-      textBuffer += decoder.decode(value, { stream: true });
-      const lines = textBuffer.split(/\r?\n/);
-      textBuffer = lines.pop() || "";
-      lines.forEach(applyEventLine);
+    setAnsweredBy(result.model);
+    if (result.fellBack && result.model) {
+      toast.info(isArabic ? `النموذج المختار غير متاح الآن — أجاب ${result.model}` : `Chosen model unavailable — answered by ${result.model}`);
     }
-
-    textBuffer += decoder.decode();
-    if (textBuffer.trim()) applyEventLine(textBuffer);
-    if (!assistantText.trim()) throw new Error(isArabic ? "لم يصل رد من النموذج. حاول مرة أخرى." : "The model returned no answer. Please try again.");
+    if (result.remaining !== null) setRemaining(result.remaining);
+    if (!result.text.trim()) throw new Error(isArabic ? "لم يصل رد من النموذج. حاول مرة أخرى." : "The model returned no answer. Please try again.");
   };
 
   const sendMessage = async (override?: string) => {
@@ -347,9 +304,8 @@ const AIAssistant = () => {
     setChatId(null);
   };
 
-  const providerBadge = provider === "groq"
-    ? (isArabic ? "مدعوم بواسطة Llama 3.3 عبر Groq" : "Powered by Llama 3.3 via Groq")
-    : (isArabic ? "مدعوم بواسطة Gemini" : "Powered by Gemini");
+  const activeModel = answeredBy ?? AI_PROVIDERS[provider].model;
+  const providerBadge = `${isArabic ? "النموذج" : "Model"}: ${activeModel}${remaining !== null ? ` · ${isArabic ? "متبقي اليوم" : "left today"} ${remaining}` : ""}`;
 
   const selectedSuggestions = modeSuggestions[mode] || [];
 
@@ -392,9 +348,24 @@ const AIAssistant = () => {
               <SheetTrigger asChild><Button size="icon" variant="ghost"><Settings size={18} /></Button></SheetTrigger>
               <SheetContent className="bg-card text-foreground border-foreground/10">
                 <SheetHeader><SheetTitle>{isArabic ? "الإعدادات" : "Settings"}</SheetTitle></SheetHeader>
-                <div className="mt-4 space-y-2">
-                  <Button variant={provider === "groq" ? "default" : "outline"} className="w-full" onClick={() => setProvider("groq")}>Llama 3.3 via Groq</Button>
-                  <Button variant={provider === "gemini" ? "default" : "outline"} className="w-full" onClick={() => setProvider("gemini")}>Gemini</Button>
+                <div className="mt-4 space-y-2" role="group" aria-label={isArabic ? "نموذج الذكاء الاصطناعي" : "AI model"}>
+                  {(Object.keys(AI_PROVIDERS) as AIProvider[]).map((id) => (
+                    <Button
+                      key={id}
+                      variant={provider === id ? "default" : "outline"}
+                      aria-pressed={provider === id}
+                      className="h-auto w-full flex-col items-start gap-0.5 py-2 text-start"
+                      onClick={() => setProvider(id)}
+                    >
+                      <span className="font-semibold">{AI_PROVIDERS[id].model}</span>
+                      <span className="text-xs font-normal opacity-80">{isArabic ? AI_PROVIDERS[id].ar : AI_PROVIDERS[id].en}</span>
+                    </Button>
+                  ))}
+                  <p className="pt-2 text-xs text-muted-foreground">
+                    {isArabic
+                      ? "إذا تعطل النموذج المختار، يتحول المساعد تلقائياً للنموذج الثاني."
+                      : "If the chosen model is unavailable, the assistant switches to the other one automatically."}
+                  </p>
                 </div>
               </SheetContent>
             </Sheet>

@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 260" role="img" aria-label="Digital Nurse — الممرض الرقمي">
+<title>Digital Nurse — الممرض الرقمي</title>
+<defs>
+  <linearGradient id="lg" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#6d7dff"/><stop offset=".55" stop-color="#7c3aed"/><stop offset="1" stop-color="#ec4899"/>
+  </linearGradient>
+  <linearGradient id="ls" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#fff" stop-opacity=".72"/><stop offset="1" stop-color="#fff" stop-opacity="0"/>
+  </linearGradient>
+  <linearGradient id="lt" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#6d7dff"/><stop offset=".6" stop-color="#7c3aed"/><stop offset="1" stop-color="#ec4899"/></linearGradient>
+</defs>
+<g transform="translate(0 2) scale(0.5)">
+  <rect x="32" y="32" width="448" height="448" rx="132" fill="url(#lg)"/>
+  <ellipse cx="256" cy="118" rx="176" ry="70" fill="url(#ls)"/>
+  <rect x="33.5" y="33.5" width="445" height="445" rx="130.5" fill="none" stroke="#fff" stroke-opacity=".5" stroke-width="3"/>
+  <g fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M156 144 H240 C322 144 370 200 370 256 C370 312 322 368 240 368 H156 Z" stroke-width="30"/>
+    <path d="M156 256 H200 L226 192 L256 320 L282 256 H322" stroke-width="26"/>
+  </g></g>
+<text x="290" y="132" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="92" font-weight="800" fill="url(#lt)" letter-spacing="-2">Digital Nurse</text>
+<text x="292" y="206" font-family="'Segoe UI','Noto Sans Arabic','Geeza Pro',Tahoma,sans-serif" font-size="50" font-weight="700" fill="#7c3aed" fill-opacity=".85">الممرض الرقمي</text>
+</svg>

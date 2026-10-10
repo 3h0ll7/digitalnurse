@@ -1,5 +1,8 @@
 <p align="center">
-  <img src="public/brand/digital-nurse-logo-medtech.svg" alt="Digital Nurse" width="300" />
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/brand/hero-dark.svg" />
+    <img src="docs/brand/hero-light.svg" alt="Digital Nurse — animated banner: a heartbeat draws the DN logo, then the app's 17 sections appear as glass icons" width="100%" />
+  </picture>
 </p>
 
 <h1 align="center">Digital Nurse Buddy · الممرض الرقمي</h1>
@@ -25,7 +28,7 @@
   <img alt="Vite" src="https://img.shields.io/badge/Vite-5-646cff?style=flat-square&logo=vite&logoColor=white" />
   <img alt="Tailwind CSS" src="https://img.shields.io/badge/Tailwind-CSS-38bdf8?style=flat-square&logo=tailwindcss&logoColor=white" />
   <img alt="Supabase" src="https://img.shields.io/badge/Supabase-Edge%20Functions-3ecf8e?style=flat-square&logo=supabase&logoColor=white" />
-  <img alt="Languages" src="https://img.shields.io/badge/UI-English%20%7C%20العربية-8b5cf6?style=flat-square" />
+  <img alt="Languages" src="https://img.shields.io/badge/UI-English%20%2B%20Arabic%20(RTL)-8b5cf6?style=flat-square" />
   <img alt="Tests" src="https://img.shields.io/badge/tests-Vitest-6e9f18?style=flat-square&logo=vitest&logoColor=white" />
 </p>
 
@@ -153,6 +156,16 @@ Found something wrong? Please [open an issue](https://github.com/3h0ll7/digitaln
 | Backend | Supabase Edge Functions (Deno) |
 | Quality | Vitest · ESLint · Playwright visual checks |
 | Hosting | Lovable · Netlify previews |
+
+## 🎨 Brand
+
+| Asset | File |
+|---|---|
+| App icon (DN monogram — a rounded **D** whose spine is a heartbeat forming the **N**) | [`public/brand/logo-mark.svg`](public/brand/logo-mark.svg) |
+| Logo with bilingual wordmark | [`public/brand/logo-lockup.svg`](public/brand/logo-lockup.svg) |
+| Animated README banner (light / dark) | [`docs/brand/`](docs/brand) |
+
+All of them are generated from code by `npx vite-node scripts/build-brand.ts`, so the banner's icons always match the app's glass icons. The animation respects *reduce motion*.
 
 ## 📁 Project structure
 

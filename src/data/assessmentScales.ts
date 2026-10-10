@@ -1,357 +1,497 @@
-export interface AssessmentScale {
-  id: string;
-  name: string;
-  description: string;
-  category: string;
-  components: ScaleComponent[];
-  interpretation?: string[];
-}
+import type { ScaleDef } from "@/lib/clinical/scores";
 
-export interface ScaleComponent {
-  factor: string;
-  options: ScoreOption[];
-}
+const yesNo = (points: number, yes = "Yes", no = "No") => [
+  { label: no, points: 0 },
+  { label: yes, points },
+];
 
-export interface ScoreOption {
-  description: string;
-  points: number;
-}
+const PHQ_OPTIONS = [
+  { label: "Not at all", points: 0 },
+  { label: "Several days", points: 1 },
+  { label: "More than half the days", points: 2 },
+  { label: "Nearly every day", points: 3 },
+];
 
-export const assessmentScales: AssessmentScale[] = [
+const phqItem = (factor: string) => ({ factor, options: PHQ_OPTIONS });
+
+/** Clinical content stays in English; interface text is translated in assessments-text.ts. */
+export const assessmentScales: ScaleDef[] = [
   {
     id: "gcs",
     name: "Glasgow Coma Scale (GCS)",
-    description: "Neurological assessment tool to evaluate level of consciousness",
-    category: "Neurological",
-    components: [
+    short: "GCS",
+    description: "Level of consciousness from eye, verbal and motor responses.",
+    category: "neuro",
+    range: [3, 15],
+    kind: "items",
+    items: [
       {
-        factor: "Eye Opening",
+        factor: "Eye opening (E)",
         options: [
-          { description: "Spontaneous", points: 4 },
-          { description: "To verbal command", points: 3 },
-          { description: "To pain", points: 2 },
-          { description: "No response", points: 1 }
-        ]
+          { label: "Spontaneous", points: 4 },
+          { label: "To sound", points: 3 },
+          { label: "To pressure", points: 2 },
+          { label: "None", points: 1 },
+        ],
       },
       {
-        factor: "Verbal Response",
+        factor: "Verbal response (V)",
         options: [
-          { description: "Oriented", points: 5 },
-          { description: "Confused", points: 4 },
-          { description: "Inappropriate words", points: 3 },
-          { description: "Incomprehensible sounds", points: 2 },
-          { description: "No response", points: 1 }
-        ]
+          { label: "Oriented", points: 5 },
+          { label: "Confused", points: 4 },
+          { label: "Words", points: 3 },
+          { label: "Sounds", points: 2 },
+          { label: "None", points: 1 },
+        ],
       },
       {
-        factor: "Motor Response",
+        factor: "Best motor response (M)",
         options: [
-          { description: "Obeys commands", points: 6 },
-          { description: "Localizes pain", points: 5 },
-          { description: "Withdrawal from pain", points: 4 },
-          { description: "Flexion to pain", points: 3 },
-          { description: "Extension to pain", points: 2 },
-          { description: "No response", points: 1 }
-        ]
-      }
+          { label: "Obeys commands", points: 6 },
+          { label: "Localising", points: 5 },
+          { label: "Normal flexion", points: 4 },
+          { label: "Abnormal flexion", points: 3 },
+          { label: "Extension", points: 2 },
+          { label: "None", points: 1 },
+        ],
+      },
     ],
-    interpretation: [
-      "Total Score: 3-15",
-      "13-15: Mild brain injury",
-      "9-12: Moderate brain injury",
-      "3-8: Severe brain injury",
-      "<8: Consider intubation"
-    ]
-  },
-  {
-    id: "braden",
-    name: "Braden Scale (Pressure Ulcer Risk)",
-    description: "Assessment tool for pressure ulcer risk",
-    category: "Skin Integrity",
-    components: [
-      {
-        factor: "Sensory Perception",
-        options: [
-          { description: "Completely Limited", points: 1 },
-          { description: "Very Limited", points: 2 },
-          { description: "Slightly Limited", points: 3 },
-          { description: "No Impairment", points: 4 }
-        ]
-      },
-      {
-        factor: "Moisture",
-        options: [
-          { description: "Constantly Moist", points: 1 },
-          { description: "Often Moist", points: 2 },
-          { description: "Occasionally Moist", points: 3 },
-          { description: "Rarely Moist", points: 4 }
-        ]
-      },
-      {
-        factor: "Activity",
-        options: [
-          { description: "Bedfast", points: 1 },
-          { description: "Chairfast", points: 2 },
-          { description: "Walks Occasionally", points: 3 },
-          { description: "Walks Frequently", points: 4 }
-        ]
-      },
-      {
-        factor: "Mobility",
-        options: [
-          { description: "Completely Immobile", points: 1 },
-          { description: "Very Limited", points: 2 },
-          { description: "Slightly Limited", points: 3 },
-          { description: "No Limitation", points: 4 }
-        ]
-      },
-      {
-        factor: "Nutrition",
-        options: [
-          { description: "Very Poor", points: 1 },
-          { description: "Probably Inadequate", points: 2 },
-          { description: "Adequate", points: 3 },
-          { description: "Excellent", points: 4 }
-        ]
-      },
-      {
-        factor: "Friction and Shear",
-        options: [
-          { description: "Problem", points: 1 },
-          { description: "Potential Problem", points: 2 },
-          { description: "No Apparent Problem", points: 3 }
-        ]
-      }
+    bands: [
+      { min: 3, max: 8, label: "Severe", tone: "critical", action: "GCS ≤ 8: the airway is at risk — call for airway support." },
+      { min: 9, max: 12, label: "Moderate", tone: "serious" },
+      { min: 13, max: 15, label: "Mild", tone: "good" },
     ],
-    interpretation: [
-      "Total Score: 6-23",
-      "≤9: Severe risk",
-      "10-12: High risk",
-      "13-14: Moderate risk",
-      "15-18: Mild risk",
-      "≥19: No risk"
-    ]
-  },
-  {
-    id: "morse-fall",
-    name: "Morse Fall Scale",
-    description: "Risk assessment tool for patient fall risk",
-    category: "Safety",
-    components: [
-      {
-        factor: "History of Falling",
-        options: [
-          { description: "No", points: 0 },
-          { description: "Yes", points: 25 }
-        ]
-      },
-      {
-        factor: "Secondary Diagnosis",
-        options: [
-          { description: "No", points: 0 },
-          { description: "Yes", points: 15 }
-        ]
-      },
-      {
-        factor: "Ambulatory Aid",
-        options: [
-          { description: "None/Bed rest/Nurse assist", points: 0 },
-          { description: "Crutches/Cane/Walker", points: 15 },
-          { description: "Furniture", points: 30 }
-        ]
-      },
-      {
-        factor: "IV/Heparin Lock",
-        options: [
-          { description: "No", points: 0 },
-          { description: "Yes", points: 20 }
-        ]
-      },
-      {
-        factor: "Gait",
-        options: [
-          { description: "Normal/Bed rest/Wheelchair", points: 0 },
-          { description: "Weak", points: 10 },
-          { description: "Impaired", points: 20 }
-        ]
-      },
-      {
-        factor: "Mental Status",
-        options: [
-          { description: "Oriented to own ability", points: 0 },
-          { description: "Overestimates/Forgets limitations", points: 15 }
-        ]
-      }
+    notes: [
+      "Report the components (e.g. E3 V4 M6), not only the total — the same total can hide very different patients.",
+      "Severity bands describe head injury; a falling GCS matters more than any single value.",
+      "If a component cannot be tested (e.g. intubated: verbal), record it as NT instead of guessing.",
     ],
-    interpretation: [
-      "Total Score: 0-125",
-      "0-24: No risk",
-      "25-50: Low risk",
-      "≥51: High risk"
-    ]
-  },
-  {
-    id: "pain-scale",
-    name: "Pain Scale (0-10)",
-    description: "Numeric rating scale for pain assessment",
-    category: "Pain",
-    components: [
-      {
-        factor: "Pain Intensity",
-        options: [
-          { description: "0 - No pain", points: 0 },
-          { description: "1-3 - Mild pain", points: 1 },
-          { description: "4-6 - Moderate pain", points: 4 },
-          { description: "7-9 - Severe pain", points: 7 },
-          { description: "10 - Worst pain imaginable", points: 10 }
-        ]
-      }
-    ],
-    interpretation: [
-      "0: No pain",
-      "1-3: Mild pain",
-      "4-6: Moderate pain",
-      "7-10: Severe pain"
-    ]
-  },
-  {
-    id: "apgar",
-    name: "APGAR Score",
-    description: "Assessment of newborn condition immediately after birth",
-    category: "Neonatal",
-    components: [
-      {
-        factor: "Appearance (Color)",
-        options: [
-          { description: "Blue/Pale", points: 0 },
-          { description: "Body pink, extremities blue", points: 1 },
-          { description: "Completely pink", points: 2 }
-        ]
-      },
-      {
-        factor: "Pulse (Heart Rate)",
-        options: [
-          { description: "Absent", points: 0 },
-          { description: "<100 bpm", points: 1 },
-          { description: ">100 bpm", points: 2 }
-        ]
-      },
-      {
-        factor: "Grimace (Reflex Irritability)",
-        options: [
-          { description: "No response", points: 0 },
-          { description: "Grimace", points: 1 },
-          { description: "Cry/Active withdrawal", points: 2 }
-        ]
-      },
-      {
-        factor: "Activity (Muscle Tone)",
-        options: [
-          { description: "Limp", points: 0 },
-          { description: "Some flexion", points: 1 },
-          { description: "Active motion", points: 2 }
-        ]
-      },
-      {
-        factor: "Respiration",
-        options: [
-          { description: "Absent", points: 0 },
-          { description: "Slow, irregular", points: 1 },
-          { description: "Good, crying", points: 2 }
-        ]
-      }
-    ],
-    interpretation: [
-      "Total Score: 0-10",
-      "Assessed at 1 and 5 minutes",
-      "7-10: Normal",
-      "4-6: Moderately abnormal",
-      "0-3: Severely abnormal"
-    ]
+    sources: ["teasdale-gcs"],
   },
   {
     id: "rass",
-    name: "RASS (Richmond Agitation-Sedation Scale)",
-    description: "Assessment of agitation and sedation levels",
-    category: "Neurological",
-    components: [
+    name: "Richmond Agitation–Sedation Scale (RASS)",
+    short: "RASS",
+    description: "Agitation and sedation level in ventilated and critically ill patients.",
+    category: "sedation",
+    range: [-5, 4],
+    kind: "items",
+    items: [
       {
         factor: "Level",
         options: [
-          { description: "+4 Combative - Violent, danger to staff", points: 4 },
-          { description: "+3 Very Agitated - Pulls/removes tubes", points: 3 },
-          { description: "+2 Agitated - Frequent movement", points: 2 },
-          { description: "+1 Restless - Anxious but movements not aggressive", points: 1 },
-          { description: "0 Alert and Calm", points: 0 },
-          { description: "-1 Drowsy - Not fully alert but sustained awakening", points: -1 },
-          { description: "-2 Light Sedation - Briefly awakens to voice", points: -2 },
-          { description: "-3 Moderate Sedation - Movement to voice", points: -3 },
-          { description: "-4 Deep Sedation - No response to voice, movement to physical stimulation", points: -4 },
-          { description: "-5 Unarousable - No response to voice or physical stimulation", points: -5 }
-        ]
-      }
+          { label: "+4 Combative — violent, immediate danger to staff", points: 4 },
+          { label: "+3 Very agitated — pulls or removes tubes/catheters, aggressive", points: 3 },
+          { label: "+2 Agitated — frequent non-purposeful movement, fights ventilator", points: 2 },
+          { label: "+1 Restless — anxious, movements not aggressive", points: 1 },
+          { label: "0 Alert and calm", points: 0 },
+          { label: "−1 Drowsy — sustained awakening to voice (eye contact ≥ 10 s)", points: -1 },
+          { label: "−2 Light sedation — briefly awakens to voice (eye contact < 10 s)", points: -2 },
+          { label: "−3 Moderate sedation — movement or eye opening to voice, no eye contact", points: -3 },
+          { label: "−4 Deep sedation — no response to voice, movement to physical stimulation", points: -4 },
+          { label: "−5 Unarousable — no response to voice or physical stimulation", points: -5 },
+        ],
+      },
     ],
-    interpretation: [
-      "Positive scores: Agitation",
-      "0: Alert and calm (goal for most patients)",
-      "Negative scores: Sedation"
-    ]
-  }  ,
-  {
-    id: "sofa",
-    name: "SOFA Score (Sequential Organ Failure Assessment)",
-    description: "Assess organ dysfunction in critically ill patients — Sepsis-3 criteria",
-    category: "SEPSIS",
-    components: []
+    bands: [
+      { min: -5, max: -4, label: "Deep sedation / unarousable", tone: "critical", action: "CAM-ICU cannot be assessed — reassess later." },
+      { min: -3, max: -3, label: "Moderate sedation", tone: "warn" },
+      { min: -2, max: -1, label: "Light sedation", tone: "good", action: "A common light-sedation target (PADIS) — follow the prescribed target." },
+      { min: 0, max: 0, label: "Alert and calm", tone: "good" },
+      { min: 1, max: 4, label: "Agitated", tone: "serious", action: "Look for pain, hypoxia, delirium, withdrawal before giving sedation." },
+    ],
+    notes: ["Observe for 30 s first; speak, then use physical stimulation only if there is no response to voice."],
+    sources: ["rass", "padis"],
   },
   {
     id: "cam-icu",
     name: "CAM-ICU (Delirium Assessment)",
-    description: "Rapid delirium screening for ICU patients",
-    category: "DELIRIUM",
-    components: []
+    short: "CAM-ICU",
+    description: "Delirium screen for ICU patients, including those on a ventilator.",
+    category: "sedation",
+    range: [0, 1],
+    kind: "cam-icu",
+    items: [],
+    bands: [],
+    notes: [
+      "Delirium = Feature 1 + Feature 2 + (Feature 3 or Feature 4).",
+      "Feature 2: read SAVEAHAART; the patient squeezes on every A. Errors = no squeeze on A + squeeze on another letter.",
+      "Feature 4 questions: Will a stone float on water? Are there fish in the sea? Does one pound weigh more than two? Can you use a hammer to pound a nail? Then: 'Hold up this many fingers', then 'Now do the same with the other hand'.",
+    ],
+    sources: ["cam-icu", "padis"],
   },
   {
     id: "news2",
     name: "NEWS2 (National Early Warning Score)",
-    description: "Detect clinical deterioration early — standardized vital signs scoring",
-    category: "EARLY WARNING",
-    components: []
+    short: "NEWS2",
+    description: "Aggregate score from routine vital signs to detect deterioration in adults.",
+    category: "warning",
+    range: [0, 20],
+    kind: "news2",
+    items: [],
+    bands: [
+      { min: 0, max: 0, label: "Low", tone: "good", action: "Routine monitoring — at least every 12 h." },
+      { min: 1, max: 4, label: "Low", tone: "good", action: "Inform the registered nurse; monitor at least every 4–6 h." },
+      { min: 5, max: 6, label: "Medium", tone: "serious", action: "Urgent review by a clinician competent in acute illness; monitor at least hourly." },
+      { min: 7, max: 20, label: "High", tone: "critical", action: "Emergency response by a critical-care team; continuous monitoring." },
+    ],
+    notes: [
+      "A score of 3 in any single parameter needs an urgent ward-based review even when the total is low.",
+      "Use SpO₂ Scale 2 only for patients with confirmed hypercapnic respiratory failure, on a clinician's decision.",
+      "Not validated for children or pregnancy.",
+    ],
+    sources: ["news2"],
   },
   {
-    id: "cha2ds2-vasc",
-    name: "CHA₂DS₂-VASc Score",
-    description: "Stroke risk assessment in atrial fibrillation — guides anticoagulation",
-    category: "CARDIAC",
-    components: []
+    id: "sofa",
+    name: "SOFA Score (Sequential Organ Failure Assessment)",
+    short: "SOFA",
+    description: "Organ dysfunction across six systems; the basis of the Sepsis-3 definition.",
+    category: "sepsis",
+    range: [0, 24],
+    kind: "items",
+    items: [
+      {
+        factor: "Respiration — PaO₂/FiO₂ (mmHg)",
+        options: [
+          { label: "≥ 400", points: 0 },
+          { label: "< 400", points: 1 },
+          { label: "< 300", points: 2 },
+          { label: "< 200 with respiratory support", points: 3 },
+          { label: "< 100 with respiratory support", points: 4 },
+        ],
+      },
+      {
+        factor: "Coagulation — platelets (×10³/µL)",
+        options: [
+          { label: "≥ 150", points: 0 },
+          { label: "< 150", points: 1 },
+          { label: "< 100", points: 2 },
+          { label: "< 50", points: 3 },
+          { label: "< 20", points: 4 },
+        ],
+      },
+      {
+        factor: "Liver — bilirubin (mg/dL)",
+        options: [
+          { label: "< 1.2", points: 0 },
+          { label: "1.2–1.9", points: 1 },
+          { label: "2.0–5.9", points: 2 },
+          { label: "6.0–11.9", points: 3 },
+          { label: "≥ 12", points: 4 },
+        ],
+      },
+      {
+        factor: "Cardiovascular (doses in mcg/kg/min for ≥ 1 h)",
+        options: [
+          { label: "MAP ≥ 70 mmHg", points: 0 },
+          { label: "MAP < 70 mmHg", points: 1 },
+          { label: "Dopamine ≤ 5 or dobutamine (any dose)", points: 2 },
+          { label: "Dopamine > 5 or epinephrine ≤ 0.1 or norepinephrine ≤ 0.1", points: 3 },
+          { label: "Dopamine > 15 or epinephrine > 0.1 or norepinephrine > 0.1", points: 4 },
+        ],
+      },
+      {
+        factor: "Central nervous system — GCS",
+        options: [
+          { label: "15", points: 0 },
+          { label: "13–14", points: 1 },
+          { label: "10–12", points: 2 },
+          { label: "6–9", points: 3 },
+          { label: "< 6", points: 4 },
+        ],
+      },
+      {
+        factor: "Renal — creatinine (mg/dL) or urine output",
+        options: [
+          { label: "< 1.2", points: 0 },
+          { label: "1.2–1.9", points: 1 },
+          { label: "2.0–3.4", points: 2 },
+          { label: "3.5–4.9 or < 500 mL/day", points: 3 },
+          { label: "≥ 5.0 or < 200 mL/day", points: 4 },
+        ],
+      },
+    ],
+    bands: [
+      { min: 0, max: 1, label: "No significant organ dysfunction", tone: "good" },
+      { min: 2, max: 24, label: "Organ dysfunction", tone: "critical", action: "With suspected infection, an acute rise of ≥ 2 points meets Sepsis-3 — escalate now." },
+    ],
+    notes: [
+      "Score the change from the patient's baseline (assume 0 if no known organ dysfunction).",
+      "Septic shock = sepsis + vasopressors needed for MAP ≥ 65 mmHg + lactate > 2 mmol/L despite adequate fluids.",
+      "Higher scores carry higher mortality; trend the score daily.",
+    ],
+    sources: ["sofa", "sepsis3"],
   },
   {
-    id: "wells-pe",
-    name: "Wells Score (PE)",
-    description: "Clinical probability assessment for pulmonary embolism",
-    category: "PULMONARY",
-    components: []
+    id: "qsofa",
+    name: "qSOFA (quick SOFA)",
+    short: "qSOFA",
+    description: "Three bedside signs that flag infected patients at risk of a poor outcome.",
+    category: "sepsis",
+    range: [0, 3],
+    kind: "items",
+    items: [
+      { factor: "Respiratory rate ≥ 22/min", options: yesNo(1) },
+      { factor: "Altered mentation (GCS < 15)", options: yesNo(1) },
+      { factor: "Systolic BP ≤ 100 mmHg", options: yesNo(1) },
+    ],
+    bands: [
+      { min: 0, max: 1, label: "Not positive", tone: "good", action: "A negative qSOFA does not rule out sepsis." },
+      { min: 2, max: 3, label: "Positive", tone: "critical", action: "Assess for organ dysfunction (SOFA) and escalate." },
+    ],
+    notes: ["Surviving Sepsis Campaign 2021 recommends against qSOFA as a single screening tool, compared with SIRS, NEWS or MEWS."],
+    sources: ["sepsis3", "ssc-2021"],
   },
   {
-    id: "must",
-    name: "MUST Score (Malnutrition Screening)",
-    description: "Screen for malnutrition risk on admission and weekly",
-    category: "NUTRITION",
-    components: []
-  },
-  {
-    id: "phq9",
-    name: "PHQ-9 (Depression Screening)",
-    description: "Screen and monitor depression severity",
-    category: "PSYCHIATRIC",
-    components: []
+    id: "braden",
+    name: "Braden Scale (Pressure Injury Risk)",
+    short: "Braden",
+    description: "Pressure injury risk from six sub-scales; a lower score means higher risk.",
+    category: "skin",
+    range: [6, 23],
+    kind: "items",
+    items: [
+      { factor: "Sensory perception", options: [{ label: "Completely limited", points: 1 }, { label: "Very limited", points: 2 }, { label: "Slightly limited", points: 3 }, { label: "No impairment", points: 4 }] },
+      { factor: "Moisture", options: [{ label: "Constantly moist", points: 1 }, { label: "Very moist", points: 2 }, { label: "Occasionally moist", points: 3 }, { label: "Rarely moist", points: 4 }] },
+      { factor: "Activity", options: [{ label: "Bedfast", points: 1 }, { label: "Chairfast", points: 2 }, { label: "Walks occasionally", points: 3 }, { label: "Walks frequently", points: 4 }] },
+      { factor: "Mobility", options: [{ label: "Completely immobile", points: 1 }, { label: "Very limited", points: 2 }, { label: "Slightly limited", points: 3 }, { label: "No limitation", points: 4 }] },
+      { factor: "Nutrition", options: [{ label: "Very poor", points: 1 }, { label: "Probably inadequate", points: 2 }, { label: "Adequate", points: 3 }, { label: "Excellent", points: 4 }] },
+      { factor: "Friction and shear", options: [{ label: "Problem", points: 1 }, { label: "Potential problem", points: 2 }, { label: "No apparent problem", points: 3 }] },
+    ],
+    bands: [
+      { min: 6, max: 9, label: "Very high risk", tone: "critical" },
+      { min: 10, max: 12, label: "High risk", tone: "serious" },
+      { min: 13, max: 14, label: "Moderate risk", tone: "warn" },
+      { min: 15, max: 18, label: "At risk", tone: "warn" },
+      { min: 19, max: 23, label: "Not at risk", tone: "good" },
+    ],
+    notes: ["Re-score on admission, at every change in condition and per local policy; act on the low sub-scales, not just the total."],
+    sources: ["braden"],
   },
   {
     id: "waterlow",
     name: "Waterlow Score (Pressure Injury Risk)",
-    description: "Comprehensive pressure injury risk assessment — widely used in UK/international",
-    category: "SKIN INTEGRITY",
-    components: []
-  }
-
+    short: "Waterlow",
+    description: "Pressure injury risk including special risks such as surgery and organ failure; a higher score means higher risk.",
+    category: "skin",
+    range: [0, 71],
+    kind: "items",
+    items: [
+      { factor: "Build / weight for height", options: [{ label: "Average (BMI 20–24.9)", points: 0 }, { label: "Above average (BMI 25–29.9)", points: 1 }, { label: "Obese (BMI ≥ 30)", points: 2 }, { label: "Below average (BMI < 20)", points: 3 }] },
+      { factor: "Skin type (visual risk areas)", options: [{ label: "Healthy", points: 0 }, { label: "Tissue paper / dry / oedematous / clammy (pyrexia)", points: 1 }, { label: "Discoloured (grade 1)", points: 2 }, { label: "Broken / spots (grade 2–4)", points: 3 }] },
+      { factor: "Sex", options: [{ label: "Male", points: 1 }, { label: "Female", points: 2 }] },
+      { factor: "Age", options: [{ label: "14–49", points: 1 }, { label: "50–64", points: 2 }, { label: "65–74", points: 3 }, { label: "75–80", points: 4 }, { label: "81 +", points: 5 }] },
+      { factor: "Continence", options: [{ label: "Complete / catheterised", points: 0 }, { label: "Urinary incontinence", points: 1 }, { label: "Faecal incontinence", points: 2 }, { label: "Urinary + faecal incontinence", points: 3 }] },
+      { factor: "Mobility", options: [{ label: "Fully mobile", points: 0 }, { label: "Restless / fidgety", points: 1 }, { label: "Apathetic", points: 2 }, { label: "Restricted", points: 3 }, { label: "Bedbound (e.g. traction)", points: 4 }, { label: "Chairbound (e.g. wheelchair)", points: 5 }] },
+      { factor: "Appetite", options: [{ label: "Average", points: 0 }, { label: "Poor", points: 1 }, { label: "NG tube / fluids only", points: 2 }, { label: "Nil by mouth / anorexic", points: 3 }] },
+      {
+        factor: "Special risks — tissue malnutrition",
+        multi: true,
+        options: [
+          { label: "Terminal cachexia", points: 8 },
+          { label: "Multiple organ failure", points: 8 },
+          { label: "Single organ failure (respiratory, renal, cardiac)", points: 5 },
+          { label: "Peripheral vascular disease", points: 5 },
+          { label: "Anaemia (Hb < 8 g/dL)", points: 2 },
+          { label: "Smoking", points: 1 },
+        ],
+      },
+      { factor: "Neurological deficit (diabetes, MS, CVA, motor/sensory paraplegia)", options: [{ label: "None", points: 0 }, { label: "Mild", points: 4 }, { label: "Moderate", points: 5 }, { label: "Severe", points: 6 }] },
+      { factor: "Major surgery or trauma", options: [{ label: "None", points: 0 }, { label: "Orthopaedic / spinal", points: 5 }, { label: "On table > 2 h (within the last 48 h)", points: 5 }, { label: "On table > 6 h (within the last 48 h)", points: 8 }] },
+      { factor: "Medication (cytotoxics, long-term/high-dose steroids, anti-inflammatories)", options: [{ label: "None", points: 0 }, { label: "Yes (maximum 4)", points: 4 }] },
+    ],
+    bands: [
+      { min: 0, max: 9, label: "Not at risk", tone: "good" },
+      { min: 10, max: 14, label: "At risk", tone: "warn" },
+      { min: 15, max: 19, label: "High risk", tone: "serious" },
+      { min: 20, max: 71, label: "Very high risk", tone: "critical" },
+    ],
+    notes: ["Neurological deficit scores 4–6 by severity; choose the level that fits.", "The appetite item is from the original card; the 2005 revision uses a nutrition screening tool instead."],
+    sources: ["waterlow"],
+  },
+  {
+    id: "morse-fall",
+    name: "Morse Fall Scale",
+    short: "Morse",
+    description: "Fall risk in hospitalised adults from six items.",
+    category: "safety",
+    range: [0, 125],
+    kind: "items",
+    items: [
+      { factor: "History of falling (immediate or within 3 months)", options: yesNo(25) },
+      { factor: "Secondary diagnosis (≥ 2 medical diagnoses)", options: yesNo(15) },
+      { factor: "Ambulatory aid", options: [{ label: "None / bed rest / nurse assist", points: 0 }, { label: "Crutches / cane / walker", points: 15 }, { label: "Furniture", points: 30 }] },
+      { factor: "IV therapy / heparin lock", options: yesNo(20) },
+      { factor: "Gait", options: [{ label: "Normal / bed rest / wheelchair", points: 0 }, { label: "Weak", points: 10 }, { label: "Impaired", points: 20 }] },
+      { factor: "Mental status", options: [{ label: "Oriented to own ability", points: 0 }, { label: "Overestimates / forgets limitations", points: 15 }] },
+    ],
+    bands: [
+      { min: 0, max: 24, label: "No risk", tone: "good", action: "Good basic nursing care." },
+      { min: 25, max: 50, label: "Low risk", tone: "warn", action: "Standard fall-prevention interventions." },
+      { min: 51, max: 125, label: "High risk", tone: "critical", action: "High-risk fall-prevention interventions." },
+    ],
+    notes: ["Cut-offs from the original study; many hospitals calibrate their own (often ≥ 45 = high risk). Follow local policy."],
+    sources: ["morse"],
+  },
+  {
+    id: "pain-scale",
+    name: "Numeric Pain Rating Scale (NRS 0–10)",
+    short: "NRS",
+    description: "Self-reported pain intensity for patients who can communicate.",
+    category: "pain",
+    range: [0, 10],
+    kind: "items",
+    items: [
+      {
+        factor: "Pain right now",
+        options: Array.from({ length: 11 }, (_, n) => ({ label: n === 0 ? "0 — No pain" : n === 10 ? "10 — Worst pain imaginable" : String(n), points: n })),
+      },
+    ],
+    bands: [
+      { min: 0, max: 0, label: "No pain", tone: "good" },
+      { min: 1, max: 3, label: "Mild", tone: "good" },
+      { min: 4, max: 6, label: "Moderate", tone: "warn" },
+      { min: 7, max: 10, label: "Severe", tone: "critical" },
+    ],
+    notes: ["For patients who cannot self-report, use a behavioural tool (e.g. CPOT or BPS) instead.", "Reassess after every intervention and document the response."],
+    sources: ["hawker-pain"],
+  },
+  {
+    id: "apgar",
+    name: "Apgar Score",
+    short: "Apgar",
+    description: "Newborn condition at 1 and 5 minutes after birth.",
+    category: "neonatal",
+    range: [0, 10],
+    kind: "items",
+    items: [
+      { factor: "Appearance (colour)", options: [{ label: "Blue or pale all over", points: 0 }, { label: "Body pink, extremities blue", points: 1 }, { label: "Pink all over", points: 2 }] },
+      { factor: "Pulse (heart rate)", options: [{ label: "Absent", points: 0 }, { label: "< 100 bpm", points: 1 }, { label: "≥ 100 bpm", points: 2 }] },
+      { factor: "Grimace (reflex irritability)", options: [{ label: "No response", points: 0 }, { label: "Grimace", points: 1 }, { label: "Cry or active withdrawal", points: 2 }] },
+      { factor: "Activity (muscle tone)", options: [{ label: "Limp", points: 0 }, { label: "Some flexion", points: 1 }, { label: "Active motion", points: 2 }] },
+      { factor: "Respiration", options: [{ label: "Absent", points: 0 }, { label: "Weak, irregular", points: 1 }, { label: "Strong cry", points: 2 }] },
+    ],
+    bands: [
+      { min: 0, max: 3, label: "Low", tone: "critical" },
+      { min: 4, max: 6, label: "Moderately abnormal", tone: "serious" },
+      { min: 7, max: 10, label: "Reassuring", tone: "good" },
+    ],
+    notes: [
+      "Resuscitation must not wait for the 1-minute score.",
+      "If the 5-minute score is < 7, repeat every 5 minutes up to 20 minutes.",
+    ],
+    sources: ["acog-apgar"],
+  },
+  {
+    id: "cha2ds2-vasc",
+    name: "CHA₂DS₂-VASc Score",
+    short: "CHA₂DS₂-VASc",
+    description: "Stroke risk in atrial fibrillation — guides anticoagulation.",
+    category: "cardiac",
+    range: [0, 9],
+    kind: "items",
+    items: [
+      { factor: "Age", options: [{ label: "< 65", points: 0 }, { label: "65–74", points: 1 }, { label: "≥ 75", points: 2 }] },
+      { factor: "Sex category", excludeFromBand: true, options: [{ label: "Male", points: 0 }, { label: "Female", points: 1 }] },
+      {
+        factor: "Risk factors",
+        multi: true,
+        options: [
+          { label: "Congestive heart failure", points: 1 },
+          { label: "Hypertension", points: 1 },
+          { label: "Diabetes mellitus", points: 1 },
+          { label: "Stroke / TIA / thromboembolism", points: 2 },
+          { label: "Vascular disease (prior MI, peripheral artery disease, aortic plaque)", points: 1 },
+        ],
+      },
+    ],
+    bandBasis: "Recommendation uses the score without the sex point (CHA₂DS₂-VA, ESC 2024) — the same thresholds as ACC/AHA 2023 (≥ 2 men / ≥ 3 women).",
+    bands: [
+      { min: 0, max: 0, label: "Low risk", tone: "good", action: "Anticoagulation not recommended for stroke prevention." },
+      { min: 1, max: 1, label: "Intermediate", tone: "warn", action: "Anticoagulation should be considered — shared decision with bleeding risk." },
+      { min: 2, max: 8, label: "High risk", tone: "critical", action: "Oral anticoagulation recommended unless contraindicated." },
+    ],
+    notes: ["Assess bleeding risk and modifiable bleeding factors separately; a high bleeding risk alone is not a reason to withhold anticoagulation."],
+    sources: ["esc-af-2024", "acc-af-2023"],
+  },
+  {
+    id: "wells-pe",
+    name: "Wells Score (PE)",
+    short: "Wells PE",
+    description: "Pre-test probability of pulmonary embolism.",
+    category: "pulmonary",
+    range: [0, 12.5],
+    kind: "items",
+    items: [
+      {
+        factor: "Criteria",
+        multi: true,
+        options: [
+          { label: "Clinical signs and symptoms of DVT", points: 3 },
+          { label: "PE is the most likely diagnosis", points: 3 },
+          { label: "Heart rate > 100 bpm", points: 1.5 },
+          { label: "Immobilisation ≥ 3 days or surgery in the previous 4 weeks", points: 1.5 },
+          { label: "Previous DVT or PE", points: 1.5 },
+          { label: "Haemoptysis", points: 1 },
+          { label: "Active cancer (treatment within 6 months or palliative)", points: 1 },
+        ],
+      },
+    ],
+    bands: [
+      { min: 0, max: 4, label: "PE unlikely", tone: "good", action: "D-dimer; a negative result makes PE very unlikely." },
+      { min: 4.5, max: 12.5, label: "PE likely", tone: "critical", action: "CT pulmonary angiography (or V/Q if CT not suitable)." },
+    ],
+    notes: ["Three-tier version: < 2 low, 2–6 moderate, > 6 high probability."],
+    sources: ["wells-pe"],
+  },
+  {
+    id: "must",
+    name: "MUST Score (Malnutrition Screening)",
+    short: "MUST",
+    description: "Malnutrition risk in adults from BMI, weight loss and acute illness.",
+    category: "nutrition",
+    range: [0, 6],
+    kind: "must",
+    items: [],
+    bands: [
+      { min: 0, max: 0, label: "Low risk", tone: "good", action: "Routine care; repeat screening (weekly in hospital)." },
+      { min: 1, max: 1, label: "Medium risk", tone: "warn", action: "Observe: document intake for 3 days (hospital)." },
+      { min: 2, max: 6, label: "High risk", tone: "critical", action: "Treat: refer to dietitian / nutrition team; follow local policy." },
+    ],
+    notes: ["Weight loss is unplanned loss over the past 3–6 months.", "The acute disease effect applies if the patient is acutely ill and has had, or is likely to have, no nutritional intake for > 5 days."],
+    sources: ["must"],
+  },
+  {
+    id: "phq9",
+    name: "PHQ-9 (Depression Screening)",
+    short: "PHQ-9",
+    description: "Depression severity over the last 2 weeks.",
+    category: "mental",
+    range: [0, 27],
+    kind: "items",
+    items: [
+      phqItem("Little interest or pleasure in doing things"),
+      phqItem("Feeling down, depressed, or hopeless"),
+      phqItem("Trouble falling or staying asleep, or sleeping too much"),
+      phqItem("Feeling tired or having little energy"),
+      phqItem("Poor appetite or overeating"),
+      phqItem("Feeling bad about yourself — or that you are a failure or have let yourself or your family down"),
+      phqItem("Trouble concentrating on things, such as reading or watching television"),
+      phqItem("Moving or speaking so slowly that other people could have noticed — or being so fidgety or restless that you have been moving around a lot more than usual"),
+      {
+        factor: "Thoughts that you would be better off dead, or of hurting yourself in some way",
+        options: PHQ_OPTIONS.map((o) => (o.points > 0 ? { ...o, flag: "Item 9 positive — assess suicide risk now and follow your local safety pathway." } : o)),
+      },
+    ],
+    bands: [
+      { min: 0, max: 4, label: "Minimal", tone: "good" },
+      { min: 5, max: 9, label: "Mild", tone: "good" },
+      { min: 10, max: 14, label: "Moderate", tone: "warn" },
+      { min: 15, max: 19, label: "Moderately severe", tone: "serious" },
+      { min: 20, max: 27, label: "Severe", tone: "critical" },
+    ],
+    notes: ["A screening tool, not a diagnosis. A score ≥ 10 warrants clinical assessment."],
+    sources: ["phq9"],
+  },
 ];

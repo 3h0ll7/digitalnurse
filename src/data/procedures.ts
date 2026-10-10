@@ -400,13 +400,12 @@ export const procedures: Procedure[] = [
     id: "inline-suction",
     category: "AIRWAY & RESPIRATORY",
     title: "Inline Suctioning and Bronchial Hygiene",
-    description: "Closed-system suction and recruitment to prevent VAP.",
+    description: "Closed-system suction to maintain oxygenation and PEEP during secretion clearance.",
     definition: "Maintaining secretion clearance and lung recruitment in mechanically ventilated patients using closed suction and physiotherapy adjuncts.",
     indications: [
       "Visible secretions or coarse breath sounds",
       "Increased peak pressures",
-      "SpO2 decline or ventilator alarms",
-      "Routine VAP prevention protocols"
+      "SpO2 decline or ventilator alarms"
     ],
     contraindications: [
       "Severe bronchospasm (premedicate)",
@@ -429,8 +428,8 @@ export const procedures: Procedure[] = [
     ],
     safetyAlerts: [
       "Stop immediately for bradycardia or arrhythmias.",
-      "Avoid routine saline instillation unless required for thick secretions.",
-      "Maintain closed system integrity to prevent VAP."
+      "Do not instil normal saline before suctioning; manage thick secretions with adequate humidification and hydration.",
+      "Maintain closed system integrity to limit derecruitment and desaturation."
     ],
     complications: [
       "Hypoxemia",
@@ -466,7 +465,7 @@ export const procedures: Procedure[] = [
       "Severe hemodynamic instability limiting mobility"
     ],
     equipment: [
-      "Oral care kits with chlorhexidine",
+      "Oral care kits with toothbrush and non-chlorhexidine moisturiser",
       "Subglottic suction ETT",
       "Sedation vacation checklist",
       "Mobility aids",
@@ -474,7 +473,7 @@ export const procedures: Procedure[] = [
     ],
     steps: [
       "Maintain head-of-bed 30–45° unless contraindicated.",
-      "Perform oral care with antiseptic every 4 hours and subglottic suctioning.",
+      "Brush teeth at least twice daily and moisturise the mouth every 2–4 hours; use subglottic secretion drainage if available.",
       "Conduct spontaneous awakening/breathing trials daily with provider.",
       "Assess readiness to extubate and manage sedation to RASS targets.",
       "Implement early mobility (dangling, chair, ambulation) as tolerated.",
@@ -534,7 +533,7 @@ export const procedures: Procedure[] = [
       "Educate on fire safety and avoiding petroleum products near oxygen."
     ],
     safetyAlerts: [
-      "Notify provider if FiO2 >0.6 required beyond 24 hours.",
+      "Notify the provider promptly for any rising oxygen requirement or failure to reach target SpO2; FiO2 > 0.6 needs urgent senior/critical care review.",
       "Avoid open flames and sparking devices near oxygen setup.",
       "Monitor for CO2 narcosis in chronic retainers when SpO2 >92%."
     ],
@@ -699,7 +698,7 @@ export const procedures: Procedure[] = [
     ],
     safetyAlerts: [
       "Never draw blood from TPN lumen to avoid contamination.",
-      "Hold dressing change if platelet count critically low unless life-threatening.",
+      "Change the dressing promptly if damp, loose or soiled; in severe thrombocytopenia remove gently and apply pressure to any oozing.",
       "Report signs of CLABSI (fever, erythema, purulence) immediately."
     ],
     complications: [
@@ -860,7 +859,7 @@ export const procedures: Procedure[] = [
       "Document unit details and patient response."
     ],
     safetyAlerts: [
-      "Stop infusion immediately for reaction symptoms and maintain IV access with saline.",
+      "Stop infusion immediately for reaction symptoms, disconnect the blood tubing at the hub, keep the vein open with normal saline through a new administration set, and notify the provider and blood bank.",
       "Never add medications to blood tubing.",
       "Warm blood only with approved devices for rapid transfusion."
     ],
@@ -1077,14 +1076,14 @@ export const procedures: Procedure[] = [
       "Verify order (drug, concentration, bolus, lockout, basal) with double-check.",
       "Prime tubing, connect to dedicated IV line, and program pump using drug library.",
       "Educate patient to be sole user of button and instruct family not to press.",
-      "Assess pain, sedation (RASS), and respiratory status hourly for first four hours.",
+      "Assess pain, sedation (POSS), and respiratory status hourly for first four hours.",
       "Adjust settings per provider order based on assessments.",
       "Document totals, attempts, and interventions each shift."
     ],
     safetyAlerts: [
       "Continuous capnography recommended for high-risk patients.",
       "Avoid basal infusion in opioid-naïve patients unless ordered.",
-      "Hold PCA and notify provider for RR <10 or sedation score >2."
+      "Hold PCA and notify provider for RR <10 or POSS ≥ 3 (frequently drowsy, drifts off mid-conversation)."
     ],
     complications: [
       "Respiratory depression",
@@ -1169,7 +1168,7 @@ export const procedures: Procedure[] = [
       "Acute urinary retention",
       "Precise output monitoring in critical illness",
       "Perioperative urologic or long surgeries",
-      "Comfort care when severe skin breakdown risk"
+      "Assist healing of open sacral/perineal wounds in incontinent patients; comfort at end of life"
     ],
     contraindications: [
       "Suspected urethral injury",
@@ -1186,7 +1185,7 @@ export const procedures: Procedure[] = [
     steps: [
       "Perform hand hygiene, explain procedure, and position patient.",
       "Open kit maintaining sterility, don sterile gloves, and drape perineum.",
-      "Cleanse meatus appropriately, lubricate catheter, insert until urine flows, then advance 2–3 cm before inflating balloon.",
+      "Cleanse meatus appropriately, lubricate catheter, insert until urine flows, then advance to the bifurcation (male) or a further 2.5–5 cm (female) before inflating the balloon with the manufacturer-specified volume.",
       "Gently pull to ensure placement, secure catheter, and position bag below bladder.",
       "Perform daily necessity review, perineal hygiene, and keep a closed system.",
       "Document insertion details, output characteristics, and removal plan."
@@ -1284,7 +1283,7 @@ export const procedures: Procedure[] = [
     contraindications: [
       "Recent colorectal surgery without clearance",
       "Suspected bowel obstruction",
-      "Severe neutropenia (use sterile technique)"
+      "Severe neutropenia or thrombocytopenia (avoid enemas and rectal manipulation)"
     ],
     equipment: [
       "Enema bag or syringe",
@@ -1344,7 +1343,6 @@ export const procedures: Procedure[] = [
     equipment: [
       "pH indicator strips",
       "60 mL syringe",
-      "Stethoscope",
       "Radiography access",
       "Securement device"
     ],
@@ -1357,7 +1355,7 @@ export const procedures: Procedure[] = [
       "Hold feedings if verification unsuccessful and notify provider."
     ],
     safetyAlerts: [
-      "Never rely on auscultation of air alone to confirm placement.",
+      "Never use auscultation of injected air ('whoosh test') to confirm tube position — it is unreliable and must not be used.",
       "Stop feeding immediately if patient coughs, desaturates, or tube length changes.",
       "Use capnography if available to detect tracheal placement during insertion."
     ],
@@ -1443,7 +1441,7 @@ export const procedures: Procedure[] = [
     indications: [
       "Short gut syndrome or malabsorption",
       "Inability to tolerate enteral feeds",
-      "Severe pancreatitis",
+      "Severe pancreatitis when enteral nutrition is not feasible or not tolerated",
       "Postoperative GI rest"
     ],
     contraindications: [
@@ -2432,7 +2430,7 @@ export const procedures: Procedure[] = [
     ],
     steps: [
       "Massage uterus, assess tone, and initiate quantified blood loss measurement.",
-      "Administer sequential uterotonics per protocol (oxytocin, tranexamic acid, methylergonovine, carboprost).",
+      "Administer uterotonics per protocol (oxytocin first; then methylergonovine, carboprost or misoprostol as indicated) and give tranexamic acid 1 g IV over 10 minutes within 3 hours of birth per order.",
       "Obtain IV access, labs (CBC, coags), and crossmatch; activate hemorrhage team if loss progresses.",
       "Apply uterine tamponade (Bakri) or prepare for OR/interventional radiology if atony persists.",
       "Monitor vitals every 5 minutes, maintain warm environment, and support breastfeeding/skin-to-skin when stable.",

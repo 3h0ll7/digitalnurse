@@ -58,6 +58,7 @@ const AppLayout = ({ title, subtitle, actions, children, onBack, className, illu
         <main className={cn("space-y-6", className)}>{children}</main>
 
         <footer className="mt-12 mb-4 space-y-1 text-center">
+          <img src="/brand/logo-lockup.svg" alt="Digital Nurse — الممرض الرقمي" width={147} height={39} className="mx-auto mb-2 h-[39px] w-auto" />
           <p className="text-xs text-muted-foreground">
             Developed by : <span className="font-medium text-foreground/80">𝓗𝓪𝓼𝓼𝓪𝓷 𝓼𝓪𝓵𝓶𝓪𝓷</span>
           </p>

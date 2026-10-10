@@ -21,7 +21,7 @@ const COLS = 3;
 const W = ROOM.w * COLS;
 const D = ROOM.d;
 const TOP_Z = (HOSPITAL_FLOORS.length - 1) * FLOOR_HEIGHT;
-const { width, height, origin } = sceneSize(W, D, TOP_Z + ROOM.h + 1.6, 18);
+const { width, height, origin } = sceneSize(W, D, TOP_Z + ROOM.h + 0.4, 18);
 const FLASH_MS = 120;
 
 interface PlacedRoom {
@@ -84,8 +84,6 @@ const IsometricHospital = ({ onOpen, className }: IsometricHospitalProps) => {
     }
   };
 
-  const signAt = project(W / 2 - 3.2, -0.35, TOP_Z + ROOM.h, origin);
-
   return (
     <div className={cn("mx-auto w-full max-w-[640px]", className)}>
       {/* Labels are positioned in percent of this box, so it must hold only the drawing. */}
@@ -124,14 +122,6 @@ const IsometricHospital = ({ onOpen, className }: IsometricHospitalProps) => {
                   })}
               </g>
             ))}
-            <g transform={`translate(${signAt[0]},${signAt[1]})`}>
-              <rect x={-4} y={-34} width={196} height={30} rx={8} fill="var(--iso-c5)" stroke="var(--iso-c5x)" />
-              <rect x={6} y={-28} width={18} height={18} rx={4} fill="var(--iso-sign)" />
-              <path d="M15 -25 v12 M9 -19 h12" stroke="#fff" strokeWidth={4} strokeLinecap="round" />
-              <text x={110} y={-13} textAnchor="middle" fontSize={13} fontWeight={700} fill="var(--iso-ink)" fontFamily='"IBM Plex Sans Arabic","IBM Plex Sans",sans-serif'>
-                {language === "ar" ? "مستشفى الممرض الرقمي" : "Digital Nurse Hospital"}
-              </text>
-            </g>
             <Plant at={project(-0.8, D + 1.2, -0.7, origin)} scale={0.8} />
             <Plant at={project(W + 0.6, D + 1.4, -0.7, origin)} scale={0.9} />
           </g>

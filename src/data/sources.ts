@@ -47,6 +47,17 @@ export const SOURCES = {
   must: { label: "BAPEN — Malnutrition Universal Screening Tool ('MUST')", year: "2003", url: "https://www.bapen.org.uk/must-and-self-screening/must/" },
   phq9: { label: "Kroenke, Spitzer & Williams — The PHQ-9, J Gen Intern Med", year: "2001" },
   waterlow: { label: "Waterlow — Pressure ulcer risk assessment card (revised)", year: "2005" },
+  "hicpac-2007": { label: "CDC/HICPAC — Guideline for Isolation Precautions (Appendix A)", year: "2007", url: "https://www.cdc.gov/infection-control/hcp/isolation-precautions/" },
+  "hicpac-mdro": { label: "CDC/HICPAC — Management of multidrug-resistant organisms in healthcare settings", year: "2006" },
+  "who-hand-hygiene": { label: "WHO Guidelines on Hand Hygiene in Health Care", year: "2009" },
+  "shea-2022": { label: "SHEA/IDSA/APIC Compendium — strategies to prevent HAIs (CLABSI, CAUTI, VAP, SSI)", year: "2022" },
+  "cdc-covid-ipc": { label: "CDC — Infection control recommendations for healthcare personnel during COVID-19", year: "2023" },
+  "idsa-cdi": { label: "IDSA/SHEA — Clinical practice guideline for Clostridioides difficile infection", year: "2017" },
+  "cdc-ssi": { label: "CDC — Guideline for the prevention of surgical site infection, JAMA Surg", year: "2017" },
+  "cdc-flu": { label: "CDC — Influenza antiviral medications and infection control in healthcare settings" },
+  "usphs-pep": { label: "USPHS — Occupational exposures to HIV and recommendations for PEP (Kuhar et al.)", year: "2013" },
+  "cdc-hcv-exposure": { label: "CDC — Testing and clinical management of healthcare personnel exposed to HCV, MMWR", year: "2020" },
+  "cdc-disinfection": { label: "CDC/HICPAC — Guideline for disinfection and sterilization in healthcare facilities (Spaulding)", year: "2008" },
   atls: { label: "ATLS Student Course Manual, 10th edition (burn resuscitation)", year: "2018" },
 } satisfies Record<string, Source>;
 

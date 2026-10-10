@@ -27,6 +27,8 @@ export const SOURCES = {
   "acc-aha-acs": { label: "AHA/ACC Guideline for non-ST-elevation acute coronary syndromes", year: "2014" },
   "ada-dka": { label: "ADA/EASD/JBDS/AACE/DTS consensus — Hyperglycemic crises in adults with diabetes, Diabetes Care", year: "2024" },
   "acog-screening": { label: "ACOG Practice Bulletins 226 (aneuploidy screening) & 190 (GDM), Committee Opinion 797 (GBS)" },
+  "aha-qt": { label: "AHA/ACCF/HRS recommendations for ECG interpretation, Part IV — ST segment, T/U waves and QT interval, Circulation", year: "2009" },
+  "udmi-4": { label: "Fourth Universal Definition of Myocardial Infarction, Circulation", year: "2018" },
   atls: { label: "ATLS Student Course Manual, 10th edition (burn resuscitation)", year: "2018" },
 } satisfies Record<string, Source>;
 

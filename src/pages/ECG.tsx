@@ -1,25 +1,22 @@
 import { useMemo, useState } from "react";
-import { Activity, Search } from "lucide-react";
+import { Activity, AlertTriangle, HeartPulse, ListChecks, Search } from "lucide-react";
 import AppLayout from "@/components/layout/AppLayout";
 import EmptyState from "@/components/EmptyState";
+import DistributionBar from "@/components/data/DistributionBar";
+import FilterChips from "@/components/data/FilterChips";
+import RangeLanes from "@/components/data/RangeLanes";
+import SourceNote from "@/components/data/SourceNote";
+import StatTile from "@/components/data/StatTile";
+import StepTimeline from "@/components/data/StepTimeline";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import { usePreferences } from "@/contexts/PreferencesContext";
 import ecgI18n from "@/data/ecg-i18n.json";
-
-type Language = "en" | "ar";
-type Severity = "BENIGN" | "MONITOR" | "URGENT" | "LIFE_THREATENING";
+import { filterRhythms, matchesCategory, RHYTHM_RATES, severityCounts, type Severity } from "@/lib/clinical/ecg";
+import { cn } from "@/lib/utils";
 
 interface Rhythm {
   id: number;
@@ -35,213 +32,245 @@ interface Rhythm {
   wave: string;
 }
 
-const severityStyles: Record<Severity, string> = {
-  BENIGN: "border-emerald-400/40 bg-emerald-500/20 text-emerald-800 dark:text-emerald-100",
-  MONITOR: "border-yellow-400/40 bg-yellow-500/20 text-yellow-800 dark:text-yellow-100",
-  URGENT: "border-orange-400/40 bg-orange-500/20 text-orange-800 dark:text-orange-100",
-  LIFE_THREATENING: "border-red-400/50 bg-red-500/25 text-red-800 dark:text-red-100 animate-pulse",
+const rhythms = ecgI18n.rhythms as Rhythm[];
+const counts = severityCounts(rhythms);
+const lifeCount = counts.find((c) => c.severity === "LIFE_THREATENING")?.count ?? 0;
+
+const SEVERITY_BADGE: Record<Severity, string> = {
+  BENIGN: "border-medical-green/40 bg-medical-green/10 text-medical-green",
+  MONITOR: "border-medical-blue/40 bg-medical-blue/10 text-medical-blue",
+  URGENT: "border-medical-yellow/40 bg-medical-yellow/10 text-medical-yellow",
+  LIFE_THREATENING: "border-medical-red/40 bg-medical-red/10 text-medical-red",
 };
 
-const categoryStyles: Record<string, string> = {
-  NORMAL_BASICS: "border-cyan-400/40 bg-cyan-500/15 text-cyan-800 dark:text-cyan-100",
-  ATRIAL: "border-indigo-400/40 bg-indigo-500/20 text-indigo-800 dark:text-indigo-100",
-  JUNCTIONAL: "border-violet-400/40 bg-violet-500/20 text-violet-800 dark:text-violet-100",
-  VENTRICULAR: "border-rose-400/40 bg-rose-500/20 text-rose-800 dark:text-rose-100",
-  BLOCKS: "border-amber-400/40 bg-amber-500/20 text-amber-800 dark:text-amber-100",
-  ST: "border-fuchsia-400/40 bg-fuchsia-500/20 text-fuchsia-800 dark:text-fuchsia-100",
-  LIFE: "border-red-400/50 bg-red-500/20 text-red-800 dark:text-red-100",
-  PACEMAKER: "border-pink-400/40 bg-pink-500/20 text-pink-800 dark:text-pink-100",
-  ELECTROLYTE: "border-teal-400/40 bg-teal-500/20 text-teal-800 dark:text-teal-100",
-  PEDIATRIC: "border-sky-400/40 bg-sky-500/20 text-sky-800 dark:text-sky-100",
+const SEVERITY_COLOR: Record<Severity, string> = {
+  BENIGN: "hsl(var(--medical-green))",
+  MONITOR: "hsl(var(--medical-blue))",
+  URGENT: "hsl(var(--medical-yellow))",
+  LIFE_THREATENING: "hsl(var(--medical-red))",
 };
 
-const EcgWave = ({ type }: { type: string }) => {
-  const path =
-    type === "vf"
-      ? "M2 35 C8 5, 14 65, 20 30 C26 10, 32 60, 38 24 C44 8, 50 62, 56 30 C62 10, 68 55, 74 32 C80 12, 86 58, 98 34"
-      : type === "vt" || type === "tachy"
-      ? "M2 32 L12 32 L16 10 L20 50 L24 8 L28 42 L32 32 L42 32 L46 8 L50 50 L54 10 L58 42 L62 32 L72 32 L76 8 L80 50 L84 10 L90 32 L98 32"
-      : type === "torsades"
-      ? "M2 32 C10 8, 18 56, 26 30 C34 14, 42 50, 50 30 C58 20, 66 44, 74 32 C82 24, 90 40, 98 30"
-      : type === "st_elev"
-      ? "M2 32 L16 32 L20 10 L24 52 L28 20 L36 20 L44 20 L52 20 L60 20 L68 32 L78 32 L84 18 L90 32 L98 32"
-      : type === "st_depress"
-      ? "M2 32 L16 32 L20 10 L24 52 L28 36 L36 36 L44 36 L52 36 L60 36 L68 32 L78 32 L84 16 L90 32 L98 32"
-      : type === "t_peaked"
-      ? "M2 32 L16 32 L20 10 L24 52 L28 32 L38 32 L46 10 L54 32 L62 32 L72 32 L80 8 L88 32 L98 32"
-      : type === "paced_vent" || type === "paced_atrial"
-      ? "M2 32 L10 32 L10 8 L12 32 L20 32 L24 10 L28 52 L32 22 L40 32 L48 32 L48 8 L50 32 L58 32 L62 10 L66 52 L70 22 L78 32 L98 32"
-      : type === "flutter"
-      ? "M2 32 L8 24 L14 32 L20 24 L26 32 L32 24 L38 32 L44 24 L50 32 L56 24 L62 32 L68 24 L74 32 L80 24 L86 32 L98 32"
-      : "M2 32 L16 32 L20 10 L24 52 L28 18 L36 32 L48 32 L52 10 L56 52 L60 18 L68 32 L80 32 L84 10 L88 52 L92 18 L98 32";
-
-  return (
-    <svg viewBox="0 0 100 64" className="h-14 w-full rounded-xl border border-foreground/10 bg-background/60 p-1">
-      <polyline points="0,32 100,32" stroke="#0b3856" strokeWidth="0.8" fill="none" />
-      <path d={path} stroke="#ffffff" strokeWidth="2" fill="none" strokeLinecap="round" />
-      <circle cx="15" cy="32" r="1.5" fill="#22d3ee" />
-      <circle cx="72" cy="32" r="1.5" fill="#14b8a6" />
-      {(type === "st_elev" || type === "st_depress") && <rect x="36" y="18" width="22" height="4" fill="#eab308" opacity="0.8" />}
-      {(type === "paced_vent" || type === "paced_atrial") && <line x1="10" y1="8" x2="10" y2="32" stroke="#ec4899" strokeWidth="2" />}
-    </svg>
-  );
+const WAVES: Record<string, string> = {
+  vf: "M2 35 C8 5, 14 65, 20 30 C26 10, 32 60, 38 24 C44 8, 50 62, 56 30 C62 10, 68 55, 74 32 C80 12, 86 58, 98 34",
+  vt: "M2 32 L12 32 L16 10 L20 50 L24 8 L28 42 L32 32 L42 32 L46 8 L50 50 L54 10 L58 42 L62 32 L72 32 L76 8 L80 50 L84 10 L90 32 L98 32",
+  torsades: "M2 32 C10 8, 18 56, 26 30 C34 14, 42 50, 50 30 C58 20, 66 44, 74 32 C82 24, 90 40, 98 30",
+  st_elev: "M2 32 L16 32 L20 10 L24 52 L28 20 L36 20 L44 20 L52 20 L60 20 L68 32 L78 32 L84 18 L90 32 L98 32",
+  st_depress: "M2 32 L16 32 L20 10 L24 52 L28 36 L36 36 L44 36 L52 36 L60 36 L68 32 L78 32 L84 16 L90 32 L98 32",
+  t_peaked: "M2 32 L16 32 L20 10 L24 52 L28 32 L38 32 L46 10 L54 32 L62 32 L72 32 L80 8 L88 32 L98 32",
+  paced: "M2 32 L10 32 L10 8 L12 32 L20 32 L24 10 L28 52 L32 22 L40 32 L48 32 L48 8 L50 32 L58 32 L62 10 L66 52 L70 22 L78 32 L98 32",
+  flutter: "M2 32 L8 24 L14 32 L20 24 L26 32 L32 24 L38 32 L44 24 L50 32 L56 24 L62 32 L68 24 L74 32 L80 24 L86 32 L98 32",
+  normal: "M2 32 L16 32 L20 10 L24 52 L28 18 L36 32 L48 32 L52 10 L56 52 L60 18 L68 32 L80 32 L84 10 L88 52 L92 18 L98 32",
 };
+const waveFor = (type: string) => WAVES[type === "tachy" ? "vt" : type.startsWith("paced") ? "paced" : type] ?? WAVES.normal;
+
+/** Schematic strip: decorative, the rhythm name and rate carry the meaning. */
+const EcgWave = ({ type }: { type: string }) => (
+  <svg viewBox="0 0 100 64" preserveAspectRatio="none" aria-hidden="true" className="h-14 w-full rounded-xl border bg-secondary/40 p-1 text-primary" style={{ direction: "ltr" }}>
+    <line x1="0" y1="32" x2="100" y2="32" stroke="hsl(var(--border))" strokeWidth="0.8" />
+    <path d={waveFor(type)} stroke="currentColor" strokeWidth="2" vectorEffect="non-scaling-stroke" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
 
 const ECG = () => {
-  const { language, direction } = usePreferences();
+  const { language } = usePreferences();
+  const copy = ecgI18n[language];
+  const lx = copy.labels;
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("ALL");
-  const copy = ecgI18n[language as Language];
-  const rhythms = ecgI18n.rhythms as Rhythm[];
+  const [severity, setSeverity] = useState<Severity | null>(null);
 
-  const filtered = useMemo(() => {
-    const needle = search.trim().toLowerCase();
-    return rhythms.filter((r) => {
-      const matchesCategory = category === "ALL" || r.category === category || (category === "LIFE" && r.severity === "LIFE_THREATENING");
-      const matchesSearch =
-        !needle ||
-        r.nameEn.toLowerCase().includes(needle) ||
-        r.nameAr.toLowerCase().includes(needle) ||
-        r.characteristics.toLowerCase().includes(needle) ||
-        r.interventions.join(" ").toLowerCase().includes(needle);
-      return matchesCategory && matchesSearch;
-    });
-  }, [category, rhythms, search]);
+  const filtered = useMemo(() => filterRhythms(rhythms, { category, severity, query: search }), [category, severity, search]);
+  const categoryOptions = Object.entries(copy.categories).map(([value, label]) => ({
+    value,
+    label,
+    count: rhythms.filter((r) => matchesCategory(r, value)).length,
+  }));
+  const hasFilters = Boolean(search || category !== "ALL" || severity);
+  const reset = () => {
+    setSearch("");
+    setCategory("ALL");
+    setSeverity(null);
+  };
 
   return (
     <AppLayout illustration="ecg" title={copy.title} subtitle={copy.subtitle}>
-      <section dir={direction} className="rounded-3xl border border-foreground/10 bg-card/80 p-5 shadow-card">
-        <div className="relative">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-cyan-800 dark:text-cyan-300 rtl:left-auto rtl:right-4" size={18} />
-          <Input
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder={copy.searchPlaceholder}
-            className="h-12 rounded-2xl border-foreground/10 bg-foreground/5 pl-12 text-foreground rtl:pl-4 rtl:pr-12"
+      <section className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+        <StatTile icon={HeartPulse} tone="primary" label={lx.total} value={rhythms.length} />
+        <StatTile icon={AlertTriangle} tone="critical" label={lx.lifeThreatening} value={lifeCount} />
+        <StatTile icon={ListChecks} label={lx.algorithms} value={copy.acls.length} hint="AHA 2020" />
+        <StatTile icon={Activity} tone="good" label={lx.normal} value={<span dir="ltr">60–100</span>} hint="bpm" />
+      </section>
+
+      <section className="grid items-start gap-4 lg:grid-cols-2">
+        <div className="space-y-3 rounded-3xl border bg-card p-4 shadow-card sm:p-5">
+          <h2 className="text-sm font-semibold">{lx.bySeverity}</h2>
+          <DistributionBar
+            ariaLabel={lx.bySeverity}
+            segments={counts.map((c) => ({ key: c.severity, label: copy.severity[c.severity], count: c.count, color: SEVERITY_COLOR[c.severity] }))}
+            selected={severity}
+            onSelect={(key) => setSeverity((prev) => (prev === key ? null : (key as Severity)))}
           />
         </div>
-        <div className="mt-4 flex flex-wrap gap-2">
-          {Object.entries(copy.categories).map(([key, label]) => (
-            <Button
-              key={key}
-              onClick={() => setCategory(key)}
-              size="sm"
-              variant="outline"
-              className={`rounded-full border px-4 py-2 text-[10px] tracking-widest ${
-                category === key ? "border-primary/50 bg-primary/30 text-foreground" : "border-foreground/20 text-muted-foreground"
-              }`}
-            >
-              {label}
-            </Button>
-          ))}
+        <div className="space-y-3 rounded-3xl border bg-card p-4 shadow-card sm:p-5">
+          <h2 className="text-sm font-semibold">{lx.rateChart}</h2>
+          <RangeLanes
+            ariaLabel={lx.rateChart}
+            domain={[0, 350]}
+            ticks={[0, 60, 100, 150, 250, 350]}
+            unit="bpm"
+            reference={{ from: 60, to: 100, label: lx.rateRef }}
+            rows={RHYTHM_RATES.map((r) => ({ key: String(r.id), label: r.label, min: r.min, max: r.max }))}
+          />
+          <p className="text-[11px] text-muted-foreground">{lx.rateNote}</p>
         </div>
       </section>
 
       <Tabs defaultValue="rhythms" className="space-y-4">
-        <TabsList className="grid h-auto grid-cols-2 gap-2 rounded-2xl border border-foreground/10 bg-card/70 p-2 md:grid-cols-4">
+        <TabsList className="grid h-auto w-full grid-cols-2 gap-1 md:grid-cols-4">
           <TabsTrigger value="rhythms">{copy.tabs.rhythms}</TabsTrigger>
           <TabsTrigger value="read">{copy.tabs.howToRead}</TabsTrigger>
           <TabsTrigger value="acls">{copy.tabs.acls}</TabsTrigger>
           <TabsTrigger value="tips">{copy.tabs.tips}</TabsTrigger>
         </TabsList>
 
-        <TabsContent value="rhythms" className="space-y-3">
-          {filtered.length === 0 && <EmptyState variant="no-results" title={copy.labels.noResults} />}
-          <div className="grid gap-3 md:grid-cols-2">
-            {filtered.map((rhythm) => (
-              <Dialog key={rhythm.id}>
-                <DialogTrigger asChild>
-                  <Card className="cursor-pointer rounded-3xl border border-foreground/10 bg-card/70 p-4 transition-all hover:-translate-y-0.5 hover:border-primary/40">
-                    <div className="mb-3 flex items-start justify-between gap-2">
-                      <div>
-                        <p className="font-semibold text-foreground">{rhythm.nameEn}</p>
-                        <p className="text-sm text-cyan-800 dark:text-cyan-100">{rhythm.nameAr}</p>
+        <TabsContent value="rhythms" className="space-y-4">
+          <section className="space-y-4 rounded-3xl border bg-card p-4 shadow-card sm:p-5">
+            <div className="relative">
+              <Search size={16} className="absolute start-4 top-1/2 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
+              <Input value={search} onChange={(e) => setSearch(e.target.value)} placeholder={copy.searchPlaceholder} aria-label={copy.searchPlaceholder} className="h-11 rounded-2xl ps-11" />
+            </div>
+            <FilterChips ariaLabel={lx.category} value={category} onChange={setCategory} options={categoryOptions} hideEmpty />
+            <div className="flex items-center justify-between text-xs text-muted-foreground">
+              <span>
+                {lx.showing} <span className="font-semibold tabular-nums text-foreground">{filtered.length}</span> / {rhythms.length}
+                {severity && <> · {copy.severity[severity]}</>}
+              </span>
+              {hasFilters && (
+                <Button size="sm" variant="ghost" onClick={reset}>
+                  {language === "ar" ? "إعادة الضبط" : "Reset"}
+                </Button>
+              )}
+            </div>
+          </section>
+
+          {filtered.length === 0 ? (
+            <EmptyState variant="no-results" title={lx.noResults} action={<Button onClick={reset}>{language === "ar" ? "إعادة الضبط" : "Reset"}</Button>} />
+          ) : (
+            <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+              {filtered.map((rhythm) => (
+                <Dialog key={rhythm.id}>
+                  <DialogTrigger asChild>
+                    <button
+                      type="button"
+                      className="flex flex-col gap-3 rounded-3xl border bg-card p-4 text-start transition-colors hover:border-primary/40 hover:bg-secondary/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                    >
+                      <span className="flex w-full items-start justify-between gap-2">
+                        <span className="min-w-0">
+                          <span dir="ltr" className="block text-start font-semibold leading-tight">{rhythm.nameEn}</span>
+                          <span className="block text-xs text-muted-foreground">{rhythm.nameAr}</span>
+                        </span>
+                        <Badge variant="outline" className={cn("shrink-0", SEVERITY_BADGE[rhythm.severity])}>{copy.severity[rhythm.severity]}</Badge>
+                      </span>
+                      <EcgWave type={rhythm.wave} />
+                      <span className="flex w-full flex-wrap items-center gap-x-2 gap-y-1 text-xs">
+                        <span className="font-medium text-primary">{copy.categories[rhythm.category as keyof typeof copy.categories]}</span>
+                        <span dir="ltr" className="ms-auto text-muted-foreground">{rhythm.rate}</span>
+                      </span>
+                    </button>
+                  </DialogTrigger>
+                  <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-2xl">
+                    <DialogHeader>
+                      <DialogTitle dir="ltr" className="text-start">{rhythm.nameEn}</DialogTitle>
+                      <DialogDescription className="text-start">{rhythm.nameAr}</DialogDescription>
+                    </DialogHeader>
+                    <div className="space-y-4 text-sm">
+                      <div className="flex flex-wrap gap-2">
+                        <Badge variant="outline" className={SEVERITY_BADGE[rhythm.severity]}>{copy.severity[rhythm.severity]}</Badge>
+                        <Badge variant="outline">{copy.categories[rhythm.category as keyof typeof copy.categories]}</Badge>
                       </div>
-                      <Badge className={`border ${severityStyles[rhythm.severity]}`}>{copy.severity[rhythm.severity]}</Badge>
+                      <EcgWave type={rhythm.wave} />
+                      <dl className="grid gap-3 sm:grid-cols-2">
+                        <div>
+                          <dt className="text-xs font-medium text-muted-foreground">{lx.rate}</dt>
+                          <dd dir="ltr" className="text-start">{rhythm.rate}</dd>
+                        </div>
+                        <div>
+                          <dt className="text-xs font-medium text-muted-foreground">{lx.characteristics}</dt>
+                          <dd dir="ltr" className="text-start">{rhythm.characteristics}</dd>
+                        </div>
+                      </dl>
+                      <div className={cn("rounded-2xl border p-3", rhythm.severity === "LIFE_THREATENING" ? "border-medical-red/30 bg-medical-red/5" : "bg-secondary/40")}>
+                        <p className="mb-2 text-xs font-semibold">{lx.interventions}</p>
+                        <div dir="ltr" className="text-start">
+                          <StepTimeline steps={rhythm.interventions.map((title) => ({ title }))} />
+                        </div>
+                      </div>
+                      <p className="rounded-2xl bg-primary/5 p-3">
+                        <span className="font-semibold">{lx.tips}: </span>
+                        {language === "ar" ? rhythm.tipsAr : rhythm.tipsEn}
+                      </p>
                     </div>
-                    <div className="mb-3 flex flex-wrap gap-2">
-                      <Badge className={`border ${categoryStyles[rhythm.category] ?? "border-foreground/20 bg-foreground/10 text-foreground"}`}>
-                        {copy.categories[rhythm.category as keyof typeof copy.categories]}
-                      </Badge>
-                      <Badge className="border-foreground/20 bg-foreground/10 text-foreground">{copy.labels.rate}: {rhythm.rate}</Badge>
-                    </div>
-                    <EcgWave type={rhythm.wave} />
-                  </Card>
-                </DialogTrigger>
-                <DialogContent className="max-h-[90vh] overflow-y-auto border-foreground/10 bg-card text-foreground sm:max-w-2xl">
-                  <DialogHeader>
-                    <DialogTitle>{rhythm.nameEn}</DialogTitle>
-                    <DialogDescription className="text-cyan-800 dark:text-cyan-100">{rhythm.nameAr}</DialogDescription>
-                  </DialogHeader>
-                  <div className="space-y-3 text-sm">
-                    <p><span className="text-cyan-800 dark:text-cyan-200">{copy.labels.category}:</span> {copy.categories[rhythm.category as keyof typeof copy.categories]}</p>
-                    <p><span className="text-cyan-800 dark:text-cyan-200">{copy.labels.rate}:</span> {rhythm.rate}</p>
-                    <p><span className="text-cyan-800 dark:text-cyan-200">{copy.labels.characteristics}:</span> {rhythm.characteristics}</p>
-                    <div>
-                      <p className="mb-1 text-cyan-800 dark:text-cyan-200">{copy.labels.interventions}:</p>
-                      <ul className="list-disc space-y-1 ps-5">
-                        {rhythm.interventions.map((item) => (
-                          <li key={item}>{item}</li>
-                        ))}
-                      </ul>
-                    </div>
-                    <p>
-                      <span className="text-cyan-800 dark:text-cyan-200">{copy.labels.tips}:</span>{" "}
-                      {language === "ar" ? rhythm.tipsAr : rhythm.tipsEn}
-                    </p>
-                  </div>
-                </DialogContent>
-              </Dialog>
-            ))}
-          </div>
+                  </DialogContent>
+                </Dialog>
+              ))}
+            </div>
+          )}
         </TabsContent>
 
         <TabsContent value="read" className="space-y-3">
-          {copy.howToReadSteps.map((step) => (
-            <details key={step.step} className="rounded-2xl border border-foreground/10 bg-card/70 p-4">
-              <summary className="cursor-pointer list-none font-semibold text-foreground">
-                {step.step}. {step.title}
-              </summary>
-              <div className="mt-2 text-sm text-foreground/90">
-                <p>{step.check}</p>
-                <p className="mt-2 text-cyan-800 dark:text-cyan-100">{language === "ar" ? "الطبيعي: قارن مع القيم المرجعية وخذ السياق السريري." : "Normal: Compare against reference values and clinical context."}</p>
-                <Activity className="mt-3 text-cyan-800 dark:text-cyan-300" size={16} />
-              </div>
-            </details>
-          ))}
+          <ol className="grid gap-3 md:grid-cols-2">
+            {copy.howToReadSteps.map((step) => (
+              <li key={step.step} className="flex gap-3 rounded-3xl border bg-card p-4">
+                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-semibold text-primary-foreground">{step.step}</span>
+                <div className="min-w-0 space-y-1.5">
+                  <p className="font-semibold">{step.title}</p>
+                  <p className="text-sm text-muted-foreground">{step.check}</p>
+                  {step.normal && (
+                    <p className="rounded-xl bg-medical-green/10 px-2.5 py-1.5 text-xs">
+                      <span className="font-semibold text-medical-green">{lx.normal}: </span>
+                      <span dir="ltr">{step.normal}</span>
+                    </p>
+                  )}
+                </div>
+              </li>
+            ))}
+          </ol>
+          <SourceNote ids={["aha-qt", "udmi-4"]} />
         </TabsContent>
 
         <TabsContent value="acls" className="space-y-3">
           <div className="grid gap-3 md:grid-cols-2">
-            {copy.acls.map((algo) => (
-              <Card key={algo.title} className="rounded-3xl border-foreground/10 bg-card/70 p-4">
-                <p className="font-semibold text-foreground">{algo.title}</p>
-                <p className="text-xs text-cyan-800 dark:text-cyan-100">{algo.subtitle}</p>
-                <ol className="mt-3 list-decimal space-y-1 ps-5 text-sm text-foreground">
-                  {algo.steps.map((step) => (
-                    <li key={step}>{step}</li>
-                  ))}
-                </ol>
-              </Card>
+            {copy.acls.map((algo, i) => (
+              <section key={algo.title} className="space-y-3 rounded-3xl border bg-card p-4 shadow-card">
+                <div>
+                  <h3 className="font-semibold">{algo.title}</h3>
+                  <p className="text-xs text-muted-foreground">{algo.subtitle}</p>
+                </div>
+                <StepTimeline steps={algo.steps.map((title) => ({ title, tone: i < 2 ? "critical" : "default" }))} />
+              </section>
             ))}
           </div>
-          <Card className="rounded-3xl border-red-400/20 bg-red-500/10 p-4">
-            <p className="font-semibold text-red-800 dark:text-red-100">{copy.labels.hAndTs}</p>
-            <div className="mt-2 grid gap-2 text-sm text-red-800 dark:text-red-50 md:grid-cols-2">
+          <section className="rounded-3xl border border-medical-red/30 bg-medical-red/5 p-4">
+            <h3 className="font-semibold text-medical-red">{lx.hAndTs}</h3>
+            <ul dir="ltr" className="mt-2 grid grid-cols-1 gap-x-4 gap-y-1 text-start text-sm sm:grid-cols-2">
               {copy.hsTs.map((item) => (
-                <p key={item}>• {item}</p>
+                <li key={item} className="flex items-center gap-2">
+                  <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-medical-red" aria-hidden="true" />
+                  {item}
+                </li>
               ))}
-            </div>
-          </Card>
+            </ul>
+          </section>
+          <SourceNote ids={["aha-acls"]} />
         </TabsContent>
 
-        <TabsContent value="tips" className="space-y-3">
+        <TabsContent value="tips">
           <div className="grid gap-3 md:grid-cols-2">
             {copy.clinicalTips.map((tip) => (
-              <Card key={tip.title} className="rounded-3xl border-foreground/10 bg-card/70 p-4">
-                <p className="font-semibold text-foreground">{tip.title}</p>
-                <p className="mt-2 text-sm text-foreground/90">{tip.content}</p>
-              </Card>
+              <section key={tip.title} className="rounded-3xl border bg-card p-4">
+                <h3 className="font-semibold">{tip.title}</h3>
+                <p className="mt-2 text-sm text-muted-foreground">{tip.content}</p>
+              </section>
             ))}
           </div>
         </TabsContent>

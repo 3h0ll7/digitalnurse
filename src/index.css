@@ -285,3 +285,12 @@ All colors MUST be HSL.
     stroke-linejoin: round;
   }
 }
+
+@layer utilities {
+  .no-scrollbar {
+    scrollbar-width: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+}

@@ -1,113 +1,54 @@
-import { useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { assessmentScales } from "@/data/assessmentScales";
+import { useNavigate, useParams } from "react-router-dom";
+import { BookOpen } from "lucide-react";
 import AppLayout from "@/components/layout/AppLayout";
+import EmptyState from "@/components/EmptyState";
+import CamIcu from "@/components/assessments/CamIcu";
+import ItemsScale from "@/components/assessments/ItemsScale";
+import Must from "@/components/assessments/Must";
+import News2 from "@/components/assessments/News2";
+import SourceNote from "@/components/data/SourceNote";
 import { usePreferences } from "@/contexts/PreferencesContext";
-import { AdvancedAssessment } from "@/pages/assessmentTools";
-
-const ADVANCED_ASSESSMENT_IDS = new Set([
-  "sofa",
-  "cam-icu",
-  "news2",
-  "cha2ds2-vasc",
-  "wells-pe",
-  "must",
-  "phq9",
-  "waterlow",
-]);
+import { assessmentScales } from "@/data/assessmentScales";
+import { assessText, CATEGORY_LABELS } from "@/data/assessments-text";
 
 const ScaleDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { t } = usePreferences();
+  const { language } = usePreferences();
+  const tx = assessText[language];
+  const back = () => navigate("/assessments");
   const scale = assessmentScales.find((s) => s.id === id);
-  const [selections, setSelections] = useState<{ [key: string]: number }>({});
 
   if (!scale) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <p className="text-muted-foreground">{t.scaleNotFound}</p>
-      </div>
+      <AppLayout title={tx.notFound} onBack={back}>
+        <EmptyState variant="not-found" title={tx.notFoundBody} />
+      </AppLayout>
     );
   }
 
-  const totalScore = Object.values(selections).reduce((sum, val) => sum + val, 0);
-  const showAdvancedAssessment = Boolean(id && ADVANCED_ASSESSMENT_IDS.has(id));
-
-
   return (
-    <AppLayout
-      title={scale.name}
-      subtitle={scale.category}
-      onBack={() => navigate("/assessments")}
-      className="space-y-4"
-    >
-      <Card className="p-4">
-        <p className="text-sm text-muted-foreground">{scale.description}</p>
-      </Card>
+    <AppLayout illustration="triage" title={scale.short} subtitle={CATEGORY_LABELS[scale.category][language]} onBack={back}>
+      <section className="space-y-1 rounded-3xl border bg-card p-4 shadow-card sm:p-5">
+        <p dir="ltr" className="text-start font-semibold">{scale.name}</p>
+        <p dir="ltr" className="text-start text-sm text-muted-foreground">{scale.description}</p>
+      </section>
 
-      {showAdvancedAssessment && id ? (
-        <AdvancedAssessment id={id} />
-      ) : (
-        <>
-          {scale.components.map((component, idx) => (
-            <Card key={idx} className="p-4">
-              <h3 className="font-bold text-card-foreground mb-3">{component.factor}</h3>
-              <div className="space-y-2">
-                {component.options.map((option, optIdx) => (
-                  <label
-                    key={optIdx}
-                    className="flex items-start gap-3 p-3 rounded-lg hover:bg-accent cursor-pointer transition-colors"
-                  >
-                    <input
-                      type="radio"
-                      name={component.factor}
-                      value={option.points}
-                      checked={selections[component.factor] === option.points}
-                      onChange={() =>
-                        setSelections({
-                          ...selections,
-                          [component.factor]: option.points,
-                        })
-                      }
-                      className="mt-1"
-                    />
-                    <div className="flex-1">
-                      <span className="text-sm">{option.description}</span>
-                      <span className="ml-2 rtl:ml-0 rtl:mr-2 text-xs text-muted-foreground">
-                        ({option.points} {option.points === 1 ? t.point : t.points})
-                      </span>
-                    </div>
-                  </label>
-                ))}
-              </div>
-            </Card>
-          ))}
+      {scale.kind === "news2" ? <News2 scale={scale} /> : scale.kind === "must" ? <Must scale={scale} /> : scale.kind === "cam-icu" ? <CamIcu /> : <ItemsScale key={scale.id} scale={scale} />}
 
-          {Object.keys(selections).length > 0 && (
-            <Card className="p-4 bg-primary text-primary-foreground">
-              <h3 className="font-bold text-lg mb-2">
-                {t.totalScore}: {totalScore}
-              </h3>
-              {scale.interpretation && (
-                <div className="mt-3 space-y-1">
-                  {scale.interpretation.map((line, idx) => (
-                    <p key={idx} className="text-sm opacity-90">
-                      {line}
-                    </p>
-                  ))}
-                </div>
-              )}
-            </Card>
-          )}
-
-          <Button onClick={() => setSelections({})} variant="outline" className="w-full">
-            {t.reset}
-          </Button>
-        </>
+      {scale.notes && scale.notes.length > 0 && (
+        <section className="space-y-2 rounded-3xl border bg-secondary/40 p-4 sm:p-5">
+          <h2 className="flex items-center gap-2 text-sm font-semibold">
+            <BookOpen size={16} className="text-primary" aria-hidden="true" /> {tx.notes}
+          </h2>
+          <ul dir="ltr" className="list-disc space-y-1 ps-5 text-start text-sm text-muted-foreground">
+            {scale.notes.map((note) => (
+              <li key={note}>{note}</li>
+            ))}
+          </ul>
+        </section>
       )}
+      <SourceNote ids={scale.sources} />
     </AppLayout>
   );
 };

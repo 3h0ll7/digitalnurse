@@ -1,119 +1,104 @@
-import AppLayout from "@/components/layout/AppLayout";
-import { assessmentScales } from "@/data/assessmentScales";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router-dom";
 import { useMemo, useState } from "react";
+import { Link } from "react-router-dom";
+import { BookCheck, ChevronRight, ClipboardList, LayoutGrid, Search, Stethoscope } from "lucide-react";
+import AppLayout from "@/components/layout/AppLayout";
+import EmptyState from "@/components/EmptyState";
+import FilterChips from "@/components/data/FilterChips";
+import StatTile from "@/components/data/StatTile";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Sparkles } from "lucide-react";
 import { usePreferences } from "@/contexts/PreferencesContext";
+import { assessmentScales } from "@/data/assessmentScales";
+import { assessText, CATEGORY_LABELS } from "@/data/assessments-text";
+import type { AssessmentCategory } from "@/lib/clinical/scores";
 
-const categoryLabels: Record<string, { en: string; ar: string }> = {
-  All: { en: "All", ar: "الكل" },
-  Neurological: { en: "Neurological", ar: "عصبي" },
-  "Skin Integrity": { en: "Skin Integrity", ar: "سلامة الجلد" },
-  Safety: { en: "Safety", ar: "سلامة" },
-  Pain: { en: "Pain", ar: "ألم" },
-  Neonatal: { en: "Neonatal", ar: "حديثي الولادة" },
-  SEPSIS: { en: "SEPSIS", ar: "إنتان" },
-  CARDIAC: { en: "CARDIAC", ar: "قلبي" },
-  "EARLY WARNING": { en: "EARLY WARNING", ar: "إنذار مبكر" },
-  DELIRIUM: { en: "DELIRIUM", ar: "هذيان" },
-  PULMONARY: { en: "PULMONARY", ar: "رئوي" },
-  NUTRITION: { en: "NUTRITION", ar: "تغذية" },
-  PSYCHIATRIC: { en: "PSYCHIATRIC", ar: "نفسي" },
-  "SKIN INTEGRITY": { en: "SKIN INTEGRITY", ar: "سلامة الجلد" },
-};
+const CATEGORY_ORDER = Object.keys(CATEGORY_LABELS) as AssessmentCategory[];
+const countIn = (c: AssessmentCategory) => assessmentScales.filter((s) => s.category === c).length;
+const usedCategories = CATEGORY_ORDER.filter((c) => countIn(c) > 0);
+const sourceCount = new Set(assessmentScales.flatMap((s) => s.sources)).size;
+const signed = (n: number, withPlus: boolean) => (n < 0 ? `−${-n}` : withPlus && n > 0 ? `+${n}` : String(n));
+const formatRange = ([lo, hi]: [number, number]) => `${signed(lo, false)} – ${signed(hi, lo < 0)}`;
+const itemCount = (s: (typeof assessmentScales)[number]) => (s.kind === "news2" ? 7 : s.kind === "must" ? 3 : s.kind === "cam-icu" ? 4 : s.items.reduce((n, i) => n + (i.multi ? i.options.length : 1), 0));
 
 const Assessments = () => {
-  const navigate = useNavigate();
   const { t, language } = usePreferences();
+  const tx = assessText[language];
   const [query, setQuery] = useState("");
-  const [category, setCategory] = useState("All");
+  const [category, setCategory] = useState<"all" | AssessmentCategory>("all");
 
-  const dataset = assessmentScales;
-  const isArabic = language === "ar";
+  const filtered = useMemo(() => {
+    const needle = query.trim().toLowerCase();
+    return assessmentScales.filter(
+      (s) =>
+        (category === "all" || s.category === category) &&
+        (!needle || [s.name, s.short, s.description, CATEGORY_LABELS[s.category].en, CATEGORY_LABELS[s.category].ar].some((x) => x.toLowerCase().includes(needle))),
+    );
+  }, [category, query]);
 
-  const categories = useMemo(
-    () => ["All", ...Array.from(new Set(dataset.map((scale) => scale.category)))],
-    [dataset],
-  );
-
-  const filteredScales = dataset.filter((scale) => {
-    const matchesQuery =
-      scale.name.toLowerCase().includes(query.toLowerCase()) ||
-      scale.description.toLowerCase().includes(query.toLowerCase());
-    const matchesCategory = category === "All" || scale.category === category;
-    return matchesQuery && matchesCategory;
-  });
-
-  const getCategoryLabel = (cat: string) => {
-    const mapped = categoryLabels[cat];
-    return mapped ? (isArabic ? mapped.ar : mapped.en) : cat;
+  const options = [
+    { value: "all", label: tx.all, count: assessmentScales.length },
+    ...usedCategories.map((c) => ({ value: c, label: CATEGORY_LABELS[c][language], count: countIn(c) })),
+  ];
+  const reset = () => {
+    setQuery("");
+    setCategory("all");
   };
 
   return (
     <AppLayout illustration="triage" title={t.assessmentHubTitle} subtitle={t.assessmentHubSubtitle}>
-      <section className="rounded-3xl border border-foreground/10 bg-card/80 p-5 shadow-card">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
-          <div className="relative flex-1">
-            <Sparkles className="absolute left-4 top-1/2 -translate-y-1/2 text-primary rtl:left-auto rtl:right-4" size={18} />
-            <Input
-              value={query}
-              onChange={(event) => setQuery(event.target.value)}
-              placeholder={t.searchAssessments}
-              className="h-12 rounded-2xl border-foreground/10 bg-foreground/5 pl-12 rtl:pl-4 rtl:pr-12 text-foreground placeholder:text-muted-foreground"
-            />
-          </div>
-          <div className="text-xs uppercase tracking-[0.4em] text-muted-foreground">
-            {dataset.length} {isArabic ? "وحدة" : "MODULES"}
-            <p className="text-[10px] text-primary">{t.sourceAssessmentCatalog}</p>
-          </div>
+      <section className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+        <StatTile icon={ClipboardList} tone="primary" label={tx.tools} value={assessmentScales.length} />
+        <StatTile icon={LayoutGrid} label={tx.categories} value={usedCategories.length} />
+        <StatTile icon={BookCheck} tone="good" label={tx.sourced} value={sourceCount} />
+        <StatTile icon={Stethoscope} label={tx.bedside} value={assessmentScales.filter((s) => s.id !== "sofa").length} />
+      </section>
+
+      <section className="space-y-4 rounded-3xl border bg-card p-4 shadow-card sm:p-5">
+        <div className="relative">
+          <Search size={16} className="absolute start-4 top-1/2 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
+          <Input value={query} onChange={(e) => setQuery(e.target.value)} placeholder={tx.search} aria-label={tx.search} className="h-11 rounded-2xl ps-11" />
         </div>
-        <div className="mt-4 flex flex-wrap gap-2">
-          {categories.map((cat) => (
-            <Button
-              key={cat}
-              size="sm"
-              variant="outline"
-              className={`rounded-full border px-4 py-2 text-xs uppercase tracking-widest transition-all ${
-                category === cat
-                  ? "border-primary/50 bg-primary/30 text-foreground shadow-card"
-                  : "border-foreground/20 text-muted-foreground hover:border-foreground/40"
-              }`}
-              onClick={() => setCategory(cat)}
-            >
-              {getCategoryLabel(cat)}
+        <FilterChips ariaLabel={tx.categories} value={category} onChange={(v) => setCategory(v as typeof category)} options={options} hideEmpty />
+        <div className="flex items-center justify-between text-xs text-muted-foreground">
+          <span>
+            {tx.showing} <span className="font-semibold tabular-nums text-foreground">{filtered.length}</span> / {assessmentScales.length}
+          </span>
+          {(query || category !== "all") && (
+            <Button size="sm" variant="ghost" onClick={reset}>
+              {tx.reset}
             </Button>
-          ))}
+          )}
         </div>
       </section>
 
-      <section className="grid gap-4">
-        {filteredScales.map((scale) => (
-          <Card
-            key={scale.id}
-            className="cursor-pointer rounded-3xl border border-foreground/10 bg-card/70 p-5 text-foreground shadow-card transition-all duration-300 hover:-translate-y-1 hover:border-primary/40"
-            onClick={() => navigate(`/scale/${scale.id}`)}
-          >
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-              <div>
-                <p className="text-xs uppercase tracking-[0.4em] text-primary">{getCategoryLabel(scale.category)}</p>
-                <p className="text-2xl font-semibold">{scale.name}</p>
-                <p className="text-sm text-muted-foreground">{scale.description}</p>
-              </div>
-              <span className="self-start rounded-full border border-foreground/10 px-4 py-1 text-xs uppercase tracking-[0.4em] text-muted-foreground">
-                {t.interactive}
+      {filtered.length === 0 ? (
+        <EmptyState variant="no-results" title={tx.empty} action={<Button onClick={reset}>{tx.reset}</Button>} />
+      ) : (
+        <section className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+          {filtered.map((s) => (
+            <Link
+              key={s.id}
+              to={`/scale/${s.id}`}
+              className="group flex flex-col gap-2 rounded-3xl border bg-card p-4 transition-colors hover:border-primary/40 hover:bg-secondary/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            >
+              <span className="flex items-start justify-between gap-2">
+                <span className="text-xs font-medium text-primary">{CATEGORY_LABELS[s.category][language]}</span>
+                <ChevronRight size={16} className="shrink-0 text-muted-foreground rtl:rotate-180" aria-hidden="true" />
               </span>
-            </div>
-          </Card>
-        ))}
-        {filteredScales.length === 0 && (
-          <div className="rounded-3xl border border-dashed border-foreground/30 p-10 text-center text-muted-foreground">
-            {t.noAssessments}
-          </div>
-        )}
-      </section>
+              <span dir="ltr" className="text-start text-lg font-semibold leading-tight">{s.short}</span>
+              <span dir="ltr" className="text-start text-xs text-muted-foreground">{s.description}</span>
+              <span className="mt-auto flex flex-wrap gap-x-3 gap-y-1 pt-1 text-[11px] text-muted-foreground">
+                <span>
+                  {tx.range}: <span dir="ltr" className="font-semibold tabular-nums text-foreground">{s.kind === "cam-icu" ? "+ / −" : formatRange(s.range)}</span>
+                </span>
+                <span>
+                  <span className="font-semibold tabular-nums text-foreground">{itemCount(s)}</span> {tx.items}
+                </span>
+              </span>
+            </Link>
+          ))}
+        </section>
+      )}
     </AppLayout>
   );
 };
